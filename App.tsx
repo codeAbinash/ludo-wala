@@ -73,8 +73,8 @@ function App(): React.JSX.Element {
 
 function NavigationDetector({navigation}: NavProp) {
   useEffect(() => {
-    if (secureLs.getString('token')) navigation.navigate('Home')
-    else navigation.navigate('EnterPhone')
+    if (secureLs.getString('token')) navigation.replace('Home')
+    else navigation.replace('EnterPhone')
   }, [navigation])
   return null
 }
