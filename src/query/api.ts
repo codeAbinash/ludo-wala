@@ -77,3 +77,15 @@ export async function verifyOtp_f({mobileNumber, otp}: {mobileNumber: string; ot
 export async function updateProfile_f({fname, lname}: {fname: string; lname: string}) {
   return await postApi<ServerResponse>('profile/profileUpdate', {fname, lname})
 }
+
+type DepositResponse = ServerResponse & {
+  razorpay_order_id: string
+  amount: number
+  key: string
+  currency: string
+}
+export async function deposit_f({amount}: {amount: string}) {
+  return await postApi<DepositResponse>('wallet/deposit', {
+    amount: parseInt(amount, 10),
+  })
+}

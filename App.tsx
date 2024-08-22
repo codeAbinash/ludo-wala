@@ -8,6 +8,7 @@
 import {showErr} from '@query/api'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
+import AddCash from '@screens/AddCash'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/auth/Otp'
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   EnterPhone: undefined
   EnterName: undefined
   OTP: OTPParamList
+  AddCash: undefined
 }
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,7 +56,7 @@ const NO_ANIMATION: StackNavigationOptions = {
 function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{flex: 1}}>
+      <GestureHandlerRootView style={{flex: 1}} className='bg-g1'>
         {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
         <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
         <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
@@ -78,6 +80,7 @@ function Navigation() {
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />
       <Stack.Screen name='OTP' component={OTP} />
+      <Stack.Screen name='AddCash' component={AddCash} />
     </Stack.Navigator>
   )
 }
