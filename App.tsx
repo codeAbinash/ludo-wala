@@ -74,10 +74,10 @@ function Navigation() {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />
       <Stack.Screen name='OTP' component={OTP} />
-      <Stack.Screen name='Home' component={Home} />
     </Stack.Navigator>
   )
 }

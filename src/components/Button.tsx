@@ -19,7 +19,7 @@ type GradientButtonProps = TouchableOpacityProps & {
 export function GradientButton({title, children, onPress, ...props}: GradientButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
-      <Gradient className={'w-full items-center justify-center rounded-full border border-bb p-3 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
+      <Gradient className={'w-full items-center justify-center rounded-2xl border border-bb p-3 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
         {title && <SemiBold className='px-10 text-lg text-black'>{title}</SemiBold>}
         {children}
       </Gradient>

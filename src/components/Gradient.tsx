@@ -6,7 +6,7 @@ type CustomLinearGradientProps = Omit<LinearGradientProps, 'colors'> & {
   colors?: Array<string>
 }
 export default function Gradient({children, ...props}: CustomLinearGradientProps) {
-  const col = props.colors || [Colors.g1, Colors.b2]
+  const col = props.colors || [Colors.g1, Colors.g2]
   return (
     <LinearGradient
       // start={{x: 0.5, y: 0}} end={{x: 0.5, y: 1}}
