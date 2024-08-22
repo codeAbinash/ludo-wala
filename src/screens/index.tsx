@@ -89,23 +89,21 @@ function BottomTabBar({state, descriptors, navigation}: BottomTabBarProps) {
           }
 
           return (
-            <>
-              <TouchableOpacity
-                key={route.key}
-                activeOpacity={0.6}
-                accessibilityRole='button'
-                accessibilityState={isFocused ? {selected: true} : {}}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                testID={options.tabBarTestID}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                className='flex items-center justify-center p-1'
-                style={{flex: 1, paddingTop: 17, paddingBottom: 20}}>
-                {options.tabBarIcon && options.tabBarIcon({focused: isFocused, color: 'black', size: 24})}
-                {/* <Text style={{color: isFocused ? '#673ab7' : '#222'}}>{label as ReactNode}</Text> */}
-                <View className={`mt-1 h-1 w-1 rounded-full ${isFocused ? 'bg-b1' : 'bg-transparent'}`} />
-              </TouchableOpacity>
-            </>
+            <TouchableOpacity
+              key={route.key}
+              activeOpacity={0.6}
+              accessibilityRole='button'
+              accessibilityState={isFocused ? {selected: true} : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              className='flex items-center justify-center p-1'
+              style={{flex: 1, paddingTop: 17, paddingBottom: 15}}>
+              {options.tabBarIcon && options.tabBarIcon({focused: isFocused, color: 'black', size: 24})}
+              {/* <Text style={{color: isFocused ? '#673ab7' : '#222'}}>{label as ReactNode}</Text> */}
+              <View className={`mt-1 h-1 w-1 rounded-full ${isFocused ? 'bg-b1' : 'bg-transparent'}`} />
+            </TouchableOpacity>
           )
         })}
       </Gradient>

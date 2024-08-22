@@ -4,22 +4,41 @@ import Images from '@assets/images/images'
 import {GradientButton, OutlineButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
+import {get_user_f} from '@query/api'
 import Clipboard from '@react-native-clipboard/clipboard'
-import React from 'react'
+import {useQuery} from '@tanstack/react-query'
+import React, {useEffect} from 'react'
 import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
+import {ScrollView} from 'react-native-gesture-handler'
 
 export default function Refer() {
+  const {isPending, data, refetch} = useQuery({
+    queryKey: ['user'],
+    queryFn: () => get_user_f(),
+  })
+
+  useEffect(() => {}, [data])
+
+  // refetch on focus
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     refetch()
+  //   })
+
+  //   return unsubscribe
+  // }, [navigation])
+
   return (
-    <View className='flex-1 bg-g1'>
+    <View className='flex-1 bg-primary'>
       <PaddingTop />
-      <View className='flex-1 px-4'>
+      <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <View className='flex-row justify-between pt-2'>
           <View>
             <Image source={Images.logo} className='h-14 w-14' />
           </View>
           <View className='flex-row items-center justify-between' style={{gap: 15}}>
-            <GradientButton activeOpacity={1} className='rounded-full px-7'>
-              <Bold className='text-base'>₹ 100</Bold>
+            <GradientButton className='rounded-full px-7'>
+              <Bold className='text-base'>₹ {data?.data?.deposit_wallet}</Bold>
             </GradientButton>
             <Image
               source={{
@@ -40,7 +59,7 @@ export default function Refer() {
             <TouchableOpacity
               onPress={() => {
                 // Copy
-                Clipboard.setString('3C9PX788')
+                Clipboard.setString(data?.data?.referCode || '')
                 ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT)
               }}
               activeOpacity={0.7}
@@ -50,7 +69,7 @@ export default function Refer() {
                 borderStyle: 'dashed',
               }}
               className='mt-5 flex-row items-center rounded-full py-3 pl-8 pr-6'>
-              <Medium className='text-center text-base text-b1'>3C9PX788</Medium>
+              <Medium className='text-center text-base text-b1'>{data?.data?.referCode || 'Loading...'}</Medium>
               <Copy01Icon className='ml-3 text-white opacity-80' height={18} width={18} />
             </TouchableOpacity>
           </View>
@@ -67,7 +86,7 @@ export default function Refer() {
           </View>
         </Gradient>
         <PaddingBottom />
-      </View>
+      </ScrollView>
     </View>
   )
 }

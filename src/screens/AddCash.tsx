@@ -38,14 +38,15 @@ export default function AddCash({navigation}: NavProp) {
 
         RazorpayCheckout.open(options).then((d) => {
           // handle success
-          Alert.alert(`Success: ${d.razorpay_payment_id}`)
+          // Alert.alert(`Success: ${d.razorpay_payment_id}`)
+          navigation.replace('PaymentSuccessful')
         })
       }
     },
   })
 
   function addMoney() {
-    let amountInt = parseInt(amount, 10)
+    let amountInt = parseFloat(amount)
     if (isNaN(amountInt)) {
       Alert.alert('Error', 'Please enter a valid amount')
       return

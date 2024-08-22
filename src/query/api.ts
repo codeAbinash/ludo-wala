@@ -86,6 +86,31 @@ type DepositResponse = ServerResponse & {
 }
 export async function deposit_f({amount}: {amount: string}) {
   return await postApi<DepositResponse>('wallet/deposit', {
-    amount: parseInt(amount, 10),
+    amount: parseFloat(amount),
   })
+}
+
+export type User = {
+  data?: Data
+  profileRequired?: boolean
+  status: boolean
+}
+
+export type Data = {
+  bonus_wallet?: string
+  cashback_wallet?: string
+  created_at?: Date
+  deposit_wallet?: string
+  email?: null
+  fname?: string
+  id?: number
+  lname?: string
+  mobileNumber?: string
+  referCode?: string
+  updated_at?: Date
+  winning_wallet?: string
+}
+
+export async function get_user_f() {
+  return await postApi<User>('profile/getUser', {})
 }

@@ -41,29 +41,29 @@ export function useRefreshOnFocus<T>(refetch: () => Promise<T>) {
 }
 
 // Disable re-renders on out of focus Screens
-export function useFocusNotifyOnChangeProps(notifyOnChangeProps?: NotifyOnChangeProps) {
-  const focusedRef = React.useRef(true)
+// export function useFocusNotifyOnChangeProps(notifyOnChangeProps?: NotifyOnChangeProps) {
+//   const focusedRef = React.useRef(true)
 
-  useFocusEffect(
-    React.useCallback(() => {
-      focusedRef.current = true
+//   useFocusEffect(
+//     React.useCallback(() => {
+//       focusedRef.current = true
 
-      return () => {
-        focusedRef.current = false
-      }
-    }, []),
-  )
+//       return () => {
+//         focusedRef.current = false
+//       }
+//     }, []),
+//   )
 
-  return () => {
-    if (!focusedRef.current) {
-      return []
-    }
+//   return () => {
+//     if (!focusedRef.current) {
+//       return []
+//     }
 
-    if (typeof notifyOnChangeProps === 'function') {
-      return notifyOnChangeProps()
-    }
+//     if (typeof notifyOnChangeProps === 'function') {
+//       return notifyOnChangeProps()
+//     }
 
-    return []
-    // return notifyOnChangeProps.current
-  }
-}
+//     return []
+//     // return notifyOnChangeProps.current
+//   }
+// }
