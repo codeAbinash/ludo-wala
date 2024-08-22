@@ -23,10 +23,9 @@ export default function EnterName({navigation}: NavProp) {
           <Input placeholder='Last Name' />
         </View>
         <View>
-          <GradientButton title='Next' color='primary' />
+          <GradientButton title='Next' color='primary' onPress={() => navigation.navigate('OTP')} />
         </View>
       </Gradient>
-      <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
     </View>
   )
 }

@@ -7,8 +7,9 @@
 
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
-import EnterName from '@screens/EnterName'
-import EnterPhone from '@screens/EnterPhone'
+import EnterName from '@screens/auth/EnterName'
+import EnterPhone from '@screens/auth/EnterPhone'
+import OTP from '@screens/auth/Otp'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
 import React from 'react'
 import {Dimensions, StatusBar, useColorScheme} from 'react-native'
@@ -18,6 +19,7 @@ export type RootStackParamList = {
   Home: undefined
   EnterPhone: undefined
   EnterName: undefined
+  OTP: undefined
 }
 
 const {height} = Dimensions.get('window')
@@ -58,6 +60,7 @@ function Navigation() {
       }}>
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />
+      <Stack.Screen name='OTP' component={OTP} />
     </Stack.Navigator>
   )
 }
