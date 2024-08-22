@@ -1,15 +1,37 @@
-import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
-import {GradientButton} from '@components/Button'
+import {GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
+import {updateProfile_f} from '@query/api'
+import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
 import type {NavProp} from '@utils/types'
 import React from 'react'
-import {Image, View} from 'react-native'
+import {Alert, Image, View} from 'react-native'
 
 export default function EnterName({navigation}: NavProp) {
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
+
+  const {mutate, isPending} = useMutation({
+    mutationFn: () => updateProfile_f({fname: firstName, lname: lastName}),
+    onSuccess: (data) => {
+      console.log(data)
+      if (!data.status) return Alert.alert('Error', data.message || 'Error occurred')
+      navigation.replace('Home')
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+
+  function update() {
+    if (firstName.length < 3) return
+    if (lastName.length < 3) return
+    mutate()
+  }
+
   return (
     <View className='flex-1 items-center justify-center bg-primary px-5'>
       <PaddingTop />
@@ -19,12 +41,10 @@ export default function EnterName({navigation}: NavProp) {
         colors={[Colors.g1, Colors.g2]}>
         <Image source={Images.logo} className='h-24 w-24' />
         <View style={{gap: 15}} className='w-full'>
-          <Input placeholder='First Name' />
-          <Input placeholder='Last Name' />
+          <Input placeholder='First Name' value={firstName} onChangeText={setFirstName} />
+          <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
         </View>
-        <View>
-          <GradientButton title='Next' color='primary' onPress={() => navigation.navigate('OTP')} />
-        </View>
+        <View>{isPending ? <LoadingButton /> : <GradientButton title='Next' onPress={update} />}</View>
       </Gradient>
     </View>
   )

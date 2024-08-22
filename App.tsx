@@ -5,11 +5,14 @@
  * @format
  */
 
+import {showErr} from '@query/api'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
-import OTP from '@screens/auth/Otp'
+import OTP, {type OTPParamList} from '@screens/auth/Otp'
+import Home from '@screens/Home'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
 import React from 'react'
 import {Dimensions, StatusBar, useColorScheme} from 'react-native'
@@ -19,8 +22,19 @@ export type RootStackParamList = {
   Home: undefined
   EnterPhone: undefined
   EnterName: undefined
-  OTP: undefined
+  OTP: OTPParamList
 }
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      retry: 1,
+      onError: showErr,
+    },
+    queries: {
+      retry: 1,
+    },
+  },
+})
 
 const {height} = Dimensions.get('window')
 
@@ -39,14 +53,16 @@ const NO_ANIMATION: StackNavigationOptions = {
 
 function App(): React.JSX.Element {
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
-      <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
-      <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
-        <Navigation />
-      </NavigationContainer>
-      {/* </SafeAreaView> */}
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{flex: 1}}>
+        {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
+        <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
+        <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
+          <Navigation />
+        </NavigationContainer>
+        {/* </SafeAreaView> */}
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   )
 }
 
@@ -61,6 +77,7 @@ function Navigation() {
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />
       <Stack.Screen name='OTP' component={OTP} />
+      <Stack.Screen name='Home' component={Home} />
     </Stack.Navigator>
   )
 }

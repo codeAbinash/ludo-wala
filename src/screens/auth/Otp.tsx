@@ -1,15 +1,44 @@
-import {Medium, SemiBold} from '@/fonts'
+import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
-import {GradientButton} from '@components/Button'
+import {GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
+import {setAuthToken, verifyOtp_f} from '@query/api'
+import type {RouteProp} from '@react-navigation/native'
+import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import type {NavProp} from '@utils/types'
+import {ls, secureLs} from '@utils/storage'
+import type {StackNav} from '@utils/types'
 import React from 'react'
-import {Image, View} from 'react-native'
+import {Alert, Image, View} from 'react-native'
 
-export default function OTP({navigation}: NavProp) {
+type ParamList = {
+  OTP: OTPParamList
+}
+
+export type OTPParamList = {phone: string}
+
+export default function OTP({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'OTP'>}) {
+  const [otp, setOtp] = React.useState('')
+
+  const {mutate, isPending} = useMutation({
+    mutationFn: () => verifyOtp_f({otp, mobileNumber: route.params.phone}),
+    onSuccess: (data) => {
+      console.log(data)
+      if (!data.status) return Alert.alert('Error', data.message || 'Error occurred')
+      secureLs.set('token', data.token)
+      setAuthToken()
+      if (data.profileRequired) navigation.replace('EnterName')
+      else navigation.replace('Home')
+    },
+  })
+
+  function verifyOtp() {
+    if (otp.length !== 6) return
+    mutate()
+  }
+
   return (
     <View className='flex-1 items-center justify-center bg-primary px-5'>
       <PaddingTop />
@@ -18,12 +47,10 @@ export default function OTP({navigation}: NavProp) {
         style={{gap: 30}}
         colors={[Colors.g1, Colors.g2]}>
         <Image source={Images.logo} className='h-24 w-24' />
-        <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold>
+        {/* <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold> */}
         {/* <OTPInputView pinCount={4} style={{width: '80%', height: 200}} /> */}
-        <Input placeholder='Enter OTP' keyboardType='number-pad' />
-        <View>
-          <GradientButton title='Submit' color='primary' />
-        </View>
+        <Input placeholder='Enter OTP' keyboardType='number-pad' maxLength={6} value={otp} onChangeText={setOtp} />
+        <View>{isPending ? <LoadingButton /> : <GradientButton title='Verify' onPress={verifyOtp} />}</View>
       </Gradient>
       <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
     </View>
