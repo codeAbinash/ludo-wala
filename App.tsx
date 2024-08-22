@@ -5,17 +5,14 @@
  * @format
  */
 
-import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
-import {Medium} from './src/fonts'
-import LottieView from 'lottie-react-native'
-import {Home01Icon} from './src/assets/icons/icons'
-import React from 'react'
+import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
-import {SafeAreaView} from 'react-native-safe-area-context'
-import {GestureHandlerRootView} from 'react-native-gesture-handler'
-import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native'
-import EnterPhone from '@screens/EnterPhone'
 import EnterName from '@screens/EnterName'
+import EnterPhone from '@screens/EnterPhone'
+import {DarkTheme, DefaultTheme} from '@utils/themes'
+import React from 'react'
+import {Dimensions, StatusBar, useColorScheme} from 'react-native'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 export type RootStackParamList = {
   Home: undefined
@@ -43,7 +40,7 @@ function App(): React.JSX.Element {
     <GestureHandlerRootView style={{flex: 1}}>
       {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
       <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
-      <NavigationContainer>
+      <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
         <Navigation />
       </NavigationContainer>
       {/* </SafeAreaView> */}

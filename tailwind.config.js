@@ -7,7 +7,7 @@ module.exports = {
         primary: '#153D4B',
         accent: '#F2A365',
         border: '#5D9FAD',
-        bb : '#E3E882'
+        bb: '#E3E882',
       },
     },
   },

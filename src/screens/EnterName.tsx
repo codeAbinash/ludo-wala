@@ -1,14 +1,13 @@
-import {Medium, MediumS, SemiBold} from '@/fonts'
+import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {GradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
-import {Colors} from '@utils/colors'
-import type {NavProp, StackNav} from '@utils/types'
+import Colors from '@utils/colors'
+import type {NavProp} from '@utils/types'
 import React from 'react'
-import {Image, TouchableOpacity, View, type TextInputProps} from 'react-native'
-import {TextInput, type TouchableOpacityProps} from 'react-native-gesture-handler'
+import {Image, View} from 'react-native'
 
 export default function EnterName({navigation}: NavProp) {
   return (

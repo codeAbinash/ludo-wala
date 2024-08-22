@@ -1,4 +1,4 @@
-import COL, {Colors} from '@utils/colors'
+import Colors from '@utils/colors'
 import React from 'react'
 import LinearGradient, {type LinearGradientProps} from 'react-native-linear-gradient'
 

@@ -1,7 +1,7 @@
-import { Medium, SemiBold } from '@/fonts'
-import { Colors } from '@utils/colors'
+import {Medium, SemiBold} from '@/fonts'
+import Colors from '@utils/colors'
 import React from 'react'
-import { TouchableOpacity, View, type TouchableOpacityProps } from 'react-native'
+import {TouchableOpacity, View, type TouchableOpacityProps} from 'react-native'
 import Gradient from './Gradient'
 
 export function Button() {
@@ -21,7 +21,7 @@ export function GradientButton({title, onPress, color, ...props}: GradientButton
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <Gradient
         {...props}
-        className={`bg-${color} border-bb w-full items-center justify-center rounded-full border p-3 px-4`}
+        className={`bg-${color} w-full items-center justify-center rounded-full border border-bb p-3 px-4`}
         colors={[Colors.b1, Colors.b2]}>
         <SemiBold className='px-10 text-lg text-black'>{title}</SemiBold>
       </Gradient>

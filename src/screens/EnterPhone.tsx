@@ -1,14 +1,13 @@
-import {Medium, MediumS, SemiBold} from '@/fonts'
+import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {GradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
-import {Colors} from '@utils/colors'
-import type {NavProp, StackNav} from '@utils/types'
+import Colors from '@utils/colors'
+import type {NavProp} from '@utils/types'
 import React from 'react'
-import {Image, TouchableOpacity, View, type TextInputProps} from 'react-native'
-import {TextInput, type TouchableOpacityProps} from 'react-native-gesture-handler'
+import {Image, View} from 'react-native'
 
 export default function EnterPhone({navigation}: NavProp) {
   return (
@@ -21,9 +20,7 @@ export default function EnterPhone({navigation}: NavProp) {
         <Image source={Images.logo} className='h-24 w-24' />
         <Input placeholder='Enter Phone Number' keyboardType='phone-pad' />
         <View>
-          <GradientButton title='Login' color='primary'
-            onPress={() => navigation.navigate('EnterName')}
-          />
+          <GradientButton title='Login' color='primary' onPress={() => navigation.navigate('EnterName')} />
         </View>
       </Gradient>
       <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>

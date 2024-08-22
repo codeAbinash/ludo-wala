@@ -1,30 +1,12 @@
 import Tailwind from '../../tailwind.config'
 
-/**
- * @deprecated
- */
-const COL = {
-  accent: Tailwind.accent as unknown as string,
-  gray50: '#f9fafb',
-  gray100: '#f3f4f6',
-  gray200: '#e2e8f0',
-  gray300: '#d1d5db',
-  gray400: '#9ca3af',
-  gray500: '#6b7280',
-  gray600: '#475569',
-  gray700: '#374151',
-  gray800: '#1e293b',
-  gray900: '#111827',
-  gray950: '#030712',
-}
-
-export const Colors = {
+const Colors = {
   inherit: 'inherit',
   current: 'currentColor',
   transparent: 'transparent',
   black: '#000',
   white: '#fff',
-  accent: COL.accent,
+  accent: Tailwind.accent as unknown as string,
   b1: '#F9E920',
   b2: '#FBBF35',
   g1: '#123745',
@@ -317,4 +299,4 @@ export const Colors = {
   },
 }
 
-export default COL
+export default Colors
