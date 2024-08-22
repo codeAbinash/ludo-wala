@@ -14,8 +14,10 @@ import EnterPhone from '@screens/auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/auth/Otp'
 import Home from '@screens/Home'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {secureLs} from '@utils/storage'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
-import React from 'react'
+import type {NavProp} from '@utils/types'
+import React, {useEffect} from 'react'
 import {Dimensions, StatusBar, useColorScheme} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
@@ -25,6 +27,7 @@ export type RootStackParamList = {
   EnterName: undefined
   OTP: OTPParamList
   AddCash: undefined
+  Nav: undefined
 }
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,6 +71,14 @@ function App(): React.JSX.Element {
   )
 }
 
+function NavigationDetector({navigation}: NavProp) {
+  useEffect(() => {
+    if (secureLs.getString('token')) navigation.navigate('Home')
+    else navigation.navigate('EnterPhone')
+  }, [navigation])
+  return null
+}
+
 function Navigation() {
   return (
     <Stack.Navigator
@@ -76,6 +87,7 @@ function Navigation() {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Stack.Screen name='Nav' component={NavigationDetector} />
       <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />
