@@ -14,7 +14,7 @@ import RazorpayCheckout from 'react-native-razorpay'
 const amounts = ['100', '500', '1000', '1500', '2000', '2500']
 
 export default function AddCash({navigation}: NavProp) {
-  const [amount, setAmount] = React.useState('')
+  const [amount, setAmount] = React.useState('100')
 
   const {isPending, mutate} = useMutation({
     mutationFn: () => deposit_f({amount}),
@@ -58,7 +58,7 @@ export default function AddCash({navigation}: NavProp) {
   }
 
   return (
-    <View className='bg-g1 flex-1'>
+    <View className='flex-1 bg-g1'>
       <BackHeader title='Add Cash' navigation={navigation} />
       <View className='p-5'>
         <Gradient className='rounded-2xl border border-border p-5' style={{gap: 15}}>

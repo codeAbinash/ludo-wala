@@ -13,6 +13,7 @@ import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/auth/Otp'
 import Home from '@screens/Home'
+import Refer from '@screens/Refer'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {secureLs} from '@utils/storage'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   OTP: OTPParamList
   AddCash: undefined
   Nav: undefined
+  Refer: undefined
 }
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -93,6 +95,7 @@ function Navigation() {
       <Stack.Screen name='EnterName' component={EnterName} />
       <Stack.Screen name='OTP' component={OTP} />
       <Stack.Screen name='AddCash' component={AddCash} />
+      <Stack.Screen name='Refer' component={Refer} />
     </Stack.Navigator>
   )
 }

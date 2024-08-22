@@ -11,6 +11,9 @@ export default function Home({navigation}: NavProp) {
       <TouchableOpacity onPress={() => navigation.navigate('AddCash')} className='mt-10'>
         <Medium className='text-xl text-white'>Add Cash (Deposit)</Medium>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Refer')} className='mt-10'>
+        <Medium className='text-xl text-white'>Refer</Medium>
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           secureLs.clearAll()
