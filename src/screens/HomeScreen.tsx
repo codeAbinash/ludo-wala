@@ -4,7 +4,7 @@ import type {NavProp} from '@utils/types'
 import React from 'react'
 import {TouchableOpacity, View} from 'react-native'
 
-export default function Home({navigation}: NavProp) {
+export default function HomeScreen({navigation}: NavProp) {
   return (
     <View className='flex-1 items-center justify-center bg-primary'>
       <Medium className='text-5xl text-white'>Home</Medium>
