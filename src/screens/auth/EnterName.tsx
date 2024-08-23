@@ -13,22 +13,26 @@ import {Alert, Image, View} from 'react-native'
 export default function EnterName({navigation}: NavProp) {
   const [firstName, setFirstName] = React.useState('')
   const [lastName, setLastName] = React.useState('')
+  const [referCode, setReferCode] = React.useState('')
 
   const {mutate, isPending} = useMutation({
-    mutationFn: () => updateProfile_f({fname: firstName, lname: lastName}),
+    mutationFn: () => updateProfile_f({fname: firstName, lname: lastName, referCode}),
     onSuccess: (data) => {
       console.log(data)
       if (!data.status) return Alert.alert('Error', data.message || 'Error occurred')
       navigation.replace('Home')
     },
-    onError: (error) => {
-      console.log(error)
-    },
   })
 
   function update() {
-    if (firstName.length < 3) return
-    if (lastName.length < 3) return
+    if (!(firstName && lastName)) {
+      return Alert.alert('Error', 'First name and last name are required')
+    }
+
+    if (referCode.length !== 9 && referCode.length !== 0) {
+      return Alert.alert('Error', 'Refer code must be 9 characters long')
+    }
+
     mutate()
   }
 
@@ -43,6 +47,7 @@ export default function EnterName({navigation}: NavProp) {
         <View style={{gap: 15}} className='w-full'>
           <Input placeholder='First Name' value={firstName} onChangeText={setFirstName} />
           <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
+          <Input placeholder='Refer Code' value={referCode} onChangeText={setReferCode} maxLength={9} />
         </View>
         <View>{isPending ? <LoadingButton /> : <GradientButton title='Next' onPress={update} />}</View>
       </Gradient>

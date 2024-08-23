@@ -3,7 +3,7 @@ import Images from '@assets/images/images'
 import Gradient from '@components/Gradient'
 import {PaddingBottom} from '@components/SafePadding'
 import {get_user_f} from '@query/api'
-import {useQuery} from '@tanstack/react-query'
+import {useMutation, useQuery} from '@tanstack/react-query'
 import {secureLs} from '@utils/storage'
 import type {NavProp} from '@utils/types'
 import LottieView from 'lottie-react-native'
@@ -14,31 +14,28 @@ import {Image, View} from 'react-native'
 export default function Splash({navigation}: NavProp) {
   const setUser = userStore((state) => state.setUser)
 
-  const {data} = useQuery({
-    queryKey: ['user'],
-    queryFn: () => {
-      if (secureLs.getString('token')) return get_user_f()
-      else {
-        navigation.replace('EnterPhone')
+  const {mutate} = useMutation({
+    mutationKey: ['user'],
+    mutationFn: get_user_f,
+    onSuccess: (data) => {
+      setUser(data)
+      if (data.data?.fname === null || data.data?.lname === null) {
+        navigation.replace('EnterName')
+        return
       }
+      navigation.replace('Home')
     },
   })
 
   useEffect(() => {
-    // Update the zustand userStore with the user data
-    if (data) setUser(data)
-  }, [data, setUser])
-
-  useEffect(() => {
-    if (data) navigation.replace('Home')
-  }, [data, navigation])
-
-  useEffect(() => {}, [navigation])
-
-  // useEffect(() => {
-  //   if (secureLs.getString('token')) navigation.replace('Home')
-  //   else navigation.replace('EnterPhone')
-  // }, [navigation])
+    const token = secureLs.getString('token')
+    console.log(token)
+    if (token) {
+      mutate()
+    } else {
+      navigation.replace('EnterPhone')
+    }
+  }, [mutate, navigation])
 
   return (
     <Gradient className='flex-1 items-center justify-center'>

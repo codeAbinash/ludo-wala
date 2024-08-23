@@ -74,8 +74,8 @@ export async function verifyOtp_f({mobileNumber, otp}: {mobileNumber: string; ot
   return await postApi<LoginResponse>('auth/loginOrSignup', {mobileNumber, otp})
 }
 
-export async function updateProfile_f({fname, lname}: {fname: string; lname: string}) {
-  return await postApi<ServerResponse>('profile/profileUpdate', {fname, lname})
+export async function updateProfile_f({fname, lname, referCode}: {fname: string; lname: string; referCode: string}) {
+  return await postApi<ServerResponse>('profile/profileUpdate', referCode ? {fname, lname, referCode} : {fname, lname})
 }
 
 type DepositResponse = ServerResponse & {
