@@ -1,16 +1,16 @@
-import { Medium, SemiBold } from '@/fonts'
-import { userStore } from '@/zustand/userStore'
-import { ArrowUpDownIcon, Copy01Icon } from '@assets/icons/icons'
+import {Medium, SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
+import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import { GradientButton, OutlineButton } from '@components/Button'
+import {GradientButton, OutlineButton} from '@components/Button'
 import Gradient from '@components/Gradient'
-import { PaddingBottom, PaddingTop } from '@components/SafePadding'
+import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import SmallProfile from '@components/SmallProfile'
 import Clipboard from '@react-native-clipboard/clipboard'
-import type { NavProp } from '@utils/types'
+import type {NavProp} from '@utils/types'
 import React from 'react'
-import { Image, ToastAndroid, TouchableOpacity, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
+import {ScrollView} from 'react-native-gesture-handler'
 
 export default function Refer({navigation}: NavProp) {
   // const {isPending, data, refetch} = useQuery({
@@ -61,14 +61,14 @@ export default function Refer({navigation}: NavProp) {
               <Copy01Icon className='ml-3 text-white opacity-80' height={16} width={16} />
             </TouchableOpacity>
           </View>
-          <View className='mt-7 flex-row' style={{gap: 15}}>
+          <View className='mt-7 w-full flex-row' style={{gap: 15}}>
             <OutlineButton className='rounded-full p-3.5'>
               <ArrowUpDownIcon className='text-b1' height={15} width={15} />
             </OutlineButton>
-            <View className='flex-1'>
+            <View style={{flexGrow: 1}}>
               <OutlineButton title='Leaderboard' className='p-4' />
             </View>
-            <View className='flex-1'>
+            <View style={{flexGrow: 1}}>
               <GradientButton className='p-4' title='Invite' />
             </View>
           </View>

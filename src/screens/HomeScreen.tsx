@@ -71,12 +71,12 @@ function GameMode({
   disabled?: boolean
 }) {
   return (
-    <View className='w-screen flex-row items-center justify-center px-3' style={{gap: 10}}>
-      <View>
-        <GradientButton className='h-8 w-8 rounded-full px-0' onPress={() => setCurrentOption(decrementOption(option))}>
+    <View className='w-screen flex-row items-center justify-center'>
+      <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(decrementOption(option))}>
+        <Gradient className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0' colors={[Colors.b1, Colors.b1]}>
           <ArrowLeft01SolidIcon height={25} width={25} className='text-black' />
-        </GradientButton>
-      </View>
+        </Gradient>
+      </TouchableOpacity>
       <Gradient
         className='flex-1 items-center rounded-2xl pb-7'
         style={{
@@ -102,11 +102,11 @@ function GameMode({
           <FullGradientButton className='mt-12 rounded-full px-10' title='Play Now' />
         )}
       </Gradient>
-      <View>
-        <GradientButton className='h-8 w-8 rounded-full px-0' onPress={() => setCurrentOption(incrementOption(option))}>
+      <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(incrementOption(option))}>
+        <Gradient className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0' colors={[Colors.b1, Colors.b1]}>
           <ArrowRight01SolidIcon height={25} width={25} className='text-black' />
-        </GradientButton>
-      </View>
+        </Gradient>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -123,7 +123,7 @@ export default function HomeScreen({navigation}: NavProp) {
 
   const animStyle = useAnimatedStyle(() => {
     return {
-      marginLeft: -curr.value * W,
+      transform: [{translateX: curr.value * -W}],
     }
   })
 
@@ -140,7 +140,7 @@ export default function HomeScreen({navigation}: NavProp) {
   return (
     <View className='flex-1 bg-primary'>
       <PaddingTop />
-      <View className='px-5'>
+      <View className='px-4'>
         <SmallProfile navigation={navigation} />
       </View>
       <View className='flex-1 justify-center'>
