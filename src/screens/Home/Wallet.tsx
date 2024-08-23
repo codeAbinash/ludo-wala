@@ -9,6 +9,10 @@ import Gradient from '@components/Gradient'
 import Colors from '@utils/colors'
 import type {NavProp} from '@utils/types'
 
+function getTotal(s1: string, s2: string, s3: string) {
+  return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
+}
+
 export default function Wallet({navigation}: NavProp) {
   const user = userStore((state) => state.user)
   return (
@@ -16,7 +20,9 @@ export default function Wallet({navigation}: NavProp) {
       <PaddingTop />
       <View className='mt-5'>
         <Medium className='text-lg text-white'>Total Balance</Medium>
-        <Bold className='mt-3 text-5xl text-white'>₹ {user?.data?.deposit_wallet}</Bold>
+        <Bold className='mt-3 text-5xl text-white'>
+          ₹ {getTotal(user?.data?.deposit_wallet || '0', user?.data?.winning_wallet || '0', user?.data?.bonus_wallet || '0')}
+        </Bold>
       </View>
       <View className='mt-5'>
         <View className='flex-row items-end justify-between py-6'>

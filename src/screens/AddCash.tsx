@@ -1,4 +1,5 @@
 import {Medium, MediumS, SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
@@ -16,10 +17,11 @@ const amounts = ['100', '500', '1000', '1500', '2000', '2500']
 export default function AddCash({navigation}: NavProp) {
   const [amount, setAmount] = React.useState('100')
 
+  const user = userStore((state) => state.user)
+
   const {isPending, mutate} = useMutation({
     mutationFn: () => deposit_f({amount}),
     onSuccess: (data) => {
-      console.log(data)
       if (!data.status) Alert.alert('Error', data.message || 'Something went wrong')
       else {
         const options = {
@@ -31,8 +33,12 @@ export default function AddCash({navigation}: NavProp) {
           image: 'https://system.ludowalagames.com/logo256.png',
           order_id: data.razorpay_order_id,
           // handler: successHandler,
-          // prefill: { name: data.name, email: data.email, contact: data.mobile_number },
-          notes: {address: 'Razorpay Corporate Office'},
+          prefill: {
+            name: user?.data?.fname + ' ' + user?.data?.lname,
+            // email: user?.data?.email,
+            contact: user?.data?.mobileNumber,
+          },
+          notes: {address: ''},
           theme: {color: '#153D4B'},
         }
 
@@ -85,7 +91,7 @@ export default function AddCash({navigation}: NavProp) {
             ))}
           </View>
         </Gradient>
-        <View className='mt-16'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money'  onPress={addMoney} />}</View>
+        <View className='mt-16'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money' onPress={addMoney} />}</View>
       </View>
     </View>
   )
