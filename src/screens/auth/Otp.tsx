@@ -1,6 +1,6 @@
 import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
-import {GradientButton, LoadingButton} from '@components/Button'
+import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
@@ -50,7 +50,7 @@ export default function OTP({navigation, route}: {navigation: StackNav; route: R
         {/* <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold> */}
         {/* <OTPInputView pinCount={4} style={{width: '80%', height: 200}} /> */}
         <Input placeholder='Enter OTP' keyboardType='number-pad' maxLength={6} value={otp} onChangeText={setOtp} />
-        <View>{isPending ? <LoadingButton /> : <GradientButton title='Verify' onPress={verifyOtp} />}</View>
+        <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Verify' onPress={verifyOtp} />}</View>
       </Gradient>
       <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
     </View>

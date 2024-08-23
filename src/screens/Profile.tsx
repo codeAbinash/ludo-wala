@@ -1,10 +1,9 @@
-import {Medium, SemiBold} from '@/fonts'
+import {SemiBold} from '@/fonts'
 import {
   Clock01SolidIcon,
   Door01SolidIcon,
   InformationCircleSolidIcon,
   LicenseSolidIcon,
-  Logout02SolidIcon,
   Notification03SolidIcon,
   SecurityCheckSolidIcon,
   SentSolidIcon,
@@ -19,9 +18,10 @@ import Colors from '@utils/colors'
 import {secureLs} from '@utils/storage'
 import type {NavProp} from '@utils/types'
 import React from 'react'
-import {TouchableOpacity, View} from 'react-native'
+import {Alert, TouchableOpacity, View} from 'react-native'
+import type {TouchableOpacityProps} from 'react-native-gesture-handler'
 
-const props = {
+const ic = {
   height: 20,
   width: 20,
   color: Colors.b1,
@@ -36,26 +36,42 @@ export default function Profile({navigation}: NavProp) {
       </View>
       <View className='mt-7 h-full justify-center px-5'>
         <Gradient className='rounded-2xl border border-border p-5'>
-          <Option Icon={<UserSolidIcon {...props} />} text='My Account' />
-          <Option Icon={<Clock01SolidIcon {...props} />} text='Transaction History' />
-          <Option Icon={<Notification03SolidIcon {...props} />} text='Notification' />
-          <Option Icon={<SecurityCheckSolidIcon {...props} />} text='Privacy Policy' />
-          <Option Icon={<LicenseSolidIcon {...props} />} text='Terms and Condition' />
-          <Option Icon={<InformationCircleSolidIcon {...props} />} text='About Us' />
-          <Option Icon={<StarSolidIcon {...props} />} text='Rate us' />
-          <Option Icon={<SentSolidIcon {...props} />} text='Share with others' />
-          <Option Icon={<Door01SolidIcon {...props} />} text='Logout' />
+          <Option Icon={<UserSolidIcon {...ic} />} text='My Account' />
+          <Option Icon={<Clock01SolidIcon {...ic} />} text='Transaction History' />
+          <Option Icon={<Notification03SolidIcon {...ic} />} text='Notification' />
+          <Option Icon={<SecurityCheckSolidIcon {...ic} />} text='Privacy Policy' />
+          <Option Icon={<LicenseSolidIcon {...ic} />} text='Terms and Condition' />
+          <Option Icon={<InformationCircleSolidIcon {...ic} />} text='About Us' />
+          <Option Icon={<StarSolidIcon {...ic} />} text='Rate us' />
+          <Option Icon={<SentSolidIcon {...ic} />} text='Share with others' />
+          <Option
+            Icon={<Door01SolidIcon {...ic} />}
+            text='Logout'
+            onPress={() => {
+              Alert.alert('Logout', 'Are you sure you want to logout?', [
+                {text: 'Cancel', style: 'cancel'},
+                {
+                  text: 'Logout',
+                  onPress: () => {
+                    secureLs.clearAll()
+                    navigation.reset({index: 0, routes: [{name: 'Splash'}]})
+                  },
+                },
+              ])
+            }}
+          />
         </Gradient>
       </View>
     </Screen>
   )
 }
 
-function Option({Icon, text}: {Icon?: React.ReactNode; text?: string}) {
+type OptionProps = TouchableOpacityProps & {Icon?: React.ReactNode; text?: string}
+function Option({Icon, text, ...props}: OptionProps) {
   return (
-    <TouchableOpacity className='flex-row items-center py-3.5' style={{gap: 15}}>
+    <TouchableOpacity className='flex-row items-center py-3.5' style={{gap: 15}} {...props}>
       {Icon}
-      <SemiBold className='text-xl text-b1'>{text}</SemiBold>
+      <SemiBold className='text-lg text-b1'>{text}</SemiBold>
     </TouchableOpacity>
   )
 }

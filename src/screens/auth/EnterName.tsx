@@ -1,5 +1,5 @@
 import Images from '@assets/images/images'
-import {GradientButton, LoadingButton} from '@components/Button'
+import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import KeyboardAvoidingContainer from '@components/KeyboardAvoidingContainer'
@@ -51,7 +51,7 @@ export default function EnterName({navigation}: NavProp) {
             <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
             <Input placeholder='Refer Code' value={referCode} onChangeText={setReferCode} maxLength={9} />
           </View>
-          <View>{isPending ? <LoadingButton /> : <GradientButton title='Next' onPress={update} />}</View>
+          <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Next' onPress={update} />}</View>
         </Gradient>
       </View>
     </KeyboardAvoidingContainer>

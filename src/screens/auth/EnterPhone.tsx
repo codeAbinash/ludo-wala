@@ -1,6 +1,6 @@
 import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
-import {GradientButton, LoadingButton} from '@components/Button'
+import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
@@ -38,7 +38,7 @@ export default function EnterPhone({navigation}: NavProp) {
         colors={[Colors.g1, Colors.g2]}>
         <Image source={Images.logo} className='h-24 w-24' />
         <Input placeholder='Enter Phone Number' keyboardType='phone-pad' value={phone} onChangeText={setPhone} maxLength={10} />
-        <View>{isPending ? <LoadingButton /> : <GradientButton title='Login' onPress={sendOtp} />}</View>
+        <View>{isPending ? <LoadingButton /> : <FullGradientButton title='Login' className='rounded-full px-10' onPress={sendOtp} />}</View>
       </Gradient>
       <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
     </View>

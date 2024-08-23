@@ -53,10 +53,11 @@ export function OutlineButton({title, children, onPress, ...props}: GradientButt
   )
 }
 
-export function LoadingButton() {
+type LoadingButtonProps = TouchableOpacityProps
+export function LoadingButton({...props}: LoadingButtonProps) {
   return (
-    <Gradient className={'w-full items-center justify-center rounded-full border border-bb'} colors={[Colors.b1, Colors.b2]}>
-      <LottieView source={require('@assets/animations/loader.json')} autoPlay loop style={{width: 150, height: 47}} />
+    <Gradient className={'w-full items-center justify-center rounded-full border border-bb'} colors={[Colors.b1, Colors.b2]} {...props}>
+      <LottieView source={require('@assets/animations/loader.json')} autoPlay loop style={{width: 140, height: 45}} />
     </Gradient>
   )
 }
