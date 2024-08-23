@@ -16,6 +16,9 @@ export const BoldS = {
 export const LightS = {
   fontFamily: 'Gellix-Light',
 }
+export const BangersS = {
+  fontFamily: 'Bangers-Regular',
+}
 
 export function Medium({children, style, ...props}: TextProps) {
   return (
@@ -52,6 +55,14 @@ export function Bold({children, style, ...props}: TextProps) {
 export function Light({children, style, ...props}: TextProps) {
   return (
     <Text style={[LightS, style]} {...props}>
+      {children}
+    </Text>
+  )
+}
+
+export function Bangers({children, style, ...props}: TextProps) {
+  return (
+    <Text style={[BangersS, style]} {...props}>
       {children}
     </Text>
   )
