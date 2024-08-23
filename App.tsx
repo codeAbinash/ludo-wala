@@ -16,7 +16,7 @@ import Home from '@screens/Home'
 import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
-import PaymentSuccessful from '@screens/PaymentSuccessful'
+import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
 import Splash from '@screens/Splash'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
@@ -76,7 +76,7 @@ export type RootStackParamList = {
   Refer: undefined
   HomeScreen: undefined
   Wallet: undefined
-  PaymentSuccessful: undefined
+  PaymentSuccessful: PaymentSuccessfulParamList
 }
 function Navigation() {
   return (
@@ -94,8 +94,8 @@ function Navigation() {
       <Stack.Screen name='AddCash' component={AddCash} />
       <Stack.Screen name='Refer' component={Refer} />
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
-      <Stack.Screen name='PaymentSuccessful' component={PaymentSuccessful} />
       <Stack.Screen name='Wallet' component={Wallet} />
+      <Stack.Screen name='PaymentSuccessful' component={PaymentSuccessful} />
     </Stack.Navigator>
   )
 }

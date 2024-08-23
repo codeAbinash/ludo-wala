@@ -45,7 +45,10 @@ export default function AddCash({navigation}: NavProp) {
         RazorpayCheckout.open(options).then((d) => {
           // handle success
           // Alert.alert(`Success: ${d.razorpay_payment_id}`)
-          navigation.replace('PaymentSuccessful')
+          navigation.navigate('PaymentSuccessful', {
+            amount,
+            ...d,
+          })
         })
       }
     },
