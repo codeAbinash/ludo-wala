@@ -1,4 +1,5 @@
 import {Bold, Medium, SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
 import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import {GradientButton, OutlineButton} from '@components/Button'
@@ -12,12 +13,14 @@ import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 
 export default function Refer() {
-  const {isPending, data, refetch} = useQuery({
-    queryKey: ['user'],
-    queryFn: () => get_user_f(),
-  })
+  // const {isPending, data, refetch} = useQuery({
+  //   queryKey: ['user'],
+  //   queryFn: () => get_user_f(),
+  // })
 
-  useEffect(() => {}, [data])
+  // useEffect(() => {}, [data])
+
+  const user = userStore((state) => state.user)
 
   // refetch on focus
   // useEffect(() => {
@@ -38,7 +41,7 @@ export default function Refer() {
           </View>
           <View className='flex-row items-center justify-between' style={{gap: 15}}>
             <GradientButton className='rounded-full px-7'>
-              <Bold className='text-base'>₹ {data?.data?.deposit_wallet}</Bold>
+              <Bold className='text-base'>₹ {user?.data?.deposit_wallet}</Bold>
             </GradientButton>
             <Image
               source={{
@@ -59,7 +62,7 @@ export default function Refer() {
             <TouchableOpacity
               onPress={() => {
                 // Copy
-                Clipboard.setString(data?.data?.referCode || '')
+                Clipboard.setString(user?.data?.referCode || '')
                 ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT)
               }}
               activeOpacity={0.7}
@@ -69,7 +72,7 @@ export default function Refer() {
                 borderStyle: 'dashed',
               }}
               className='mt-5 flex-row items-center rounded-full py-3 pl-8 pr-6'>
-              <Medium className='text-center text-base text-b1'>{data?.data?.referCode || 'Loading...'}</Medium>
+              <Medium className='text-center text-base text-b1'>{user?.data?.referCode || 'Loading...'}</Medium>
               <Copy01Icon className='ml-3 text-white opacity-80' height={18} width={18} />
             </TouchableOpacity>
           </View>
