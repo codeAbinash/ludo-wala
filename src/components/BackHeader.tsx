@@ -17,7 +17,7 @@ export default function BackHeader({
   return (
     <>
       <PaddingTop />
-      <View className='flex-row items-center justify-between p-2 px-3 pr-4'>
+      <View className='flex-row items-center justify-between p-2 px-3 pr-4 pt-0'>
         <View className='flex-row items-center gap-3'>
           <TouchableOpacity className='p-2.5' onPress={() => navigation.goBack()}>
             <ArrowLeft01Icon height={25} width={25} className='text-white' />

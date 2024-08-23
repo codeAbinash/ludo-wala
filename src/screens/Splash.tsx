@@ -1,15 +1,14 @@
-import {userStore} from '@/zustand/userStore'
+import { userStore } from '@/zustand/userStore'
 import Images from '@assets/images/images'
 import Gradient from '@components/Gradient'
-import {PaddingBottom} from '@components/SafePadding'
-import {get_user_f} from '@query/api'
-import {useMutation, useQuery} from '@tanstack/react-query'
-import {secureLs} from '@utils/storage'
-import type {NavProp} from '@utils/types'
+import { PaddingBottom } from '@components/SafePadding'
+import { get_user_f } from '@query/api'
+import { useMutation } from '@tanstack/react-query'
+import { secureLs } from '@utils/storage'
+import type { NavProp } from '@utils/types'
 import LottieView from 'lottie-react-native'
-import React from 'react'
-import {useEffect} from 'react'
-import {Image, View} from 'react-native'
+import React, { useEffect } from 'react'
+import { Image, View } from 'react-native'
 
 export default function Splash({navigation}: NavProp) {
   const setUser = userStore((state) => state.setUser)
