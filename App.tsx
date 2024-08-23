@@ -12,6 +12,7 @@ import AddCash from '@screens/AddCash'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/auth/Otp'
+import EditProfile from '@screens/EditProfile'
 import Home from '@screens/Home'
 import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
@@ -77,6 +78,8 @@ export type RootStackParamList = {
   HomeScreen: undefined
   Wallet: undefined
   PaymentSuccessful: PaymentSuccessfulParamList
+  EditProfile: undefined
+  Profile: undefined
 }
 function Navigation() {
   return (
@@ -96,6 +99,8 @@ function Navigation() {
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
       <Stack.Screen name='Wallet' component={Wallet} />
       <Stack.Screen name='PaymentSuccessful' component={PaymentSuccessful} />
+      <Stack.Screen name='EditProfile' component={EditProfile} />
+      <Stack.Screen name='Profile' component={EditProfile} />
     </Stack.Navigator>
   )
 }

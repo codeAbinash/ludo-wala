@@ -1,17 +1,12 @@
-import {View, Text, TouchableOpacity} from 'react-native'
+import { Bold, Medium, SemiBold } from '@/fonts'
+import { userStore } from '@/zustand/userStore'
+import { ArrowDown02Icon } from '@assets/icons/icons'
+import { GradientButton } from '@components/Button'
+import { PaddingTop } from '@components/SafePadding'
+import type { NavProp } from '@utils/types'
+import { getTotal } from '@utils/utils'
 import React from 'react'
-import {Bold, Medium, SemiBold} from '@/fonts'
-import {userStore} from '@/zustand/userStore'
-import {PaddingTop} from '@components/SafePadding'
-import {GradientButton, OutlineButton} from '@components/Button'
-import {ArrowDown02Icon} from '@assets/icons/icons'
-import Gradient from '@components/Gradient'
-import Colors from '@utils/colors'
-import type {NavProp} from '@utils/types'
-
-function getTotal(s1: string, s2: string, s3: string) {
-  return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
-}
+import { TouchableOpacity, View } from 'react-native'
 
 export default function Wallet({navigation}: NavProp) {
   const user = userStore((state) => state.user)

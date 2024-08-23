@@ -1,18 +1,18 @@
-import {Bold, Medium, SemiBold} from '@/fonts'
-import {userStore} from '@/zustand/userStore'
-import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
+import { Medium, SemiBold } from '@/fonts'
+import { userStore } from '@/zustand/userStore'
+import { ArrowUpDownIcon, Copy01Icon } from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import {GradientButton, OutlineButton} from '@components/Button'
+import { GradientButton, OutlineButton } from '@components/Button'
 import Gradient from '@components/Gradient'
-import {PaddingBottom, PaddingTop} from '@components/SafePadding'
-import {get_user_f} from '@query/api'
+import { PaddingBottom, PaddingTop } from '@components/SafePadding'
+import SmallProfile from '@components/SmallProfile'
 import Clipboard from '@react-native-clipboard/clipboard'
-import {useQuery} from '@tanstack/react-query'
-import React, {useEffect} from 'react'
-import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
-import {ScrollView} from 'react-native-gesture-handler'
+import type { NavProp } from '@utils/types'
+import React from 'react'
+import { Image, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 
-export default function Refer() {
+export default function Refer({navigation}: NavProp) {
   // const {isPending, data, refetch} = useQuery({
   //   queryKey: ['user'],
   //   queryFn: () => get_user_f(),
@@ -35,22 +35,7 @@ export default function Refer() {
     <View className='flex-1 bg-primary'>
       <PaddingTop />
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
-        <View className='flex-row justify-between pt-2'>
-          <View>
-            <Image source={Images.logo} className='h-12 w-12' />
-          </View>
-          <View className='flex-row items-center justify-between' style={{gap: 15}}>
-            <GradientButton className='rounded-full px-7'>
-              <Bold className='text-base'>₹ {user?.data?.deposit_wallet}</Bold>
-            </GradientButton>
-            <Image
-              source={{
-                uri: 'https://i.pinimg.com/originals/1c/c5/35/1cc535901e32f18db87fa5e340a18aff.jpg',
-              }}
-              className='h-10 w-10 rounded-full bg-white'
-            />
-          </View>
-        </View>
+        <SmallProfile navigation={navigation} />
         <Gradient className='mt-5 flex-1 rounded-2xl border border-border p-5 pb-7 pt-7'>
           <Medium className='text-center text-base text-white opacity-70'>Refer your friends and earn cash prizes!</Medium>
           <Image source={Images.refer} className='mx-auto h-40 w-40' />
