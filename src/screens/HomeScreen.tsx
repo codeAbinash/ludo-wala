@@ -11,11 +11,12 @@ import {useMutation} from '@tanstack/react-query'
 import type colors from '@utils/colors'
 import Colors from '@utils/colors'
 import {W} from '@utils/dimensions'
-import type {NavProp} from '@utils/types'
+import type {NavProp, StackNav} from '@utils/types'
 import React, {useDebugValue, useEffect} from 'react'
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native'
 import Animated, {useAnimatedStyle, useDerivedValue, useSharedValue, withTiming} from 'react-native-reanimated'
 import BannerImage from '@icons/bannerImage.svg'
+import {useNavigation} from '@react-navigation/native'
 
 type GameType = 'Classic' | 'Quick' | 'Challenge' | 'Tournament'
 
@@ -64,12 +65,15 @@ function GameMode({
   option,
   setCurrentOption,
   disabled,
+  to,
 }: {
   game: GameType
   option: number
   setCurrentOption: (option: GameType) => void
   disabled?: boolean
+  to?: string
 }) {
+  const navigation = useNavigation<StackNav>()
   return (
     <View className='w-screen flex-row items-center justify-center'>
       <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(decrementOption(option))}>
@@ -99,7 +103,7 @@ function GameMode({
         {disabled ? (
           <FullGradientButton className='mt-12 rounded-full border-transparent px-10 opacity-50' title='Coming Soon' activeOpacity={1} />
         ) : (
-          <FullGradientButton className='mt-12 rounded-full px-10' title='Play Now' />
+          <FullGradientButton className='mt-12 rounded-full px-10' title='Play Now' onPress={() => to && navigation.navigate(to as any)} />
         )}
       </Gradient>
       <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(incrementOption(option))}>
@@ -145,7 +149,7 @@ export default function HomeScreen({navigation}: NavProp) {
       </View>
       <View className='flex-1 justify-center'>
         <Animated.View className='flex-row pt-16' style={animStyle}>
-          <GameMode setCurrentOption={setCurrentOption} option={0} game='Tournament' />
+          <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' />
           <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' />
           <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' />
           <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' />

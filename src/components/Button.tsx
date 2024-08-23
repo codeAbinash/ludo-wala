@@ -32,7 +32,7 @@ export function FullGradientButton({title, children, onPress, colors, ...props}:
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
       <Gradient
-        className={'w-full items-center justify-center rounded-2xl border border-bb p-3.5 px-4'}
+        className={'w-full items-center justify-center rounded-2xl border border-bb p-3 px-4'}
         colors={colors || [Colors.b1, Colors.b2]}
         {...props}>
         {title && <Bold className='text-base text-black'>{title}</Bold>}

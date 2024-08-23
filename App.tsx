@@ -19,6 +19,7 @@ import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
 import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
 import Splash from '@screens/Splash'
+import Tournament from '@screens/Tournament'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
 import React from 'react'
@@ -80,6 +81,7 @@ export type RootStackParamList = {
   PaymentSuccessful: PaymentSuccessfulParamList
   EditProfile: undefined
   Profile: undefined
+  Tournament: undefined
 }
 function Navigation() {
   return (
@@ -101,6 +103,7 @@ function Navigation() {
       <Stack.Screen name='PaymentSuccessful' component={PaymentSuccessful} />
       <Stack.Screen name='EditProfile' component={EditProfile} />
       <Stack.Screen name='Profile' component={EditProfile} />
+      <Stack.Screen name='Tournament' component={Tournament} />
     </Stack.Navigator>
   )
 }
