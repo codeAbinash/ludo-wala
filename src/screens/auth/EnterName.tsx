@@ -2,6 +2,7 @@ import Images from '@assets/images/images'
 import {GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
+import KeyboardAvoidingContainer from '@components/KeyboardAvoidingContainer'
 import {PaddingTop} from '@components/SafePadding'
 import {updateProfile_f} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
@@ -37,20 +38,22 @@ export default function EnterName({navigation}: NavProp) {
   }
 
   return (
-    <View className='flex-1 items-center justify-center bg-primary px-5'>
-      <PaddingTop />
-      <Gradient
-        className='w-full items-center justify-center rounded-2xl border border-border px-5 py-10 pt-7'
-        style={{gap: 30}}
-        colors={[Colors.g1, Colors.g2]}>
-        <Image source={Images.logo} className='h-24 w-24' />
-        <View style={{gap: 15}} className='w-full'>
-          <Input placeholder='First Name' value={firstName} onChangeText={setFirstName} />
-          <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
-          <Input placeholder='Refer Code' value={referCode} onChangeText={setReferCode} maxLength={9} />
-        </View>
-        <View>{isPending ? <LoadingButton /> : <GradientButton title='Next' onPress={update} />}</View>
-      </Gradient>
-    </View>
+    <KeyboardAvoidingContainer className='bg-primary'>
+      <View className='h-screen flex-1 items-center justify-center px-5'>
+        <PaddingTop />
+        <Gradient
+          className='w-full items-center justify-center rounded-2xl border border-border px-5 py-10 pt-7'
+          style={{gap: 30}}
+          colors={[Colors.g1, Colors.g2]}>
+          <Image source={Images.logo} className='h-24 w-24' />
+          <View style={{gap: 15}} className='w-full'>
+            <Input placeholder='First Name' value={firstName} onChangeText={setFirstName} />
+            <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
+            <Input placeholder='Refer Code' value={referCode} onChangeText={setReferCode} maxLength={9} />
+          </View>
+          <View>{isPending ? <LoadingButton /> : <GradientButton title='Next' onPress={update} />}</View>
+        </Gradient>
+      </View>
+    </KeyboardAvoidingContainer>
   )
 }

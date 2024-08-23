@@ -1,4 +1,4 @@
-import {Bold, Medium} from '@/fonts'
+import {Bold, Medium, SemiBold} from '@/fonts'
 import Colors from '@utils/colors'
 import LottieView from 'lottie-react-native'
 import React from 'react'
@@ -19,8 +19,19 @@ type GradientButtonProps = TouchableOpacityProps & {
 export function GradientButton({title, children, onPress, ...props}: GradientButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
-      <Gradient className={'w-full items-center justify-center rounded-2xl border border-bb p-3.5 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
-        {title && <Bold className='text-base text-black'>{title}</Bold>}
+      <Gradient className={'w-full items-center justify-center rounded-2xl border border-bb p-2.5 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
+        {title && <SemiBold className='text-black'>{title}</SemiBold>}
+        {children}
+      </Gradient>
+    </TouchableOpacity>
+  )
+}
+
+export function FullGradientButton({title, children, onPress, ...props}: GradientButtonProps) {
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
+      <Gradient className={'w-full items-center justify-center rounded-2xl p-3.5 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
+        {title && <SemiBold className='text-base text-black'>{title}</SemiBold>}
         {children}
       </Gradient>
     </TouchableOpacity>
@@ -31,7 +42,7 @@ export function OutlineButton({title, children, onPress, ...props}: GradientButt
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
       <View className='w-full items-center justify-center rounded-2xl border border-b1 p-2' {...props}>
-        {title && <Bold className='text-base text-b1'>{title}</Bold>}
+        {title && <SemiBold className='text-b1'>{title}</SemiBold>}
         {children}
       </View>
     </TouchableOpacity>

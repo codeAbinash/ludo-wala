@@ -37,7 +37,7 @@ export default function Refer() {
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <View className='flex-row justify-between pt-2'>
           <View>
-            <Image source={Images.logo} className='h-14 w-14' />
+            <Image source={Images.logo} className='h-12 w-12' />
           </View>
           <View className='flex-row items-center justify-between' style={{gap: 15}}>
             <GradientButton className='rounded-full px-7'>
@@ -47,17 +47,17 @@ export default function Refer() {
               source={{
                 uri: 'https://i.pinimg.com/originals/1c/c5/35/1cc535901e32f18db87fa5e340a18aff.jpg',
               }}
-              className='h-12 w-12 rounded-full bg-white'
+              className='h-10 w-10 rounded-full bg-white'
             />
           </View>
         </View>
-        <Gradient className='mt-5 flex-1 rounded-2xl border border-border p-5'>
-          <Medium className='text-center text-lg text-white opacity-70'>Refer your friends and earn cash prizes!</Medium>
-          <Image source={Images.refer} className='mx-auto h-60 w-60' />
-          <SemiBold className='mt-7 text-center text-xl text-b1 underline underline-offset-1'>Referral Rank</SemiBold>
-          <SemiBold className='mt-7 text-center text-4xl text-white'>Get 2%</SemiBold>
-          <SemiBold className='mt-2 text-center text-lg text-white opacity-70'>of your referral’s every deposit</SemiBold>
-          <SemiBold className='mt-7 text-center text-xl text-white'>Referral code</SemiBold>
+        <Gradient className='mt-5 flex-1 rounded-2xl border border-border p-5 pb-7 pt-7'>
+          <Medium className='text-center text-base text-white opacity-70'>Refer your friends and earn cash prizes!</Medium>
+          <Image source={Images.refer} className='mx-auto h-40 w-40' />
+          <SemiBold className='mt-7 text-center text-lg text-b1 underline underline-offset-1'>Referral Rank</SemiBold>
+          <SemiBold className='mt-7 text-center text-3xl text-white'>Get 2%</SemiBold>
+          <SemiBold className='mt-2 text-center text-base text-white opacity-70'>of your referral’s every deposit</SemiBold>
+          <SemiBold className='mt-7 text-center text-lg text-white'>Referral code</SemiBold>
           <View className='flex-row items-center justify-center'>
             <TouchableOpacity
               onPress={() => {
@@ -72,13 +72,13 @@ export default function Refer() {
                 borderStyle: 'dashed',
               }}
               className='mt-5 flex-row items-center rounded-full py-3 pl-8 pr-6'>
-              <Medium className='text-center text-base text-b1'>{user?.data?.referCode || 'Loading...'}</Medium>
-              <Copy01Icon className='ml-3 text-white opacity-80' height={18} width={18} />
+              <Medium className='text-center text-sm text-b1'>{user?.data?.referCode || 'Loading...'}</Medium>
+              <Copy01Icon className='ml-3 text-white opacity-80' height={16} width={16} />
             </TouchableOpacity>
           </View>
           <View className='mt-7 flex-row' style={{gap: 15}}>
-            <OutlineButton className='rounded-full p-4'>
-              <ArrowUpDownIcon className='text-b1' height={18} width={18} />
+            <OutlineButton className='rounded-full p-3.5'>
+              <ArrowUpDownIcon className='text-b1' height={15} width={15} />
             </OutlineButton>
             <View className='flex-1'>
               <OutlineButton title='Leaderboard' className='p-4' />

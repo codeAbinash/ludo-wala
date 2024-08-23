@@ -5,23 +5,24 @@
  * @format
  */
 
-import { showErr } from '@query/api'
-import { NavigationContainer } from '@react-navigation/native'
-import { CardStyleInterpolators, createStackNavigator, type StackNavigationOptions } from '@react-navigation/stack'
+import {showErr} from '@query/api'
+import {NavigationContainer} from '@react-navigation/native'
+import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
 import AddCash from '@screens/AddCash'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
-import OTP, { type OTPParamList } from '@screens/auth/Otp'
+import OTP, {type OTPParamList} from '@screens/auth/Otp'
+import Home from '@screens/Home'
+import Refer from '@screens/Home/Refer'
+import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
-import Home from '@screens/index'
 import PaymentSuccessful from '@screens/PaymentSuccessful'
-import Refer from '@screens/Refer'
 import Splash from '@screens/Splash'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { DarkTheme, DefaultTheme } from '@utils/themes'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {DarkTheme, DefaultTheme} from '@utils/themes'
 import React from 'react'
-import { Dimensions, StatusBar, useColorScheme } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import {Dimensions, StatusBar, useColorScheme} from 'react-native'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,7 +54,7 @@ const NO_ANIMATION: StackNavigationOptions = {
 function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{flex: 1}} className='bg-g1'>
+      <GestureHandlerRootView style={{flex: 1}} className='bg-primary'>
         {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
         <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
         <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
@@ -74,6 +75,7 @@ export type RootStackParamList = {
   Splash: undefined
   Refer: undefined
   HomeScreen: undefined
+  Wallet: undefined
   PaymentSuccessful: undefined
 }
 function Navigation() {
@@ -93,6 +95,7 @@ function Navigation() {
       <Stack.Screen name='Refer' component={Refer} />
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
       <Stack.Screen name='PaymentSuccessful' component={PaymentSuccessful} />
+      <Stack.Screen name='Wallet' component={Wallet} />
     </Stack.Navigator>
   )
 }

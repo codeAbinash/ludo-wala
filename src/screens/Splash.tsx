@@ -41,7 +41,9 @@ export default function Splash({navigation}: NavProp) {
     <Gradient className='flex-1 items-center justify-center'>
       <Image source={Images.logo} className='mt-52 h-44 w-44' />
       <View className='mt-40'>
-        <LottieView source={require('@assets/animations/dice-loading.json')} style={{width: 50, height: 50}} autoPlay loop />
+        <View className='opacity-60'>
+          <LottieView source={require('@assets/animations/dice-loading.json')} style={{width: 50, height: 50}} autoPlay loop />
+        </View>
         <PaddingBottom />
       </View>
     </Gradient>

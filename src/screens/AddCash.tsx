@@ -1,6 +1,6 @@
 import {Medium, MediumS, SemiBold} from '@/fonts'
 import BackHeader from '@components/BackHeader'
-import {GradientButton, LoadingButton} from '@components/Button'
+import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {deposit_f} from '@query/api'
@@ -85,7 +85,7 @@ export default function AddCash({navigation}: NavProp) {
             ))}
           </View>
         </Gradient>
-        <View className='mt-16'>{isPending ? <LoadingButton /> : <GradientButton title='Add Money' onPress={addMoney} />}</View>
+        <View className='mt-16'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money'  onPress={addMoney} />}</View>
       </View>
     </View>
   )

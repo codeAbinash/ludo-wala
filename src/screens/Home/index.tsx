@@ -2,11 +2,12 @@ import {PaddingBottom} from '@components/SafePadding'
 import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import React from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import HomeScreen from './HomeScreen'
+import HomeScreen from '../HomeScreen'
 
 import {Home03Icon, UserAdd02Icon, UserIcon, Wallet01Icon} from '@assets/icons/icons'
 import Gradient from '@components/Gradient'
 import Refer from './Refer'
+import Wallet from './Wallet'
 
 function HomeIcon(props: {focused: boolean; color: string; size: number}) {
   return <Home03Icon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />
@@ -99,8 +100,8 @@ function BottomTabBar({state, descriptors, navigation}: BottomTabBarProps) {
               onPress={onPress}
               onLongPress={onLongPress}
               className='flex items-center justify-center p-1'
-              style={{flex: 1, paddingTop: 17, paddingBottom: 15}}>
-              {options.tabBarIcon && options.tabBarIcon({focused: isFocused, color: 'black', size: 24})}
+              style={{flex: 1, paddingTop: 14, paddingBottom: 13}}>
+              {options.tabBarIcon && options.tabBarIcon({focused: isFocused, color: 'black', size: 22})}
               {/* <Text style={{color: isFocused ? '#673ab7' : '#222'}}>{label as ReactNode}</Text> */}
               <View className={`mt-1 h-1 w-1 rounded-full ${isFocused ? 'bg-b1' : 'bg-transparent'}`} />
             </TouchableOpacity>
@@ -136,7 +137,7 @@ const Home = () => {
         />
         <Tab.Screen
           name='Wallet'
-          component={HomeScreen}
+          component={Wallet}
           options={{
             tabBarLabel: 'Wallet',
             headerShown: false,
