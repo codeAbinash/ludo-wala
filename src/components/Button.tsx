@@ -41,6 +41,16 @@ export function FullGradientButton({title, children, onPress, colors, ...props}:
     </TouchableOpacity>
   )
 }
+export function FullOutlineButton({title, children, onPress, colors, ...props}: GradientButtonProps) {
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
+      <View className={'w-full items-center justify-center rounded-2xl border border-bb p-3 px-4'} {...props}>
+        {title && <Bold className='text-base text-b1'>{title}</Bold>}
+        {children}
+      </View>
+    </TouchableOpacity>
+  )
+}
 
 export function OutlineButton({title, children, onPress, ...props}: GradientButtonProps) {
   return (

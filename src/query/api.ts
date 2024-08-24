@@ -175,3 +175,7 @@ export interface TournamentData {
 export async function getTournamentList_f() {
   return await postApi<TournamentList>('tournament/getTournamentList', {})
 }
+
+export async function joinTournament_f({tournament_id}: {tournament_id: string}) {
+  return await postApi<ServerResponse>('tournament/joinTournament', {tournament_id})
+}

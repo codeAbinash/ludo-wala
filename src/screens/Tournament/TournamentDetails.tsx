@@ -2,14 +2,16 @@ import {Medium, SemiBold} from '@/fonts'
 import {Award01SolidIcon, INRIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
-import {FullGradientButton} from '@components/Button'
+import {FullGradientButton, FullOutlineButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
-import {PaddingBottom} from '@components/SafePadding'
-import type {TournamentData} from '@query/api'
+import {PaddingBottom, PaddingTop} from '@components/SafePadding'
+import {joinTournament_f, type TournamentData} from '@query/api'
 import type {RouteProp} from '@react-navigation/native'
+import {useMutation} from '@tanstack/react-query'
+import Colors from '@utils/colors'
 import type {StackNav} from '@utils/types'
 import React, {useEffect, useState} from 'react'
-import {Dimensions, Image, TouchableOpacity, View} from 'react-native'
+import {Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 import Carousel from 'react-native-reanimated-carousel'
 import type {SvgProps} from 'react-native-svg'
@@ -42,15 +44,15 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
   ]
 
   const roundData = [
-    {left: 'Round 1', right: '₹' + data['1stRoundBonus'].toString()},
-    {left: 'Round 2', right: '₹' + data['2ndRoundWinning'].toString()},
-    {left: 'Round 3', right: '₹' + data['3rdRoundWinning'].toString()},
-    {left: 'Round 4', right: '₹' + data['4thRoundWinning'].toString()},
-    {left: 'Round 5', right: '₹' + data['5thRoundWinning'].toString()},
-    {left: 'Round 6', right: '₹' + data['6thRoundWinning'].toString()},
-    {left: 'Round 7', right: '₹' + data['7thRoundWinning'].toString()},
-    {left: 'Round 8', right: '₹' + data['8thRoundWinning'].toString()},
-    {left: 'Round 9', right: '₹' + data['9thRoundWinning'].toString()},
+    {left: 'Round 1', mid: '', right: '₹' + data['1stRoundBonus'].toString()},
+    {left: 'Round 2', mid: '', right: '₹' + data['2ndRoundWinning'].toString()},
+    {left: 'Round 3', mid: '', right: '₹' + data['3rdRoundWinning'].toString()},
+    {left: 'Round 4', mid: '', right: '₹' + data['4thRoundWinning'].toString()},
+    {left: 'Round 5', mid: '', right: '₹' + data['5thRoundWinning'].toString()},
+    {left: 'Round 6', mid: '', right: '₹' + data['6thRoundWinning'].toString()},
+    {left: 'Round 7', mid: '', right: '₹' + data['7thRoundWinning'].toString()},
+    {left: 'Round 8', mid: '', right: '₹' + data['8thRoundWinning'].toString()},
+    {left: 'Round 9', mid: '', right: '₹' + data['9thRoundWinning'].toString()},
   ]
 
   return (
@@ -59,6 +61,9 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
         <BackHeader title='Tournament' navigation={navigation} />
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: 60}}>
+        {/* <Gradient className='mb-5 p-1' colors={[Colors.b1, Colors.b2]}>
+          <SemiBold className='text-center'>The tournament may be delayed.</SemiBold>
+        </Gradient> */}
         <View>
           <Carousal data={images} />
         </View>
@@ -75,38 +80,43 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
           )}
         </View>
       </ScrollView>
-      <View>
-        <View className='bg-g1 p-5 pb-0 pt-3'>
-          <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}}>
-            <View className='flex-row items-center justify-center'>
-              <Award01SolidIcon width={20} height={20} className='text-black' />
-              <SemiBold className='ml-3 text-lg text-black'>Join Tournament</SemiBold>
-            </View>
-          </FullGradientButton>
-          <Timer endTime={new Date(data.startTime)} />
-          <PaddingBottom />
-        </View>
-      </View>
+      <BottomPart data={data} />
     </Gradient>
   )
 }
 
-function Timer({endTime}: {endTime: Date}) {
+function BottomPart({data}: {data: TournamentData}) {
   const [time, setTime] = useState(0)
+  const [visible, setVisible] = useState(false)
+
   useEffect(() => {
-    const interval = setInterval(() => {
+    const endTime = new Date(data.registrationEndTime)
+    function calculateTime() {
       const diff = endTime.getTime() - new Date().getTime()
       setTime(diff)
-      if (diff < 0) {
-        clearInterval(interval)
-      }
-    }, 1000)
+      if (diff < 0) clearInterval(interval)
+    }
+    calculateTime()
+    const interval = setInterval(calculateTime, 1000)
     return () => clearInterval(interval)
-  }, [endTime])
+  }, [data.registrationEndTime])
 
   return (
-    <View className='mb-2 mt-1 flex-row items-center justify-center'>
-      <Medium className='text-sm text-white'>Starts in {time > 0 ? new Date(time).toISOString().substr(11, 8) : '00:00:00'}</Medium>
+    <View>
+      <ModalAlert data={data} visible={visible} setVisible={setVisible} />
+      <View className='bg-g1 p-5 pb-0 pt-3'>
+        <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}} onPress={() => setVisible(true)}>
+          <View className='flex-row items-center justify-center'>
+            <Award01SolidIcon width={16} height={16} className='text-black' />
+            <SemiBold className='ml-3 text-lg text-black'>Join Tournament</SemiBold>
+          </View>
+        </FullGradientButton>
+
+        <View className='mb-2 mt-1 flex-row items-center justify-center'>
+          <Medium className='text-sm text-white'>Starts in {time > 0 ? new Date(time).toISOString().substr(11, 8) : '00:00:00'}</Medium>
+        </View>
+        <PaddingBottom />
+      </View>
     </View>
   )
 }
@@ -145,14 +155,96 @@ function RowHeader({header, HeaderIcon}: {header: string; HeaderIcon?: React.FC<
   )
 }
 
-function Row({left, right}: {left: string; right: string}) {
+function Row({left, right, mid}: {left: string; right: string; mid?: string}) {
   return (
     <View className='flex-row items-center justify-between p-4'>
       <Medium className='text-base text-white'>{left}</Medium>
+      <Medium className='text-base text-white'>{mid}</Medium>
       <Medium className='text-base text-white'>{right}</Medium>
     </View>
   )
 }
+
+function ModalAlert({data, visible, setVisible}: {data: TournamentData; visible: boolean; setVisible: (visible: boolean) => void}) {
+  const {isPending, mutate} = useMutation({
+    mutationKey: ['joinTournament', data.id],
+    mutationFn: () => joinTournament_f({tournament_id: data.id.toString()}),
+    onSuccess: (d) => {
+      console.log(d)
+      if (!d.status) return Alert.alert('Failed to join tournament', d.message)
+      setVisible(!visible)
+    },
+  })
+
+  return (
+    <>
+      <Modal
+        statusBarTranslucent={true}
+        animationType='fade'
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+          setVisible(!visible)
+        }}>
+        <View className='flex-1 justify-end bg-black/50'>
+          <PaddingTop />
+          <Gradient className='rounded-t-3xl bg-white px-5 py-5 pt-7'>
+            <Medium className='text-lg text-white' style={styles.modalText}>
+              Are you sure you want to join the tournament?
+            </Medium>
+            <View>
+              <SemiBold className='py-10 text-center text-6xl text-white'>₹ {data.entryFee}</SemiBold>
+            </View>
+            <View style={{gap: 15}}>
+              {isPending ? <LoadingButton className='rounded-2xl' /> : <FullGradientButton title='Confirm ' onPress={() => mutate()} />}
+              <FullOutlineButton title='Cancel' onPress={() => setVisible(!visible)} />
+            </View>
+            <PaddingBottom />
+          </Gradient>
+        </View>
+      </Modal>
+    </>
+  )
+}
+
+const styles = StyleSheet.create({
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+})
 
 let {width} = Dimensions.get('window')
 
