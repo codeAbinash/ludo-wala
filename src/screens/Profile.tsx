@@ -24,7 +24,7 @@ import type {NavProp} from '@utils/types'
 import {open, refer} from '@utils/utils'
 import React from 'react'
 import {Alert, TouchableOpacity, View} from 'react-native'
-import type {TouchableOpacityProps} from 'react-native-gesture-handler'
+import {ScrollView, type TouchableOpacityProps} from 'react-native-gesture-handler'
 
 const ic = {
   height: 20,
@@ -40,7 +40,7 @@ export default function Profile({navigation}: NavProp) {
       <View className='px-4'>
         <SmallProfile navigation={navigation} />
       </View>
-      <View className='mt-7 h-full px-5'>
+      <ScrollView className='mt-7 h-full px-5' contentContainerStyle={{paddingBottom: 15}}>
         <Gradient className='rounded-2xl border border-border p-5'>
           <Option Icon={<UserSolidIcon {...ic} />} text='My Account' onPress={() => navigation.navigate('EditProfile')} />
           <Option Icon={<Clock01SolidIcon {...ic} />} text='Transaction History' />
@@ -69,7 +69,7 @@ export default function Profile({navigation}: NavProp) {
             }}
           />
         </Gradient>
-      </View>
+      </ScrollView>
     </Screen>
   )
 }

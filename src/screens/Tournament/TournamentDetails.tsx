@@ -29,10 +29,10 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
 
   const data = route.params
   const tournamentData = [
-    {
-      left: 'Registration Open',
-      right: stylishDate(data.registrationStartTime),
-    },
+    // {
+    //   left: 'Registration Open',
+    //   right: stylishDate(data.registrationStartTime),
+    // },
     {left: 'Registration Closed', right: stylishDate(data.registrationEndTime)},
     {left: 'Match Day', right: stylishDate(data.startTime)},
     {left: 'Total Rounds', right: data.totalRound.toString()},
@@ -47,7 +47,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
   ]
 
   const roundData = [
-    {left: 'Round 1', mid: '10,48,576', right: '₹' + data['1stRoundBonus'].toString()},
+    {left: 'Round 1', mid: '10,48,576', right: '₹' + data['1stRoundBonus'].toString() + ' *'},
     {left: 'Round 2', mid: '2,62,144', right: '₹' + data['2ndRoundWinning'].toString()},
     {left: 'Round 3', mid: '65,536', right: '₹' + data['3rdRoundWinning'].toString()},
     {left: 'Round 4', mid: '16,384', right: '₹' + data['4thRoundWinning'].toString()},
@@ -82,7 +82,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
               <Award01SolidIcon width={13} height={13} className='ml-2 text-b1' />
             </TouchableOpacity>
           )}
-          <Medium className='text-center text-lg text-b1'>Terms and Conditions Apply</Medium>
+          <Medium className='text-center text-base text-b1'>Terms and Conditions Applied *</Medium>
         </View>
       </ScrollView>
       <BottomPart data={data} />
