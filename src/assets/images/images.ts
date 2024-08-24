@@ -10,6 +10,10 @@ const Images = {
   b3: require('./src/3.jpg'),
   b4: require('./src/4.jpg'),
   start: require('./src/start.jpg'),
+  challenge: require('./src/challenge.png'),
+  classic: require('./src/classic.png'),
+  quick_mode: require('./src/quick-mode.png'),
+  tournament: require('./src/tournament.png'),
 }
 
 export default Images

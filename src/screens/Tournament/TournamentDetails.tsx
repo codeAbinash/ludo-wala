@@ -36,7 +36,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
     {left: 'Registration Closed', right: stylishDate(data.registrationEndTime)},
     {left: 'Match Day', right: stylishDate(data.startTime)},
     {left: 'Total Rounds', right: data.totalRound.toString()},
-    {left: 'Rounds Time', right: data.roundInterval.toString() + ' minutes'},
+    {left: 'Rounds Time', right: data.roundInterval.toString() + ' Minutes'},
   ]
 
   const lastRoundData = [
@@ -47,15 +47,16 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
   ]
 
   const roundData = [
-    {left: 'Round 1', mid: '', right: '₹' + data['1stRoundBonus'].toString()},
-    {left: 'Round 2', mid: '', right: '₹' + data['2ndRoundWinning'].toString()},
-    {left: 'Round 3', mid: '', right: '₹' + data['3rdRoundWinning'].toString()},
-    {left: 'Round 4', mid: '', right: '₹' + data['4thRoundWinning'].toString()},
-    {left: 'Round 5', mid: '', right: '₹' + data['5thRoundWinning'].toString()},
-    {left: 'Round 6', mid: '', right: '₹' + data['6thRoundWinning'].toString()},
-    {left: 'Round 7', mid: '', right: '₹' + data['7thRoundWinning'].toString()},
-    {left: 'Round 8', mid: '', right: '₹' + data['8thRoundWinning'].toString()},
-    {left: 'Round 9', mid: '', right: '₹' + data['9thRoundWinning'].toString()},
+    {left: 'Round 1', mid: '10,48,576', right: '₹' + data['1stRoundBonus'].toString()},
+    {left: 'Round 2', mid: '2,62,144', right: '₹' + data['2ndRoundWinning'].toString()},
+    {left: 'Round 3', mid: '65,536', right: '₹' + data['3rdRoundWinning'].toString()},
+    {left: 'Round 4', mid: '16,384', right: '₹' + data['4thRoundWinning'].toString()},
+    {left: 'Round 5', mid: '4,096', right: '₹' + data['5thRoundWinning'].toString()},
+    {left: 'Round 6', mid: '1,024', right: '₹' + data['6thRoundWinning'].toString()},
+    {left: 'Round 7', mid: '256', right: '₹' + data['7thRoundWinning'].toString()},
+    {left: 'Round 8', mid: '64', right: '₹' + data['8thRoundWinning'].toString()},
+    {left: 'Round 9', mid: '16', right: '₹' + data['9thRoundWinning'].toString()},
+    {left: 'Rounds', mid: 'Players', right: 'Prize'},
   ].reverse()
 
   return (
@@ -81,6 +82,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
               <Award01SolidIcon width={13} height={13} className='ml-2 text-b1' />
             </TouchableOpacity>
           )}
+          <Medium className='text-center text-lg text-b1'>Terms and Conditions Apply</Medium>
         </View>
       </ScrollView>
       <BottomPart data={data} />
@@ -168,14 +170,22 @@ function availableTime(time: number) {
   return `${days}d ${hours}h ${minutes}m ${seconds}s`
 }
 
-function TournamentCard({data, header, HeaderIcon}: {data: {left: string; right: string}[]; header: string; HeaderIcon?: React.FC<SvgProps>}) {
+function TournamentCard({
+  data,
+  header,
+  HeaderIcon,
+}: {
+  data: {left: string; right?: string; mid?: string}[]
+  header: string
+  HeaderIcon?: React.FC<SvgProps>
+}) {
   return (
     <Gradient className='overflow-hidden rounded-2xl border border-border'>
       <RowHeader header={header} HeaderIcon={HeaderIcon} />
       <Hr />
       {data.map((item, index) => (
         <React.Fragment key={index}>
-          <Row left={item.left} right={item.right} />
+          <Row left={item.left} right={item.right || ''} mid={item.mid} />
           {item === data[data.length - 1] ? null : <Hr />}
         </React.Fragment>
       ))}

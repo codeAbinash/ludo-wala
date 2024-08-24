@@ -1,3 +1,9 @@
+import {image} from '@/images'
+import type {User} from '@query/api'
+import {getShareText} from './constants'
+import Share from 'react-native-share'
+import {Linking} from 'react-native'
+
 export function getTotal(s1: string, s2: string, s3: string) {
   return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
 }
@@ -14,4 +20,24 @@ export function stylishDate(date: Date) {
     minute: 'numeric',
     hour12: true,
   })
+}
+
+export function open(link: string) {
+  Linking.openURL(link)
+}
+
+export function refer(user: User | null) {
+  const shareOptions = {
+    title: 'Invite your friends',
+    message: getShareText(user?.data?.referCode || ''),
+    url: image,
+  }
+
+  Share.open(shareOptions)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      err && console.log(err)
+    })
 }

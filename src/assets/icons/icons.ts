@@ -31,3 +31,5 @@ export {default as PaintBrush01SolidIcon} from '@icons/paint-brush-01-solid-roun
 export {default as TrophyWhiteIcon} from '@icons/trophy-white.svg'
 export {default as INRIcon} from '@icons/inr.svg'
 export {default as Award01SolidIcon} from '@icons/award-01-solid-rounded.svg'
+export { default as BubbleChatSolidIcon } from '@icons/bubble-chat-solid-rounded.svg'
+export { default as CodeSquareSolidIcon } from '@icons/code-square-solid-rounded.svg'

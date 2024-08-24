@@ -1,4 +1,5 @@
 import {Medium, SemiBold} from '@/fonts'
+import {image} from '@/images'
 import {userStore} from '@/zustand/userStore'
 import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
@@ -6,11 +7,15 @@ import {GradientButton, OutlineButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import SmallProfile from '@components/SmallProfile'
+import type {User} from '@query/api'
 import Clipboard from '@react-native-clipboard/clipboard'
+import {getShareText} from '@utils/constants'
 import type {NavProp} from '@utils/types'
+import {refer} from '@utils/utils'
 import React from 'react'
 import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
+import Share from 'react-native-share'
 
 export default function Refer({navigation}: NavProp) {
   // const {isPending, data, refetch} = useQuery({
@@ -69,7 +74,7 @@ export default function Refer({navigation}: NavProp) {
               <OutlineButton title='Leaderboard' className='p-4' />
             </View>
             <View style={{flexGrow: 1}}>
-              <GradientButton className='p-4' title='Invite' />
+              <GradientButton className='p-4' title='Invite' onPress={() => refer(user)} />
             </View>
           </View>
         </Gradient>

@@ -66,12 +66,14 @@ function GameMode({
   setCurrentOption,
   disabled,
   to,
+  img,
 }: {
   game: GameType
   option: number
   setCurrentOption: (option: GameType) => void
   disabled?: boolean
   to?: string
+  img?: any
 }) {
   const navigation = useNavigation<StackNav>()
   return (
@@ -87,7 +89,7 @@ function GameMode({
           paddingTop: 120,
         }}>
         <Image
-          source={Images.default}
+          source={img || Images.default}
           style={{
             width: '80%',
             height: 250,
@@ -149,10 +151,10 @@ export default function HomeScreen({navigation}: NavProp) {
       </View>
       <View className='flex-1 justify-center'>
         <Animated.View className='flex-row pt-16' style={animStyle}>
-          <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' />
+          <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' img={Images.tournament} />
+          <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' img={Images.challenge} />
+          <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' img={Images.classic} />
+          <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' img={Images.quick_mode} />
         </Animated.View>
       </View>
       <View className='pb-7'>

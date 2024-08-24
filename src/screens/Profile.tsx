@@ -1,6 +1,9 @@
 import {SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
 import {
+  BubbleChatSolidIcon,
   Clock01SolidIcon,
+  CodeSquareSolidIcon,
   Door01SolidIcon,
   InformationCircleSolidIcon,
   LicenseSolidIcon,
@@ -15,8 +18,10 @@ import {PaddingTop} from '@components/SafePadding'
 import Screen from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import Colors from '@utils/colors'
+import {aboutLink, conductLink, contactLink, privacyLink, rateLink, termsLink} from '@utils/constants'
 import {secureLs} from '@utils/storage'
 import type {NavProp} from '@utils/types'
+import {open, refer} from '@utils/utils'
 import React from 'react'
 import {Alert, TouchableOpacity, View} from 'react-native'
 import type {TouchableOpacityProps} from 'react-native-gesture-handler'
@@ -28,6 +33,7 @@ const ic = {
 }
 
 export default function Profile({navigation}: NavProp) {
+  const user = userStore((state) => state.user)
   return (
     <Screen>
       <PaddingTop />
@@ -39,11 +45,13 @@ export default function Profile({navigation}: NavProp) {
           <Option Icon={<UserSolidIcon {...ic} />} text='My Account' onPress={() => navigation.navigate('EditProfile')} />
           <Option Icon={<Clock01SolidIcon {...ic} />} text='Transaction History' />
           <Option Icon={<Notification03SolidIcon {...ic} />} text='Notification' />
-          <Option Icon={<SecurityCheckSolidIcon {...ic} />} text='Privacy Policy' />
-          <Option Icon={<LicenseSolidIcon {...ic} />} text='Terms and Condition' />
-          <Option Icon={<InformationCircleSolidIcon {...ic} />} text='About Us' />
-          <Option Icon={<StarSolidIcon {...ic} />} text='Rate us' />
-          <Option Icon={<SentSolidIcon {...ic} />} text='Share with others' />
+          <Option Icon={<SecurityCheckSolidIcon {...ic} />} text='Privacy Policy' onPress={() => open(privacyLink)} />
+          <Option Icon={<LicenseSolidIcon {...ic} />} text='Terms and Condition' onPress={() => open(termsLink)} />
+          <Option Icon={<InformationCircleSolidIcon {...ic} />} text='About Us' onPress={() => open(aboutLink)} />
+          <Option Icon={<CodeSquareSolidIcon {...ic} />} text='Code of Conduct' onPress={() => open(conductLink)} />
+          <Option Icon={<StarSolidIcon {...ic} />} text='Rate us' onPress={() => open(rateLink)} />
+          <Option Icon={<BubbleChatSolidIcon {...ic} />} text='24/7 Support' onPress={() => open(contactLink)} />
+          <Option Icon={<SentSolidIcon {...ic} />} text='Share with others' onPress={() => refer(user)} />
           <Option
             Icon={<Door01SolidIcon {...ic} />}
             text='Logout'
