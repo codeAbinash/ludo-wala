@@ -4,19 +4,29 @@ import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
-import {PaddingTop} from '@components/SafePadding'
 import Screen from '@components/Screen'
+import {getTournamentList_f} from '@query/api'
+import {useQuery} from '@tanstack/react-query'
 import Colors from '@utils/colors'
 import type {NavProp} from '@utils/types'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Image, View} from 'react-native'
 import type {SvgProps} from 'react-native-svg'
 
 export default function Tournament({navigation}: NavProp) {
+  const {data} = useQuery({
+    queryKey: ['tournamentList'],
+    queryFn: getTournamentList_f,
+  })
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
   return (
     <>
       <View className='bg-primary'>
-        <BackHeader title='Tournament' navigation={navigation} />
+        <BackHeader title='Tournament Mode' navigation={navigation} />
       </View>
       <Screen>
         <View className='px-5 pb-10' style={{gap: 20}}>

@@ -135,3 +135,8 @@ export interface Settings {
 export async function get_settings_f() {
   return await postApi<Settings>('settings/getSetting', {})
 }
+
+
+export async function getTournamentList_f() {
+  return await postApi<ServerResponse>('tournament/getTournamentList', {})
+}

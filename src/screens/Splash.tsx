@@ -16,33 +16,38 @@ export default function Splash({navigation}: NavProp) {
   const setUser = userStore((state) => state.setUser)
   const setNavigation = navigationStore((state) => state.setNavigation)
 
-  const {mutate} = useMutation({
+  const {mutate, data} = useMutation({
     mutationKey: ['user'],
     mutationFn: get_user_f,
-    onSuccess: (data) => {
-      setUser(data)
-      if (data.data?.fname === null || data.data?.lname === null) {
-        navigation.replace('EnterName')
-        return
-      }
-      navigation.replace('Home')
-    },
+    onSuccess: setUser,
   })
 
   const getSettingsMutation = useMutation({
     mutationKey: ['settings'],
     mutationFn: get_settings_f,
-    onSuccess: (data) => {
-      console.log(data)
-      const version = data.apkVersion
-      const isForceUpdate = data.forceUpdate === '1'
+  })
+
+  useEffect(() => {
+    const updateData = getSettingsMutation.data
+    if (data && updateData) {
+      // Decide navigation here
+
+      // Check for Update
+      const version = updateData.apkVersion
+      const isForceUpdate = updateData.forceUpdate === '1'
 
       if (APP_VERSION !== version && isForceUpdate) {
         navigation.reset({index: 0, routes: [{name: 'Update'}]})
         return
       }
-    },
-  })
+
+      if (data?.data?.fname === null || data?.data?.lname === null) {
+        navigation.replace('EnterName')
+        return
+      }
+      navigation.replace('Home')
+    }
+  }, [data, getSettingsMutation.data, navigation])
 
   useEffect(() => {
     getSettingsMutation.mutate()
