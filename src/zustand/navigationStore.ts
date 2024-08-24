@@ -1,5 +1,5 @@
-import type { StackNav } from '@utils/types'
-import { create } from 'zustand'
+import type {StackNav} from '@utils/types'
+import {create} from 'zustand'
 
 type NavigationS = {
   navigation: StackNav | null

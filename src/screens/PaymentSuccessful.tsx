@@ -37,15 +37,15 @@ export default function PaymentSuccessful({navigation, route}: {navigation: Stac
   return (
     <View className='flex-1 items-center justify-center bg-primary p-5'>
       <Medium className='text-lg text-white'>Payment Successful</Medium>
-      <LottieView source={require('@/assets/animations/payment.json')} autoPlay loop style={{width: W * 1.5, height: W * 1}} />
+      <LottieView source={require('@/assets/animations/payment.json')} autoPlay style={{width: W * 1.5, height: W * 1}} />
       <Gradient
         className='w-full rounded-2xl border border-border p-5'
         style={{
           gap: 5,
         }}>
-        <Medium className='text-lg text-white'>Amount: ₹{route.params.amount}</Medium>
-        <Medium className='text-lg text-white'>Transaction ID: {route.params.razorpay_payment_id}</Medium>
-        <Medium className='text-lg text-white'>Order ID: {route.params.razorpay_order_id}</Medium>
+        <Medium className='text-base text-white'>Amount: ₹{route.params.amount}</Medium>
+        <Medium className='text-base text-white'>Transaction ID: {route.params.razorpay_payment_id}</Medium>
+        <Medium className='text-base text-white'>Order ID: {route.params.razorpay_order_id}</Medium>
       </Gradient>
       <GradientButton title='Go to Home' onPress={() => navigation.pop(2)} className='mt-10 rounded-full px-10 py-3' />
     </View>

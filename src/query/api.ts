@@ -170,6 +170,7 @@ export interface TournamentData {
   title: string
   totalRound: number
   updated_at: null
+  userJoined: boolean
 }
 
 export async function getTournamentList_f() {

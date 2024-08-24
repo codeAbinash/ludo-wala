@@ -1,4 +1,4 @@
-import {Bold, Medium, SemiBold} from '@/fonts'
+import {Bold, Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
@@ -20,7 +20,9 @@ export default function UpdateAvailable({navigation}: NavProp) {
           }}
         />
         <Bold className='text-2xl uppercase text-white'>Update Available</Bold>
-        <Medium className='mt-2 text-base text-white/50'>{'A new version of Figma is ready to installed'}</Medium>
+        <Medium className='mt-2 text-center text-base text-white/50'>
+          A new version of the app is available. Please update to continue using the app.
+        </Medium>
         <View className='mt-10 w-full'>
           <FullGradientButton
             onPress={() => {

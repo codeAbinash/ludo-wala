@@ -1,10 +1,10 @@
-import {Bold, Medium, SemiBold} from '@/fonts'
+import {Bold, Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Screen from '@components/Screen'
 import type {RouteProp} from '@react-navigation/native'
-import type {NavProp, StackNav} from '@utils/types'
+import type {StackNav} from '@utils/types'
 import React from 'react'
 import {Image, View} from 'react-native'
 
@@ -29,7 +29,7 @@ export default function Maintenance({navigation, route}: {navigation: StackNav; 
           }}
         />
         <Bold className='text-2xl text-white'>APP UNDER MAINTENANCE</Bold>
-        <Medium className='mt-2 text-base text-white/50'>{route.params.message || 'Something is wrong. Try again after sometime'}</Medium>
+        <Medium className='mt-2 text-center text-base text-white/50'>{route.params.message || 'Something is wrong. Try again after sometime'}</Medium>
         <View className='mt-10 w-full'>
           <FullGradientButton
             onPress={() => {

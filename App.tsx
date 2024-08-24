@@ -16,6 +16,7 @@ import Home from '@screens/Home'
 import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
+import JoinedTournament from '@screens/JoinedTournament'
 import Maintenance, { type MaintenanceParamList } from '@screens/Maintenance'
 import PaymentSuccessful, { type PaymentSuccessfulParamList } from '@screens/PaymentSuccessful'
 import Splash from '@screens/Splash'
@@ -87,6 +88,7 @@ export type RootStackParamList = {
   Maintenance: MaintenanceParamList
   Update: undefined
   TournamentDetails: TournamentDetailsParamList
+  JoinedTournament: undefined
 }
 function Navigation() {
   return (
@@ -112,6 +114,7 @@ function Navigation() {
       <Stack.Screen name='TournamentDetails' component={TournamentDetails} />
       <Stack.Screen name='Maintenance' component={Maintenance} options={NO_ANIMATION} />
       <Stack.Screen name='Update' component={UpdateAvailable} />
+      <Stack.Screen name='JoinedTournament' component={JoinedTournament} />
     </Stack.Navigator>
   )
 }

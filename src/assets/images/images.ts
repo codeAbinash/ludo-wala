@@ -9,6 +9,7 @@ const Images = {
   b2: require('./src/2.jpg'),
   b3: require('./src/3.jpg'),
   b4: require('./src/4.jpg'),
+  start: require('./src/start.jpg'),
 }
 
 export default Images

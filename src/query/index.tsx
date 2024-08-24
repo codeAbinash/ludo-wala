@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo'
-import { useFocusEffect } from '@react-navigation/native'
-import { NotifyOnChangeProps, onlineManager } from '@tanstack/react-query'
+import {useFocusEffect} from '@react-navigation/native'
+import {NotifyOnChangeProps, onlineManager} from '@tanstack/react-query'
 import React from 'react'
 
 // Online status management

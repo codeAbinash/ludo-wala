@@ -6,16 +6,17 @@ import {FullGradientButton, FullOutlineButton, LoadingButton} from '@components/
 import Gradient from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import {joinTournament_f, type TournamentData} from '@query/api'
-import type {RouteProp} from '@react-navigation/native'
+import {useNavigation, type RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
 import type {StackNav} from '@utils/types'
+import {stylishDate} from '@utils/utils'
 import React, {useEffect, useState} from 'react'
 import {Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 import Carousel from 'react-native-reanimated-carousel'
 import type {SvgProps} from 'react-native-svg'
 
-const images = [Images.b1, Images.b2, Images.b3, Images.b4]
+const images = [Images.start, Images.b1, Images.b2, Images.b3, Images.b4]
 
 type ParamList = {
   TournamentDetails: TournamentDetailsParamList
@@ -28,9 +29,12 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
 
   const data = route.params
   const tournamentData = [
-    {left: 'Registration Open', right: new Date(data.registrationStartTime).toLocaleString()},
-    {left: 'Registration Closed', right: new Date(data.registrationEndTime).toLocaleString()},
-    {left: 'Match Day', right: new Date(data.nextRoundTime).toLocaleString()},
+    {
+      left: 'Registration Open',
+      right: stylishDate(data.registrationStartTime),
+    },
+    {left: 'Registration Closed', right: stylishDate(data.registrationEndTime)},
+    {left: 'Match Day', right: stylishDate(data.startTime)},
     {left: 'Total Rounds', right: data.totalRound.toString()},
     {left: 'Rounds Time', right: data.roundInterval.toString() + ' minutes'},
   ]
@@ -100,6 +104,8 @@ function BottomPart({data}: {data: TournamentData}) {
     return () => clearInterval(interval)
   }, [data.registrationEndTime])
 
+  if (data.userJoined) return <AlreadyJoined data={data} />
+
   return (
     <View>
       <ModalAlert data={data} visible={visible} setVisible={setVisible} />
@@ -112,12 +118,54 @@ function BottomPart({data}: {data: TournamentData}) {
         </FullGradientButton>
 
         <View className='mb-2 mt-1 flex-row items-center justify-center'>
-          <Medium className='text-sm text-white'>Starts in {time > 0 ? new Date(time).toISOString().substr(11, 8) : '00:00:00'}</Medium>
+          <Medium className='text-sm text-white'>Starts in {availableTime(time)}</Medium>
         </View>
         <PaddingBottom />
       </View>
     </View>
   )
+}
+
+function AlreadyJoined({data}: {data: TournamentData}) {
+  const [tournamentStartTime, setTournamentStartTime] = useState(0)
+
+  useEffect(() => {
+    const startTime = new Date(data.startTime)
+    function calculateTime() {
+      let diff = startTime.getTime() - new Date().getTime()
+      diff = diff < 0 ? 0 : diff
+      setTournamentStartTime(diff)
+      if (diff < 0) clearInterval(interval)
+    }
+    calculateTime()
+    const interval = setInterval(calculateTime, 1000)
+    return () => clearInterval(interval)
+  }, [data.startTime])
+
+  return (
+    <View>
+      <View className='bg-g1 p-5 pb-0 pt-3'>
+        <FullGradientButton className='rounded-full bg-g1 opacity-70' activeOpacity={1} style={{padding: 15}} disabled>
+          <View className='flex-row items-center justify-center'>
+            <Award01SolidIcon width={16} height={16} className='text-black' />
+            <SemiBold className='ml-3 text-base text-black'>Starts in {availableTime(tournamentStartTime)}</SemiBold>
+          </View>
+        </FullGradientButton>
+        <View className='mb-2 mt-1 flex-row items-center justify-center'>
+          <Medium className='text-sm text-white'>You have already joined the tournament</Medium>
+        </View>
+        <PaddingBottom />
+      </View>
+    </View>
+  )
+}
+
+function availableTime(time: number) {
+  const days = Math.floor(time / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((time % (1000 * 60)) / 1000)
+  return `${days}d ${hours}h ${minutes}m ${seconds}s`
 }
 
 function TournamentCard({data, header, HeaderIcon}: {data: {left: string; right: string}[]; header: string; HeaderIcon?: React.FC<SvgProps>}) {
@@ -165,6 +213,7 @@ function Row({left, right, mid}: {left: string; right: string; mid?: string}) {
 }
 
 function ModalAlert({data, visible, setVisible}: {data: TournamentData; visible: boolean; setVisible: (visible: boolean) => void}) {
+  const navigation = useNavigation<StackNav>()
   const {isPending, mutate} = useMutation({
     mutationKey: ['joinTournament', data.id],
     mutationFn: () => joinTournament_f({tournament_id: data.id.toString()}),
@@ -172,6 +221,7 @@ function ModalAlert({data, visible, setVisible}: {data: TournamentData; visible:
       console.log(d)
       if (!d.status) return Alert.alert('Failed to join tournament', d.message)
       setVisible(!visible)
+      navigation.navigate('JoinedTournament')
     },
   })
 
