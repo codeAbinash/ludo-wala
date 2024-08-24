@@ -74,7 +74,13 @@ export async function verifyOtp_f({mobileNumber, otp}: {mobileNumber: string; ot
   return await postApi<LoginResponse>('auth/loginOrSignup', {mobileNumber, otp})
 }
 
-export async function updateProfile_f({fname, lname, referCode}: {fname: string; lname: string; referCode: string}) {
+export type UpdateProfileInput = {
+  fname: string
+  lname: string
+  referCode?: string
+  email?: string
+}
+export async function updateProfile_f({fname, lname, referCode}: UpdateProfileInput) {
   return await postApi<ServerResponse>('profile/profileUpdate', referCode ? {fname, lname, referCode} : {fname, lname})
 }
 
@@ -101,7 +107,7 @@ export type Data = {
   cashback_wallet?: string
   created_at?: Date
   deposit_wallet?: string
-  email?: null
+  email?: null | string
   fname?: string
   id?: number
   lname?: string
