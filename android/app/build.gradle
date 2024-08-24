@@ -159,6 +159,9 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:react-native:0.75.2")
 
+    // For animated GIF support
+    implementation("com.facebook.fresco:animated-gif:3.2.0")
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {

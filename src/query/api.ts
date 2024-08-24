@@ -1,3 +1,4 @@
+import {navigationStore} from '@/zustand/navigationStore'
 import {ls, secureLs} from '@utils/storage'
 import axios from 'axios'
 import {Alert} from 'react-native'
@@ -28,6 +29,10 @@ async function postApi<T>(url: string, data: any) {
     else return (await axios.post<T>(API + url)).data
   } catch (error: any) {
     if (error?.response?.status === 401 || error?.response.data.message === 'Unauthenticated.') ShowAlertAndRestart()
+    // If the status is 503 then go to Maintenance page
+    if (error?.response?.status === 503) {
+      navigationStore.getState().navigation?.replace('Maintenance', {message: error.response.data.message})
+    }
     console.log(JSON.stringify(error.response.data, null, 2))
     const errors = error?.response.data.errors
     const singleError = errors[Object.keys(errors)[0]][0]
@@ -119,4 +124,14 @@ export type Data = {
 
 export async function get_user_f() {
   return await postApi<User>('profile/getUser', {})
+}
+
+export interface Settings {
+  status: boolean
+  forceUpdate: '0' | '1'
+  apkVersion: string
+}
+
+export async function get_settings_f() {
+  return await postApi<Settings>('settings/getSetting', {})
 }

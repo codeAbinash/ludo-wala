@@ -5,7 +5,7 @@ import {PaddingBottom, PaddingTop} from './SafePadding'
 
 export default function Screen({children, ...props}: ScrollViewProps) {
   return (
-    <KeyboardAvoidingContainer className='bg-primary' {...props}>
+    <KeyboardAvoidingContainer className='bg-primary' contentContainerStyle={{flex: 1}} {...props}>
       {children}
     </KeyboardAvoidingContainer>
   )

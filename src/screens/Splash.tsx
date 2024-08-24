@@ -1,17 +1,20 @@
-import { userStore } from '@/zustand/userStore'
+import {navigationStore} from '@/zustand/navigationStore'
+import {userStore} from '@/zustand/userStore'
 import Images from '@assets/images/images'
 import Gradient from '@components/Gradient'
-import { PaddingBottom } from '@components/SafePadding'
-import { get_user_f } from '@query/api'
-import { useMutation } from '@tanstack/react-query'
-import { secureLs } from '@utils/storage'
-import type { NavProp } from '@utils/types'
+import {PaddingBottom} from '@components/SafePadding'
+import {get_settings_f, get_user_f} from '@query/api'
+import {useMutation} from '@tanstack/react-query'
+import {APP_VERSION} from '@utils/constants'
+import {ls, secureLs} from '@utils/storage'
+import type {NavProp} from '@utils/types'
 import LottieView from 'lottie-react-native'
-import React, { useEffect } from 'react'
-import { Image, View } from 'react-native'
+import React, {useEffect} from 'react'
+import {Image, View} from 'react-native'
 
 export default function Splash({navigation}: NavProp) {
   const setUser = userStore((state) => state.setUser)
+  const setNavigation = navigationStore((state) => state.setNavigation)
 
   const {mutate} = useMutation({
     mutationKey: ['user'],
@@ -26,6 +29,26 @@ export default function Splash({navigation}: NavProp) {
     },
   })
 
+  const getSettingsMutation = useMutation({
+    mutationKey: ['settings'],
+    mutationFn: get_settings_f,
+    onSuccess: (data) => {
+      console.log(data)
+      const version = data.apkVersion
+      const isForceUpdate = data.forceUpdate === '1'
+
+      if (APP_VERSION !== version && isForceUpdate) {
+        navigation.reset({index: 0, routes: [{name: 'Update'}]})
+        return
+      }
+    },
+  })
+
+  useEffect(() => {
+    getSettingsMutation.mutate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     const token = secureLs.getString('token')
     console.log(token)
@@ -35,6 +58,10 @@ export default function Splash({navigation}: NavProp) {
       navigation.replace('EnterPhone')
     }
   }, [mutate, navigation])
+
+  useEffect(() => {
+    setNavigation(navigation)
+  }, [navigation, setNavigation])
 
   return (
     <Gradient className='flex-1 items-center justify-center'>

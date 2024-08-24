@@ -34,7 +34,7 @@ export default function Profile({navigation}: NavProp) {
       <View className='px-4'>
         <SmallProfile navigation={navigation} />
       </View>
-      <View className='mt-7 h-full justify-center px-5'>
+      <View className='mt-7 h-full px-5'>
         <Gradient className='rounded-2xl border border-border p-5'>
           <Option Icon={<UserSolidIcon {...ic} />} text='My Account' onPress={() => navigation.navigate('EditProfile')} />
           <Option Icon={<Clock01SolidIcon {...ic} />} text='Transaction History' />
