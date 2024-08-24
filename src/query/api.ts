@@ -160,7 +160,7 @@ export interface TournamentData {
   entryFee: number
   id: number
   maxPlayers: number
-  joinedUsers: number
+  participants_count: number
   nextRoundTime: Date
   registrationEndTime: Date
   registrationStartTime: Date

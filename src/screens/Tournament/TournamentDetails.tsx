@@ -1,0 +1,192 @@
+import {Medium, SemiBold} from '@/fonts'
+import {Award01SolidIcon, INRIcon} from '@assets/icons/icons'
+import Images from '@assets/images/images'
+import BackHeader from '@components/BackHeader'
+import {FullGradientButton} from '@components/Button'
+import Gradient from '@components/Gradient'
+import {PaddingBottom} from '@components/SafePadding'
+import type {TournamentData} from '@query/api'
+import type {RouteProp} from '@react-navigation/native'
+import type {StackNav} from '@utils/types'
+import React, {useEffect, useState} from 'react'
+import {Dimensions, Image, TouchableOpacity, View} from 'react-native'
+import {ScrollView} from 'react-native-gesture-handler'
+import Carousel from 'react-native-reanimated-carousel'
+import type {SvgProps} from 'react-native-svg'
+
+const images = [Images.b1, Images.b2, Images.b3, Images.b4]
+
+type ParamList = {
+  TournamentDetails: TournamentDetailsParamList
+}
+
+export type TournamentDetailsParamList = TournamentData
+
+export default function TournamentDetails({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'TournamentDetails'>}) {
+  const [more, setMore] = useState(false)
+
+  const data = route.params
+  const tournamentData = [
+    {left: 'Registration Open', right: new Date(data.registrationStartTime).toLocaleString()},
+    {left: 'Registration Closed', right: new Date(data.registrationEndTime).toLocaleString()},
+    {left: 'Match Day', right: new Date(data.nextRoundTime).toLocaleString()},
+    {left: 'Total Rounds', right: data.totalRound.toString()},
+    {left: 'Rounds Time', right: data.roundInterval.toString() + ' minutes'},
+  ]
+
+  const lastRoundData = [
+    {left: 'Rank #1', right: data['1stPrize']},
+    {left: 'Rank #1', right: data['2ndPrize']},
+    {left: 'Rank #1', right: data['3rdPrize']},
+    {left: 'Rank #1', right: data['4thPrize']},
+  ]
+
+  const roundData = [
+    {left: 'Round 1', right: '₹' + data['1stRoundBonus'].toString()},
+    {left: 'Round 2', right: '₹' + data['2ndRoundWinning'].toString()},
+    {left: 'Round 3', right: '₹' + data['3rdRoundWinning'].toString()},
+    {left: 'Round 4', right: '₹' + data['4thRoundWinning'].toString()},
+    {left: 'Round 5', right: '₹' + data['5thRoundWinning'].toString()},
+    {left: 'Round 6', right: '₹' + data['6thRoundWinning'].toString()},
+    {left: 'Round 7', right: '₹' + data['7thRoundWinning'].toString()},
+    {left: 'Round 8', right: '₹' + data['8thRoundWinning'].toString()},
+    {left: 'Round 9', right: '₹' + data['9thRoundWinning'].toString()},
+  ]
+
+  return (
+    <Gradient className='flex-1'>
+      <View>
+        <BackHeader title='Tournament' navigation={navigation} />
+      </View>
+      <ScrollView contentContainerStyle={{paddingBottom: 60}}>
+        <View>
+          <Carousal data={images} />
+        </View>
+        <View className='mt-7 px-5' style={{gap: 20}}>
+          <TournamentCard data={tournamentData} header={'Tournament Details'} HeaderIcon={Award01SolidIcon} />
+          <TournamentCard data={lastRoundData} header={'Last Round'} HeaderIcon={INRIcon} />
+          {more ? (
+            <TournamentCard data={roundData} header={'Round Details'} HeaderIcon={INRIcon} />
+          ) : (
+            <TouchableOpacity onPress={() => setMore(true)} className='flex-row items-center justify-center'>
+              <Medium className='text-b1 underline'>Round Details</Medium>
+              <Award01SolidIcon width={13} height={13} className='ml-2 text-b1' />
+            </TouchableOpacity>
+          )}
+        </View>
+      </ScrollView>
+      <View>
+        <View className='bg-g1 p-5 pb-0 pt-3'>
+          <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}}>
+            <View className='flex-row items-center justify-center'>
+              <Award01SolidIcon width={20} height={20} className='text-black' />
+              <SemiBold className='ml-3 text-lg text-black'>Join Tournament</SemiBold>
+            </View>
+          </FullGradientButton>
+          <Timer endTime={new Date(data.startTime)} />
+          <PaddingBottom />
+        </View>
+      </View>
+    </Gradient>
+  )
+}
+
+function Timer({endTime}: {endTime: Date}) {
+  const [time, setTime] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = endTime.getTime() - new Date().getTime()
+      setTime(diff)
+      if (diff < 0) {
+        clearInterval(interval)
+      }
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [endTime])
+
+  return (
+    <View className='mb-2 mt-1 flex-row items-center justify-center'>
+      <Medium className='text-sm text-white'>Starts in {time > 0 ? new Date(time).toISOString().substr(11, 8) : '00:00:00'}</Medium>
+    </View>
+  )
+}
+
+function TournamentCard({data, header, HeaderIcon}: {data: {left: string; right: string}[]; header: string; HeaderIcon?: React.FC<SvgProps>}) {
+  return (
+    <Gradient className='overflow-hidden rounded-2xl border border-border'>
+      <RowHeader header={header} HeaderIcon={HeaderIcon} />
+      <Hr />
+      {data.map((item, index) => (
+        <React.Fragment key={index}>
+          <Row left={item.left} right={item.right} />
+          {item === data[data.length - 1] ? null : <Hr />}
+        </React.Fragment>
+      ))}
+    </Gradient>
+  )
+}
+
+function Hr() {
+  return <View className='bg-border' style={{height: 1.5}} />
+}
+
+function RowHeader({header, HeaderIcon}: {header: string; HeaderIcon?: React.FC<SvgProps>}) {
+  return (
+    <View className='flex-row items-center px-3.5 py-3'>
+      <View className='rounded-full bg-border p-3'>
+        {HeaderIcon ? (
+          <HeaderIcon width={20} height={20} className='text-white' />
+        ) : (
+          <Award01SolidIcon width={20} height={20} className='text-white' />
+        )}
+      </View>
+      <SemiBold className='ml-4 text-lg text-white'>{header}</SemiBold>
+    </View>
+  )
+}
+
+function Row({left, right}: {left: string; right: string}) {
+  return (
+    <View className='flex-row items-center justify-between p-4'>
+      <Medium className='text-base text-white'>{left}</Medium>
+      <Medium className='text-base text-white'>{right}</Medium>
+    </View>
+  )
+}
+
+let {width} = Dimensions.get('window')
+
+function Carousal({data}: {data: any[]}) {
+  const [page, setPage] = useState(0)
+  const w = width - 20
+  const h = (w * 9) / 16
+
+  return (
+    <>
+      <View style={{flex: 1}} className='mb-4 items-center'>
+        <Carousel
+          loop
+          width={width - 30}
+          height={((width - 30) * 9) / 16}
+          autoPlay={true}
+          data={data || []}
+          scrollAnimationDuration={1000}
+          autoPlayInterval={5000}
+          renderItem={({item}) => (
+            <View className='flex-1 justify-center rounded-3xl'>
+              <View className='flex-1'>
+                <Image source={item} className='aspect-video flex-1 rounded-3xl border border-border' />
+              </View>
+            </View>
+          )}
+          onProgressChange={(_, p) => setPage(Math.floor(p))}
+        />
+      </View>
+      <View className='flex-row items-center justify-center' style={{gap: 5}}>
+        {(data || []).map((_: any, i: number) => (
+          <View className={`${i === page ? 'bg-b2' : 'bg-border/80'} h-2 w-2 rounded-full`} key={i} />
+        ))}
+      </View>
+    </>
+  )
+}

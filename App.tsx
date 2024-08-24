@@ -5,27 +5,28 @@
  * @format
  */
 
-import {NavigationContainer} from '@react-navigation/native'
-import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { CardStyleInterpolators, createStackNavigator, type StackNavigationOptions } from '@react-navigation/stack'
 import AddCash from '@screens/AddCash'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
-import OTP, {type OTPParamList} from '@screens/auth/Otp'
+import OTP, { type OTPParamList } from '@screens/auth/Otp'
 import EditProfile from '@screens/EditProfile'
 import Home from '@screens/Home'
 import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
-import Maintenance, {type MaintenanceParamList} from '@screens/Maintenance'
-import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
+import Maintenance, { type MaintenanceParamList } from '@screens/Maintenance'
+import PaymentSuccessful, { type PaymentSuccessfulParamList } from '@screens/PaymentSuccessful'
 import Splash from '@screens/Splash'
-import Tournament from '@screens/Tournament'
+import Tournament from '@screens/Tournament/Tournament'
+import TournamentDetails, { type TournamentDetailsParamList } from '@screens/Tournament/TournamentDetails'
 import UpdateAvailable from '@screens/UpdateAvailable'
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
-import {DarkTheme, DefaultTheme} from '@utils/themes'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { DarkTheme, DefaultTheme } from '@utils/themes'
 import React from 'react'
-import {Dimensions, StatusBar, useColorScheme} from 'react-native'
-import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import { Dimensions, StatusBar, useColorScheme } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -85,6 +86,7 @@ export type RootStackParamList = {
   Tournament: undefined
   Maintenance: MaintenanceParamList
   Update: undefined
+  TournamentDetails: TournamentDetailsParamList
 }
 function Navigation() {
   return (
@@ -107,6 +109,7 @@ function Navigation() {
       <Stack.Screen name='EditProfile' component={EditProfile} />
       <Stack.Screen name='Profile' component={EditProfile} />
       <Stack.Screen name='Tournament' component={Tournament} />
+      <Stack.Screen name='TournamentDetails' component={TournamentDetails} />
       <Stack.Screen name='Maintenance' component={Maintenance} options={NO_ANIMATION} />
       <Stack.Screen name='Update' component={UpdateAvailable} />
     </Stack.Navigator>

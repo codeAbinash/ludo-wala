@@ -1,18 +1,20 @@
-import {Bold, Medium, Regular} from '@/fonts'
-import {DbFillIcon, LikeFillIcon, TrophyFillIcon} from '@assets/icons/icons'
+import { Bold, Medium, Regular } from '@/fonts'
+import { DbFillIcon, LikeFillIcon, TrophyFillIcon } from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
-import {FullGradientButton} from '@components/Button'
+import { FullGradientButton } from '@components/Button'
 import Gradient from '@components/Gradient'
 import Screen from '@components/Screen'
-import {getTournamentList_f} from '@query/api'
-import {useQuery} from '@tanstack/react-query'
+import { getTournamentList_f, type TournamentData } from '@query/api'
+import { useNavigation } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import type {NavProp} from '@utils/types'
+import type { NavProp, StackNav } from '@utils/types'
+import { print } from '@utils/utils'
 import LottieView from 'lottie-react-native'
-import React, {useEffect} from 'react'
-import {Image, View} from 'react-native'
-import type {SvgProps} from 'react-native-svg'
+import React, { useEffect } from 'react'
+import { Image, View } from 'react-native'
+import type { SvgProps } from 'react-native-svg'
 
 export default function Tournament({navigation}: NavProp) {
   const {data} = useQuery({
@@ -21,7 +23,7 @@ export default function Tournament({navigation}: NavProp) {
   })
 
   useEffect(() => {
-    console.log(data?.data)
+    print(data)
   }, [data])
 
   return (
@@ -43,14 +45,15 @@ export default function Tournament({navigation}: NavProp) {
               <LottieView source={require('@assets/animations/dice-loading.json')} autoPlay loop style={{width: 30, height: 30, opacity: 0.7}} />
             </View>
           )}
-          {data?.data.map((item: any, index: number) => (
+          {data?.data.map((item, index: number) => (
             <Card
               firstPrice={item['1stPrize'] || ''}
               entryPrize={item.entryFee || 0}
               buttonText='Upcoming'
               key={index}
               maxPlayers={item.maxPlayers}
-              joinedUsers={item.joinedUsers}
+              joinedUsers={item.participants_count}
+              data={item}
             />
           ))}
         </View>
@@ -65,9 +68,11 @@ interface CardProps {
   buttonText: string
   maxPlayers: number
   joinedUsers: number
+  data: TournamentData
 }
 
-function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers}: CardProps) {
+function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data}: CardProps) {
+  const navigation = useNavigation<StackNav>()
   return (
     <Gradient className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
       <View className='bg-white py-5' style={{gap: 15}}>
@@ -86,7 +91,7 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers}: Car
           </Medium>
         </View>
         <View>
-          <FullGradientButton className='rounded-full' title={buttonText} />
+          <FullGradientButton className='rounded-full' title={buttonText} onPress={() => navigation.navigate('TournamentDetails', data)} />
         </View>
       </View>
     </Gradient>
