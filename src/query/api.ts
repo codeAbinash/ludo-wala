@@ -136,7 +136,42 @@ export async function get_settings_f() {
   return await postApi<Settings>('settings/getSetting', {})
 }
 
+export interface TournamentList {
+  data: TournamentData[]
+  status: boolean
+}
+
+export interface TournamentData {
+  '1stPrize': string
+  '1stRoundBonus': number
+  '2ndPrize': string
+  '2ndRoundWinning': number
+  '3rdPrize': string
+  '3rdRoundWinning': number
+  '4thPrize': string
+  '4thRoundWinning': number
+  '5thRoundWinning': number
+  '6thRoundWinning': number
+  '7thRoundWinning': number
+  '8thRoundWinning': number
+  '9thRoundWinning': number
+  created_at: null
+  currentRound: number
+  entryFee: number
+  id: number
+  maxPlayers: number
+  joinedUsers: number
+  nextRoundTime: Date
+  registrationEndTime: Date
+  registrationStartTime: Date
+  roundInterval: number
+  startTime: Date
+  status: string
+  title: string
+  totalRound: number
+  updated_at: null
+}
 
 export async function getTournamentList_f() {
-  return await postApi<ServerResponse>('tournament/getTournamentList', {})
+  return await postApi<TournamentList>('tournament/getTournamentList', {})
 }

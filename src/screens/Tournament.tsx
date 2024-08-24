@@ -9,6 +9,7 @@ import {getTournamentList_f} from '@query/api'
 import {useQuery} from '@tanstack/react-query'
 import Colors from '@utils/colors'
 import type {NavProp} from '@utils/types'
+import LottieView from 'lottie-react-native'
 import React, {useEffect} from 'react'
 import {Image, View} from 'react-native'
 import type {SvgProps} from 'react-native-svg'
@@ -20,7 +21,7 @@ export default function Tournament({navigation}: NavProp) {
   })
 
   useEffect(() => {
-    console.log(data)
+    console.log(data?.data)
   }, [data])
 
   return (
@@ -37,9 +38,21 @@ export default function Tournament({navigation}: NavProp) {
             </View>
             <Image source={Images.trophy} className='h-24 w-24' />
           </Gradient>
-          <Card firstPrice='₹51 L' entryPrize='₹ 49' progress={87} buttonText='Upcoming' />
-          <Card firstPrice='₹1 CR' entryPrize='₹ 99' progress={34} buttonText='Live' />
-          <Card firstPrice='₹2 CR' entryPrize='₹ 199' progress={54} buttonText='Leaderboard' />
+          {!data?.data && (
+            <View className='h-80 w-full items-center justify-center'>
+              <LottieView source={require('@assets/animations/dice-loading.json')} autoPlay loop style={{width: 30, height: 30, opacity: 0.7}} />
+            </View>
+          )}
+          {data?.data.map((item: any, index: number) => (
+            <Card
+              firstPrice={item['1stPrize'] || ''}
+              entryPrize={item.entryFee || 0}
+              buttonText='Upcoming'
+              key={index}
+              maxPlayers={item.maxPlayers}
+              joinedUsers={item.joinedUsers}
+            />
+          ))}
         </View>
       </Screen>
     </>
@@ -48,26 +61,29 @@ export default function Tournament({navigation}: NavProp) {
 
 interface CardProps {
   firstPrice: string
-  entryPrize: string
-  progress: number
+  entryPrize: number
   buttonText: string
+  maxPlayers: number
+  joinedUsers: number
 }
 
-function Card({firstPrice, entryPrize, progress, buttonText}: CardProps) {
+function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers}: CardProps) {
   return (
     <Gradient className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
       <View className='bg-white py-5' style={{gap: 15}}>
         <Option text='First Price' Icon={DbFillIcon} value={firstPrice} />
-        <Option text='Entry Prize' Icon={TrophyFillIcon} value={entryPrize} />
+        <Option text='Entry Prize' Icon={TrophyFillIcon} value={'₹ ' + entryPrize} />
         <Option text='ASSURED WINNERS' Icon={LikeFillIcon} value={'100%'} />
       </View>
       <View className='flex-grow justify-between px-3 py-4'>
         <View className='mt-5'>
           <Medium className='text-xs text-white/80'>TOURNAMENT ENTRIES</Medium>
           <View className='mt-1.5 overflow-hidden rounded-full bg-white'>
-            <Gradient style={{width: `${progress}%`}} className='h-2.5 rounded-full' colors={[Colors.b1, Colors.b2]} />
+            <Gradient style={{width: `${joinedUsers || (0 / maxPlayers) * 100}%`}} className='h-2.5 rounded-full' colors={[Colors.b1, Colors.b2]} />
           </View>
-          <Medium className='mt-1.5 text-xs text-white/80'>1,00,000 of 10,00,000 filled</Medium>
+          <Medium className='mt-1.5 text-xs text-white/80'>
+            {joinedUsers || 0} of {maxPlayers} filled
+          </Medium>
         </View>
         <View>
           <FullGradientButton className='rounded-full' title={buttonText} />
