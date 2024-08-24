@@ -8,7 +8,6 @@ import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import {joinTournament_f, type TournamentData} from '@query/api'
 import type {RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
-import Colors from '@utils/colors'
 import type {StackNav} from '@utils/types'
 import React, {useEffect, useState} from 'react'
 import {Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
@@ -38,9 +37,9 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
 
   const lastRoundData = [
     {left: 'Rank #1', right: data['1stPrize']},
-    {left: 'Rank #1', right: data['2ndPrize']},
-    {left: 'Rank #1', right: data['3rdPrize']},
-    {left: 'Rank #1', right: data['4thPrize']},
+    {left: 'Rank #2', right: data['2ndPrize']},
+    {left: 'Rank #3', right: data['3rdPrize']},
+    {left: 'Rank #4', right: data['4thPrize']},
   ]
 
   const roundData = [
@@ -53,7 +52,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
     {left: 'Round 7', mid: '', right: '₹' + data['7thRoundWinning'].toString()},
     {left: 'Round 8', mid: '', right: '₹' + data['8thRoundWinning'].toString()},
     {left: 'Round 9', mid: '', right: '₹' + data['9thRoundWinning'].toString()},
-  ]
+  ].reverse()
 
   return (
     <Gradient className='flex-1'>
@@ -108,7 +107,7 @@ function BottomPart({data}: {data: TournamentData}) {
         <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}} onPress={() => setVisible(true)}>
           <View className='flex-row items-center justify-center'>
             <Award01SolidIcon width={16} height={16} className='text-black' />
-            <SemiBold className='ml-3 text-lg text-black'>Join Tournament</SemiBold>
+            <SemiBold className='ml-3 text-base text-black'>Join Tournament</SemiBold>
           </View>
         </FullGradientButton>
 
