@@ -1,21 +1,17 @@
-import {Medium, SemiBold} from '@/fonts'
-import {image} from '@/images'
-import {userStore} from '@/zustand/userStore'
-import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
+import { Medium, SemiBold } from '@/fonts'
+import { userStore } from '@/zustand/userStore'
+import { ArrowUpDownIcon, Copy01Icon } from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import {GradientButton, OutlineButton} from '@components/Button'
-import Gradient from '@components/Gradient'
-import {PaddingBottom, PaddingTop} from '@components/SafePadding'
+import { GradientButton, OutlineButton } from '@components/Button'
+import Gradient, { Radial } from '@components/Gradient'
+import { PaddingBottom, PaddingTop } from '@components/SafePadding'
 import SmallProfile from '@components/SmallProfile'
-import type {User} from '@query/api'
 import Clipboard from '@react-native-clipboard/clipboard'
-import {getShareText} from '@utils/constants'
-import type {NavProp} from '@utils/types'
-import {refer} from '@utils/utils'
+import type { NavProp } from '@utils/types'
+import { refer } from '@utils/utils'
 import React from 'react'
-import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
-import {ScrollView} from 'react-native-gesture-handler'
-import Share from 'react-native-share'
+import { Image, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Refer({navigation}: NavProp) {
   // const {isPending, data, refetch} = useQuery({
@@ -37,7 +33,7 @@ export default function Refer({navigation}: NavProp) {
   // }, [navigation])
 
   return (
-    <View className='flex-1 bg-primary'>
+    <Radial className='flex-1'>
       <PaddingTop />
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <SmallProfile navigation={navigation} />
@@ -80,6 +76,6 @@ export default function Refer({navigation}: NavProp) {
         </Gradient>
         <PaddingBottom />
       </ScrollView>
-    </View>
+    </Radial>
   )
 }

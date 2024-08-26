@@ -1,6 +1,9 @@
 import Colors from '@utils/colors'
 import React from 'react'
-import LinearGradient, {type LinearGradientProps} from 'react-native-linear-gradient'
+import { StyleSheet, View } from 'react-native'
+import LinearGradient, { type LinearGradientProps } from 'react-native-linear-gradient'
+import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg'
+import type { ViewProps } from 'react-native-svg/lib/typescript/fabric/utils'
 
 type CustomLinearGradientProps = Omit<LinearGradientProps, 'colors'> & {
   colors?: Array<string>
@@ -14,5 +17,26 @@ export default function Gradient({children, ...props}: CustomLinearGradientProps
       colors={col}>
       {children}
     </LinearGradient>
+  )
+}
+
+type RadialProps = ViewProps & {
+  from?: string
+  to?: string
+}
+export function Radial({children, from = Colors.g2, to = Colors.g1, ...props}: RadialProps) {
+  return (
+    <View style={{flex: 1}} {...props}>
+      <Svg height='100%' width='100%' style={StyleSheet.absoluteFillObject}>
+        <Defs>
+          <RadialGradient id='grad' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
+            <Stop offset='0' stopColor={from} />
+            <Stop offset='1' stopColor={to} />
+          </RadialGradient>
+        </Defs>
+        <Rect width='100%' height='100%' fill='url(#grad)' />
+      </Svg>
+      {children}
+    </View>
   )
 }

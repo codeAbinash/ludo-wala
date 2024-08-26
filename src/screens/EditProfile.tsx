@@ -68,11 +68,11 @@ export default function EditProfile({navigation}: NavProp) {
   }, [userMutation.data, navigation, setUser])
 
   return (
-    <View className='flex-1 bg-primary'>
-      <View>
-        <BackHeader navigation={navigation} title='Profile' />
-      </View>
-      <Screen className='flex-1 px-5'>
+    <Screen>
+      <View className='flex-1 bg-primary px-5'>
+        <View>
+          <BackHeader navigation={navigation} title='Profile' />
+        </View>
         <KeyboardAvoidingContainer>
           <View className='flex-row items-center' style={{gap: 20}}>
             <View className='flex-row'>
@@ -135,8 +135,8 @@ export default function EditProfile({navigation}: NavProp) {
           <View className='h-10' />
           <PaddingBottom />
         </KeyboardAvoidingContainer>
-      </Screen>
-    </View>
+      </View>
+    </Screen>
   )
 }
 

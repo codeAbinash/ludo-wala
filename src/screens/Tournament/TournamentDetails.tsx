@@ -1,20 +1,20 @@
-import {Medium, SemiBold} from '@/fonts'
-import {Award01SolidIcon, INRIcon} from '@assets/icons/icons'
+import { Medium, SemiBold } from '@/fonts'
+import { Award01SolidIcon, INRIcon } from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
-import {FullGradientButton, FullOutlineButton, LoadingButton} from '@components/Button'
-import Gradient from '@components/Gradient'
-import {PaddingBottom, PaddingTop} from '@components/SafePadding'
-import {joinTournament_f, type TournamentData} from '@query/api'
-import {useNavigation, type RouteProp} from '@react-navigation/native'
-import {useMutation} from '@tanstack/react-query'
-import type {StackNav} from '@utils/types'
-import {stylishDate} from '@utils/utils'
-import React, {useEffect, useState} from 'react'
-import {Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
-import {ScrollView} from 'react-native-gesture-handler'
+import { FullGradientButton, FullOutlineButton, LoadingButton } from '@components/Button'
+import Gradient, { Radial } from '@components/Gradient'
+import { PaddingBottom, PaddingTop } from '@components/SafePadding'
+import { joinTournament_f, type TournamentData } from '@query/api'
+import { useNavigation, type RouteProp } from '@react-navigation/native'
+import { useMutation } from '@tanstack/react-query'
+import type { StackNav } from '@utils/types'
+import { stylishDate } from '@utils/utils'
+import React, { useEffect, useState } from 'react'
+import { Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import Carousel from 'react-native-reanimated-carousel'
-import type {SvgProps} from 'react-native-svg'
+import type { SvgProps } from 'react-native-svg'
 
 const images = [Images.start, Images.b1, Images.b2, Images.b3, Images.b4]
 
@@ -60,7 +60,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
   ].reverse()
 
   return (
-    <Gradient className='flex-1'>
+    <Radial>
       <View>
         <BackHeader title='Tournament' navigation={navigation} />
       </View>
@@ -86,7 +86,7 @@ export default function TournamentDetails({navigation, route}: {navigation: Stac
         </View>
       </ScrollView>
       <BottomPart data={data} />
-    </Gradient>
+    </Radial>
   )
 }
 

@@ -5,6 +5,7 @@
  * @format
  */
 
+import Blank from '@/Blank'
 import { NavigationContainer } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator, type StackNavigationOptions } from '@react-navigation/stack'
 import AddCash from '@screens/AddCash'
@@ -89,6 +90,7 @@ export type RootStackParamList = {
   Update: undefined
   TournamentDetails: TournamentDetailsParamList
   JoinedTournament: undefined
+  Blank: undefined
 }
 function Navigation() {
   return (
@@ -99,6 +101,7 @@ function Navigation() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen name='Splash' component={Splash} />
+      <Stack.Screen name='Blank' component={Blank} />
       <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='EnterPhone' component={EnterPhone} />
       <Stack.Screen name='EnterName' component={EnterName} />

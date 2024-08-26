@@ -1,22 +1,20 @@
-import {Bangers, SemiBold} from '@/fonts'
-import {userStore} from '@/zustand/userStore'
-import {ArrowLeft01SolidIcon, ArrowRight01SolidIcon, ChampionIcon, ChessPawnIcon, PieChartIcon} from '@assets/icons/icons'
+import { Bangers, SemiBold } from '@/fonts'
+import { userStore } from '@/zustand/userStore'
+import { ArrowLeft01SolidIcon, ArrowRight01SolidIcon, ChampionIcon, ChessPawnIcon, PieChartIcon } from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import {FullGradientButton, GradientButton} from '@components/Button'
-import Gradient from '@components/Gradient'
-import {PaddingTop} from '@components/SafePadding'
+import { FullGradientButton } from '@components/Button'
+import Gradient, { Radial } from '@components/Gradient'
+import { PaddingTop } from '@components/SafePadding'
 import SmallProfile from '@components/SmallProfile'
-import {get_user_f} from '@query/api'
-import {useMutation} from '@tanstack/react-query'
-import type colors from '@utils/colors'
+import { get_user_f } from '@query/api'
+import { useNavigation } from '@react-navigation/native'
+import { useMutation } from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import {W} from '@utils/dimensions'
-import type {NavProp, StackNav} from '@utils/types'
-import React, {useDebugValue, useEffect} from 'react'
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native'
-import Animated, {useAnimatedStyle, useDerivedValue, useSharedValue, withTiming} from 'react-native-reanimated'
-import BannerImage from '@icons/bannerImage.svg'
-import {useNavigation} from '@react-navigation/native'
+import { W } from '@utils/dimensions'
+import type { NavProp, StackNav } from '@utils/types'
+import React, { useEffect } from 'react'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated'
 
 type GameType = 'Classic' | 'Quick' | 'Challenge' | 'Tournament'
 
@@ -144,50 +142,52 @@ export default function HomeScreen({navigation}: NavProp) {
   }, [mutate])
 
   return (
-    <View className='flex-1 bg-primary'>
-      <PaddingTop />
-      <View className='px-4'>
-        <SmallProfile navigation={navigation} />
-      </View>
-      <View className='flex-1 justify-center'>
-        <Animated.View className='flex-row pt-16' style={animStyle}>
-          <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' img={Images.tournament} />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' img={Images.challenge} />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' img={Images.classic} />
-          <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' img={Images.quick_mode} />
-        </Animated.View>
-      </View>
-      <View className='pb-7'>
-        <View className='flex-row items-center justify-center' style={{gap: 15}}>
-          <RoundButton
-            active={currentOption === 'Tournament'}
-            onPress={() => setCurrentOption('Tournament')}
-            icon={<ChampionIcon height={25} width={25} className={currentOption === 'Tournament' ? 'text-b1' : 'text-border'} />}
-          />
-          <RoundButton
-            active={currentOption === 'Challenge'}
-            onPress={() => setCurrentOption('Challenge')}
-            icon={
-              <SemiBold
-                className={`text-lg ${currentOption === 'Challenge' ? 'text-b1' : 'text-border'} text-center`}
-                style={{height: 25, width: 25}}>
-                VS
-              </SemiBold>
-            }
-          />
-          <RoundButton
-            active={currentOption === 'Classic'}
-            onPress={() => setCurrentOption('Classic')}
-            icon={<ChessPawnIcon height={25} width={25} className={currentOption === 'Classic' ? 'text-b1' : 'text-border'} />}
-          />
-          <RoundButton
-            active={currentOption === 'Quick'}
-            onPress={() => setCurrentOption('Quick')}
-            icon={<PieChartIcon height={25} width={25} className={currentOption === 'Quick' ? 'text-b1' : 'text-border'} />}
-          />
+    <Radial>
+      <View className='flex-1'>
+        <PaddingTop />
+        <View className='px-4'>
+          <SmallProfile navigation={navigation} />
+        </View>
+        <View className='flex-1 justify-center'>
+          <Animated.View className='flex-row pt-16' style={animStyle}>
+            <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' img={Images.tournament} />
+            <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' img={Images.challenge} />
+            <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' img={Images.classic} />
+            <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' img={Images.quick_mode} />
+          </Animated.View>
+        </View>
+        <View className='pb-7'>
+          <View className='flex-row items-center justify-center' style={{gap: 15}}>
+            <RoundButton
+              active={currentOption === 'Tournament'}
+              onPress={() => setCurrentOption('Tournament')}
+              icon={<ChampionIcon height={25} width={25} className={currentOption === 'Tournament' ? 'text-b1' : 'text-border'} />}
+            />
+            <RoundButton
+              active={currentOption === 'Challenge'}
+              onPress={() => setCurrentOption('Challenge')}
+              icon={
+                <SemiBold
+                  className={`text-lg ${currentOption === 'Challenge' ? 'text-b1' : 'text-border'} text-center`}
+                  style={{height: 25, width: 25}}>
+                  VS
+                </SemiBold>
+              }
+            />
+            <RoundButton
+              active={currentOption === 'Classic'}
+              onPress={() => setCurrentOption('Classic')}
+              icon={<ChessPawnIcon height={25} width={25} className={currentOption === 'Classic' ? 'text-b1' : 'text-border'} />}
+            />
+            <RoundButton
+              active={currentOption === 'Quick'}
+              onPress={() => setCurrentOption('Quick')}
+              icon={<PieChartIcon height={25} width={25} className={currentOption === 'Quick' ? 'text-b1' : 'text-border'} />}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </Radial>
   )
 }
 
