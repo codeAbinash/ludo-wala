@@ -12,7 +12,7 @@ import React from 'react'
 import {Alert, TouchableOpacity, View} from 'react-native'
 import RazorpayCheckout from 'react-native-razorpay'
 
-const amounts = ['100', '500', '1000', '1500', '2000', '2500']
+const amounts = ['50', '100', '500', '1000', '1500', '2000']
 
 export default function AddCash({navigation}: NavProp) {
   const [amount, setAmount] = React.useState('100')

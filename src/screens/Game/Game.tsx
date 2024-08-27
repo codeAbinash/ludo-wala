@@ -1,17 +1,36 @@
-import {SemiBold} from '@/fonts'
-import {ArrowIcon, StarIcon} from '@assets/icons/icons'
+import {Medium, SemiBold} from '@/fonts'
 import Images from '@assets/images/images'
-import {Radial} from '@components/Gradient'
 import {PaddingTop} from '@components/SafePadding'
 import Screen from '@components/Screen'
-import {Blue, Green, Red, Yellow} from '@utils/colors'
-import React, {useMemo} from 'react'
-import {Image, View} from 'react-native'
-import type {ViewProps} from 'react-native-svg/lib/typescript/fabric/utils'
+import Colors, {Blue, Green, Red, Yellow} from '@utils/colors'
+import React, {useEffect} from 'react'
+import {Image, StyleSheet, View} from 'react-native'
+import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
-import {ArrowSpot, Plot1Data, Plot2Data, Plot3Data, Plot4Data, SafeSpots, StarSpots, startingPoints} from './plotData'
+import {HorizontalBoxes, VerticalBoxes} from './components/Path'
+import {Plot1Data, Plot2Data, Plot3Data, Plot4Data} from './plotData'
+import gameStore from './zustand/gameStore'
+import {useIsFocused} from '@react-navigation/native'
+import {CheckmarkCircle02SolidIcon, D1, D2, D3, D4, D5, D6, UnavailableSolidIcon} from '@assets/icons/icons'
+import {ppUrl} from '@utils/constants'
+import {Skia, Path, Canvas} from '@shopify/react-native-skia'
+import {W} from '@utils/dimensions'
+import {useSharedValue, withTiming} from 'react-native-reanimated'
 
 export default function Game() {
+  const game = gameStore((state) => state.game)
+  const p1 = game.player1
+  const p2 = game.player2
+  const p3 = game.player3
+  const p4 = game.player4
+  const isDiceTouch = game.touchDisabled
+  const winner = game.winner
+  const diceNo = game.diceNo
+  const player = game.chancePlayer
+  const playerPiece = player === 1 ? p1 : player === 2 ? p2 : player === 3 ? p3 : p4
+
+  const isFocused = useIsFocused()
+
   return (
     <Screen Col={['#215962', '#0b1e22']}>
       <View className='flex-1 items-center justify-center'>
@@ -25,177 +44,158 @@ export default function Game() {
 
 function TopPart() {
   return (
-    <View className='flex-1'>
-      <PaddingTop />
-      <View className='mt-2'>
-        <View className='flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5' style={{columnGap: 10}}>
-          <Image source={Images.trophy} style={{width: 40, height: 40}} />
-          <View>
-            <SemiBold className='text-blue-600'>1st Prize</SemiBold>
-            <SemiBold className='text-base text-blue-600'>₹1 Crore</SemiBold>
+    <View className='w-full flex-1 justify-between'>
+      <View>
+        <PaddingTop />
+        <View className='mt-2 flex-row'>
+          <View className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5' style={{columnGap: 10}}>
+            <Image source={Images.trophy} style={{width: 40, height: 40}} />
+            <View>
+              <SemiBold className='text-blue-600'>1st Prize</SemiBold>
+              <SemiBold className='text-base text-blue-600'>₹1 Crore</SemiBold>
+            </View>
           </View>
         </View>
+      </View>
+      <View className='flex-row justify-between'>
+        <User name='Abinash' />
+        <User name='Sudipto' reversed />
       </View>
     </View>
   )
 }
 
+type UserProps = {
+  banned?: boolean
+  name: string
+  reversed?: boolean
+  bottom?: boolean
+}
+function User({banned, name, reversed, bottom}: UserProps) {
+  const path = Skia.Path.Make()
+  path.addCircle(W / 2, W / 2, r)
+  const percent = useSharedValue(0)
+
+  useEffect(() => {
+    percent.value = withTiming(percentAge, {duration: 2000})
+  }, [percent])
+
+  return (
+    <View className={`flex-row ${reversed ? 'flex-row-reverse' : 'flex'} w-1/2 items-center p-5`} style={{gap: 10}}>
+      <View style={{gap: 5}} className={`w-10/12 ${bottom ? 'flex-col-reverse' : ''}`}>
+        <View className='flex-row' style={{gap: 5}}>
+          {banned ? (
+            <UnavailableSolidIcon width={20} height={20} color='red' />
+          ) : (
+            <CheckmarkCircle02SolidIcon width={20} height={20} color={Colors.green[500]} />
+          )}
+          <View>
+            <Medium className='rounded-full bg-white px-3 pb-1 pt-0.5 text-blue-700'>{name}</Medium>
+          </View>
+        </View>
+        <View className={'w-full'}>
+          <View className={`w-full flex-row justify-between rounded-full bg-white/30 ${reversed ? 'flex-row-reverse' : 'items-end'}`}>
+            <View className='h-12 w-12 items-center justify-center overflow-hidden rounded-xl'>
+              <Dice n={1} />
+            </View>
+            <View className='relative h-12 w-12 items-center justify-center rounded-full'>
+              <View style={{position: 'absolute', zIndex: 50}}>
+                <Canvas style={{height: W, width: W, transform: [{rotate: '90deg'}]}}>
+                  <Path
+                    path={path}
+                    strokeWidth={strokeW}
+                    color={bgColor}
+                    style={'stroke'}
+                    strokeJoin={'round'}
+                    strokeCap={'round'}
+                    start={0}
+                    end={1}
+                  />
+                  <Path
+                    path={path}
+                    strokeWidth={strokeW}
+                    color={'white'}
+                    style={'stroke'}
+                    strokeJoin={'round'}
+                    strokeCap={'round'}
+                    start={0}
+                    end={percent}
+                  />
+                </Canvas>
+              </View>
+              <Image
+                source={{uri: `https://avatar.iran.liara.run/username?username=${name}`}}
+                style={{width: 48, height: 48}}
+                className='rounded-full'
+              />
+            </View>
+          </View>
+        </View>
+      </View>
+      <View style={{gap: 5}}>
+        <View className='h-2 w-2 rounded-full bg-green-500'></View>
+        <View className='h-2 w-2 rounded-full bg-green-500'></View>
+        <View className='h-2 w-2 rounded-full bg-green-500'></View>
+      </View>
+    </View>
+  )
+}
+const r = 22
+const strokeW = 3
+const bgColor = Green[0]
+const percentAge = 0.5
+
 function BottomPart() {
-  return <View className='flex-1'></View>
+  return (
+    <View className='flex-1'>
+      <View className='flex-row justify-between'>
+        <User name='Sujal' bottom />
+        <User name='Raju' reversed bottom />
+      </View>
+    </View>
+  )
 }
 
 function Board() {
   return (
-    <View
-      style={{
-        height: w,
-        width: w,
-      }}
-      className='flex-row flex-wrap justify-between'>
-      <Home
-        Col={Green}
-        style={{
-          borderTopLeftRadius: 40,
-        }}
-      />
+    <View style={{height: w, width: w}} className='flex-row flex-wrap justify-between'>
+      <HomeBox Col={Green} style={{borderTopLeftRadius: 40}} />
       <VerticalBoxes cells={Plot2Data} color={Yellow[1]} />
-      <Home
-        Col={Yellow}
-        style={{
-          borderTopRightRadius: 40,
-        }}
-      />
+      <HomeBox Col={Yellow} style={{borderTopRightRadius: 40}} />
       <HorizontalBoxes cells={Plot1Data} color={Green[1]} />
       <MidBox />
       <HorizontalBoxes cells={Plot3Data} color={Blue[1]} />
-      <Home
-        Col={Red}
-        style={{
-          borderBottomLeftRadius: 40,
-        }}
-      />
+      <HomeBox Col={Red} style={{borderBottomLeftRadius: 40}} />
       <VerticalBoxes cells={Plot4Data} color={Red[1]} />
-      <Home
-        Col={Blue}
-        style={{
-          borderBottomRightRadius: 40,
-        }}
-      />
+      <HomeBox Col={Blue} style={{borderBottomRightRadius: 40}} />
     </View>
   )
 }
 
-type HomeProps = {
-  Col?: string[]
-} & ViewProps
-function Home({Col, style, ...props}: HomeProps) {
-  return (
-    <View
-      className='aspect-square justify-center overflow-hidden'
-      {...props}
-      style={[
-        {
-          width: w * 0.4,
-          height: w * 0.4,
-          transform: [{scale: 0.95}],
-          borderRadius: 20,
-        },
-        style,
-      ]}>
-      <Radial className='flex aspect-square h-full w-full items-center justify-center' Col={Col}>
-        <View className='h-1/2 w-1/2 rounded-full bg-white' />
-      </Radial>
-    </View>
-  )
+function getDiceIcon(n: number) {
+  switch (n) {
+    case 1:
+      return D1
+    case 2:
+      return D2
+    case 3:
+      return D3
+    case 4:
+      return D4
+    case 5:
+      return D5
+    case 6:
+      return D6
+  }
+  return D1
 }
 
-type VerticalBoxesProps = {
-  cells: number[]
-  color: string
-} & ViewProps
+// const Dice = React.memo(({n}: {n: number}) => {
+//   const Icon = getDiceIcon(n)
+//   return <Icon width={48} height={48} />
+// })
 
-function VerticalBoxes({cells, color, ...props}: VerticalBoxesProps) {
-  const groupedCells = useMemo(() => {
-    const groups = []
-    for (let i = 0; i < cells.length; i += 3) {
-      groups.push(cells.slice(i, i + 3))
-    }
-    console.log({groups})
-    return groups
-  }, [cells])
-  return (
-    <View className='rounded-xl' style={{width: w * 0.2, height: w * 0.4}} {...props}>
-      {groupedCells.map((cell, j) => (
-        <View key={j} className='flex-1 flex-row items-center justify-center'>
-          {cell.map((c, i) => (
-            <Cell key={i} cell={c} i={i} color={color} />
-          ))}
-        </View>
-      ))}
-    </View>
-  )
-}
-
-function HorizontalBoxes({cells, color, ...props}: VerticalBoxesProps) {
-  const groupedCells = useMemo(() => {
-    const groups = []
-    for (let i = 0; i < cells.length; i += 6) {
-      groups.push(cells.slice(i, i + 6))
-    }
-    console.log({groups})
-    return groups
-  }, [cells])
-  return (
-    <View className='rounded-xl' style={{width: w * 0.4, height: w * 0.2}} {...props}>
-      {groupedCells.map((cell, j) => (
-        <View key={j} className='flex-1 flex-row items-center justify-center'>
-          {cell.map((c, i) => (
-            <Cell key={i} cell={c} i={i} color={color} />
-          ))}
-        </View>
-      ))}
-    </View>
-  )
-}
-
-type CellProps = {
-  cell: number
-  color: string
-  i: number
-} & ViewProps
-
-function Cell({cell, id, color, ...props}: CellProps) {
-  const isSafe = useMemo(() => SafeSpots.includes(cell), [cell])
-  const isStar = useMemo(() => StarSpots.includes(cell), [cell])
-  const isStarting = useMemo(() => startingPoints.includes(cell), [cell])
-  const isArrow = useMemo(() => ArrowSpot.includes(cell), [cell])
-
-  return (
-    <View key={cell} className='flex-1 items-center justify-center' style={{padding: 1.5}}>
-      <View
-        className='h-full w-full flex-1 items-center justify-center'
-        style={{borderRadius: 5, backgroundColor: isStar ? '#ffffff55' : isSafe ? color : 'white'}}>
-        {isStar && <StarIcon width={w * 0.04} height={w * 0.04} color={'white'} transform={[{rotate: '20deg'}]} />}
-        {isStarting && <StarIcon width={w * 0.04} height={w * 0.04} color={'white'} transform={[{rotate: '20deg'}]} />}
-        {isArrow && <ArrowIcon width={w * 0.04} height={w * 0.04} color={color} style={getRotatedArrowStyle(cell)} />}
-        {/* <Medium
-          className='text-xs'
-          style={[
-            {
-              color: isSafe ? 'white' : color,
-            },
-            StyleSheet.absoluteFillObject,
-          ]}>
-          {cell}
-        </Medium> */}
-      </View>
-    </View>
-  )
-}
-
-function getRotatedArrowStyle(i: number) {
-  if (i === 38) return {transform: [{rotate: '90deg'}]}
-  else if (i === 25) return {transform: [{rotate: '0deg'}]}
-  else if (i === 51) return {transform: [{rotate: '180deg'}]}
-  else return {transform: [{rotate: '-90deg'}]}
+function Dice({n}: {n: number}) {
+  const DiceIcon = getDiceIcon(n)
+  return <DiceIcon width={48} height={48} />
 }

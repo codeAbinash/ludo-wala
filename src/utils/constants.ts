@@ -20,3 +20,5 @@ export const termsLink = `${mainLink}terms-and-conditions/`
 export const aboutLink = `${mainLink}about-us/`
 export const conductLink = `${mainLink}code-of-conduct/`
 export const rateLink = `${mainLink}review/`
+
+export const ppUrl = 'https://i.pinimg.com/originals/1c/c5/35/1cc535901e32f18db87fa5e340a18aff.jpg'
