@@ -300,3 +300,8 @@ const Colors = {
 }
 
 export default Colors
+
+export const Green = ['#86DA44', '#399703']
+export const Red = ['#FE514E', '#DA0200']
+export const Blue = ['#477BF2', '#0C2295']
+export const Yellow = ['#FAE523', '#FBC632']

@@ -14,6 +14,7 @@ const Images = {
   classic: require('./src/classic.png'),
   quick_mode: require('./src/quick-mode.png'),
   tournament: require('./src/tournament.png'),
+  logoText: require('./src/logo-text.png'),
 }
 
 export default Images

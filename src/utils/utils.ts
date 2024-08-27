@@ -1,4 +1,4 @@
-import {image} from '@/images'
+import {image} from '@/image'
 import type {User} from '@query/api'
 import {getShareText} from './constants'
 import Share from 'react-native-share'

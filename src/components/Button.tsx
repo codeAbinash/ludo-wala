@@ -67,7 +67,14 @@ type LoadingButtonProps = TouchableOpacityProps
 export function LoadingButton({...props}: LoadingButtonProps) {
   return (
     <Gradient className={'w-full items-center justify-center rounded-full border border-bb'} colors={[Colors.b1, Colors.b2]} {...props}>
-      <LottieView source={require('@assets/animations/loader.json')} autoPlay loop style={{width: 140, height: 45}} />
+      <LottieView
+        hardwareAccelerationAndroid
+        cacheComposition
+        source={require('@assets/animations/loader.json')}
+        autoPlay
+        loop
+        style={{width: 140, height: 45}}
+      />
     </Gradient>
   )
 }

@@ -6,29 +6,30 @@
  */
 
 import Blank from '@/Blank'
-import { NavigationContainer } from '@react-navigation/native'
-import { CardStyleInterpolators, createStackNavigator, type StackNavigationOptions } from '@react-navigation/stack'
+import {NavigationContainer} from '@react-navigation/native'
+import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
 import AddCash from '@screens/AddCash'
 import EnterName from '@screens/auth/EnterName'
 import EnterPhone from '@screens/auth/EnterPhone'
-import OTP, { type OTPParamList } from '@screens/auth/Otp'
+import OTP, {type OTPParamList} from '@screens/auth/Otp'
 import EditProfile from '@screens/EditProfile'
+import Game from '@screens/Game/Game'
 import Home from '@screens/Home'
 import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
 import JoinedTournament from '@screens/JoinedTournament'
-import Maintenance, { type MaintenanceParamList } from '@screens/Maintenance'
-import PaymentSuccessful, { type PaymentSuccessfulParamList } from '@screens/PaymentSuccessful'
+import Maintenance, {type MaintenanceParamList} from '@screens/Maintenance'
+import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
 import Splash from '@screens/Splash'
 import Tournament from '@screens/Tournament/Tournament'
-import TournamentDetails, { type TournamentDetailsParamList } from '@screens/Tournament/TournamentDetails'
+import TournamentDetails, {type TournamentDetailsParamList} from '@screens/Tournament/TournamentDetails'
 import UpdateAvailable from '@screens/UpdateAvailable'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { DarkTheme, DefaultTheme } from '@utils/themes'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {DarkTheme, DefaultTheme} from '@utils/themes'
 import React from 'react'
-import { Dimensions, StatusBar, useColorScheme } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import {Dimensions, StatusBar, useColorScheme} from 'react-native'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -91,6 +92,7 @@ export type RootStackParamList = {
   TournamentDetails: TournamentDetailsParamList
   JoinedTournament: undefined
   Blank: undefined
+  Game: undefined
 }
 function Navigation() {
   return (
@@ -100,6 +102,7 @@ function Navigation() {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Stack.Screen name='Game' component={Game} />
       <Stack.Screen name='Splash' component={Splash} />
       <Stack.Screen name='Blank' component={Blank} />
       <Stack.Screen name='Home' component={Home} />

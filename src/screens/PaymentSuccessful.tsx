@@ -37,7 +37,13 @@ export default function PaymentSuccessful({navigation, route}: {navigation: Stac
   return (
     <View className='flex-1 items-center justify-center bg-primary p-5'>
       <Medium className='text-lg text-white'>Payment Successful</Medium>
-      <LottieView source={require('@/assets/animations/payment.json')} autoPlay style={{width: W * 1.5, height: W * 1}} />
+      <LottieView
+        hardwareAccelerationAndroid
+        cacheComposition
+        source={require('@/assets/animations/payment.json')}
+        autoPlay
+        style={{width: W * 1.5, height: W * 1}}
+      />
       <Gradient
         className='w-full rounded-2xl border border-border p-5'
         style={{

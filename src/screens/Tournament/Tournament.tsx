@@ -1,20 +1,21 @@
-import { Bold, Medium, Regular } from '@/fonts'
-import { DbFillIcon, LikeFillIcon, TrophyFillIcon } from '@assets/icons/icons'
+import {Bold, Medium, Regular} from '@/fonts'
+import {DbFillIcon, LikeFillIcon, TrophyFillIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
-import { FullGradientButton } from '@components/Button'
+import {FullGradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Screen from '@components/Screen'
-import { getTournamentList_f, type TournamentData } from '@query/api'
-import { useNavigation } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
+import {getTournamentList_f, type TournamentData} from '@query/api'
+import {useNavigation} from '@react-navigation/native'
+import {useQuery} from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import type { NavProp, StackNav } from '@utils/types'
-import { print } from '@utils/utils'
+import {W} from '@utils/dimensions'
+import type {NavProp, StackNav} from '@utils/types'
+import {print} from '@utils/utils'
 import LottieView from 'lottie-react-native'
-import React, { useEffect } from 'react'
-import { Image, TouchableOpacity, View } from 'react-native'
-import type { SvgProps } from 'react-native-svg'
+import React, {useEffect} from 'react'
+import {Image, TouchableOpacity, View} from 'react-native'
+import type {SvgProps} from 'react-native-svg'
 
 export default function Tournament({navigation}: NavProp) {
   const {data} = useQuery({
@@ -39,7 +40,14 @@ export default function Tournament({navigation}: NavProp) {
         </Gradient>
         {!data?.data && (
           <View className='h-80 w-full items-center justify-center'>
-            <LottieView source={require('@assets/animations/dice-loading.json')} autoPlay loop style={{width: 30, height: 30, opacity: 0.7}} />
+            <LottieView
+              hardwareAccelerationAndroid
+              cacheComposition
+              source={require('@assets/animations/dice-loading.json')}
+              autoPlay
+              loop
+              style={{width: 30, height: 30, opacity: 0.7}}
+            />
           </View>
         )}
         {data?.data.map((item, index: number) => (
@@ -71,6 +79,7 @@ interface CardProps {
 
 function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data}: CardProps) {
   const navigation = useNavigation<StackNav>()
+  const width = (joinedUsers / maxPlayers) * 100
   return (
     <TouchableOpacity onPress={() => navigation.navigate('TournamentDetails', data)} activeOpacity={0.7}>
       <Gradient className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
@@ -83,7 +92,7 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data
           <View className='mt-5'>
             <Medium className='text-xs text-white/80'>TOURNAMENT ENTRIES</Medium>
             <View className='mt-1.5 overflow-hidden rounded-full bg-white'>
-              <Gradient style={{width: `${joinedUsers || (0 / maxPlayers) * 100}%`}} className='h-2.5 rounded-full' colors={[Colors.b1, Colors.b2]} />
+              <Gradient style={{width: `${width}%`}} className='h-2.5 rounded-full' colors={[Colors.b1, Colors.b2]} />
             </View>
             <Medium className='mt-1.5 text-xs text-white/80'>
               {joinedUsers || 0} of {maxPlayers} filled
