@@ -6,6 +6,10 @@
  */
 
 import Blank from '@/Blank'
+import {Medium, SemiBold} from '@/fonts'
+import Animations from '@assets/animations/animations'
+import Screen from '@components/Screen'
+import {useNetInfo} from '@react-native-community/netinfo'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
 import AddCash from '@screens/AddCash'
@@ -26,9 +30,11 @@ import Tournament from '@screens/Tournament/Tournament'
 import TournamentDetails, {type TournamentDetailsParamList} from '@screens/Tournament/TournamentDetails'
 import UpdateAvailable from '@screens/UpdateAvailable'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {W} from '@utils/dimensions'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
+import LottieView from 'lottie-react-native'
 import React from 'react'
-import {Dimensions, StatusBar, useColorScheme} from 'react-native'
+import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 const queryClient = new QueryClient({
@@ -59,17 +65,39 @@ const NO_ANIMATION: StackNavigationOptions = {
 }
 
 function App(): React.JSX.Element {
+  const netInfo = useNetInfo()
+  const scheme = useColorScheme()
+
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{flex: 1}} className='bg-primary'>
         {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
         <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
-        <NavigationContainer theme={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
-          <Navigation />
-        </NavigationContainer>
-        {/* </SafeAreaView> */}
+        {!netInfo.isConnected ? (
+          <NoInternet />
+        ) : (
+          <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Navigation />
+          </NavigationContainer>
+        )}
       </GestureHandlerRootView>
     </QueryClientProvider>
+  )
+}
+
+const size = W * 0.8
+
+function NoInternet() {
+  return (
+    <Screen>
+      <View className='flex-1 items-center justify-center px-5'>
+        <LottieView source={Animations.noInternet} autoPlay loop style={{width: size, height: size, backgroundColor: 'transparent'}} />
+        <SemiBold className='mt-4 text-center text-3xl text-white/90'>No Internet</SemiBold>
+        <Medium className='mt-4 text-center text-base text-white/70'>
+          Please check your internet connection! Check if you are connected to a Wi-Fi network or mobile data.
+        </Medium>
+      </View>
+    </Screen>
   )
 }
 
