@@ -77,3 +77,31 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+```
+keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
+
+Enter keystore password: codexindia
+
+Re-enter new password: codexindia
+
+Enter the distinguished name. Provide a single dot (.) to leave a sub-component empty or press ENTER to use the default value in braces.
+What is your first and last name?
+[Unknown]: Vikash
+What is the name of your organizational unit?
+[Unknown]: Ludo Wala
+What is the name of your organization?
+[Unknown]: Sportoni Technologies
+What is the name of your City or Locality?
+[Unknown]: Parsvnath City
+What is the name of your State or Province?
+[Unknown]: Haryana
+What is the two-letter country code for this unit?
+[Unknown]: IN
+Is CN=Vikash, OU=Ludo Wala, 0=Sportoni Technologies, L=Parsvnath City, ST=Haryana, C=IN correct?
+[no]: yes
+
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 10,000 days
+for: CN=Vikash, OU=Ludo Wala, O=Sportoni Technologies, L=Parsvnath City, ST=Haryana, C=IN
+[Storing my-release-key.keystore]
+```

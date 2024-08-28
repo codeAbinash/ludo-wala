@@ -113,6 +113,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release{
+            storeFile file('release.keystore')
+            storePassword 'codexindia'
+            keyAlias 'alias_name'
+            keyPassword 'android'
+        }
     }
     splits {
         abi {

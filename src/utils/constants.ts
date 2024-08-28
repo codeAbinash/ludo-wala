@@ -1,11 +1,11 @@
-import {Linking} from 'react-native'
-
 export const APP_VERSION = '1.0'
 
 export function getShareText(referCode: string) {
   return `Duniya Ka Pehla Ludo Tournament App! 🌍
 
 Ludo ka asli maza pao bina paisa lagaye! Apne doston ko invite karo aur kamao 2% har deposit par.
+
+Paye 100 Rupees Instantly Aapke Wallet Mein Mera Refer Code Use Karke.
 
 Referral Code: ${referCode}
 
@@ -20,5 +20,3 @@ export const termsLink = `${mainLink}terms-and-conditions/`
 export const aboutLink = `${mainLink}about-us/`
 export const conductLink = `${mainLink}code-of-conduct/`
 export const rateLink = `${mainLink}review/`
-
-export const ppUrl = 'https://i.pinimg.com/originals/1c/c5/35/1cc535901e32f18db87fa5e340a18aff.jpg'
