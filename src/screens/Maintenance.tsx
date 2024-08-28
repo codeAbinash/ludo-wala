@@ -2,7 +2,7 @@ import {Bold, Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import type {RouteProp} from '@react-navigation/native'
 import type {StackNav} from '@utils/types'
 import React from 'react'
@@ -18,7 +18,7 @@ export type MaintenanceParamList = {
 
 export default function Maintenance({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'Maintenance'>}) {
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1 items-center justify-center p-5'>
         <PaddingTop />
         <Image
@@ -43,6 +43,6 @@ export default function Maintenance({navigation, route}: {navigation: StackNav; 
         </View>
         <PaddingBottom />
       </View>
-    </Screen>
+    </Wrap>
   )
 }

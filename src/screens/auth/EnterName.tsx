@@ -3,7 +3,7 @@ import {FullGradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import {updateProfile_f} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
@@ -38,7 +38,7 @@ export default function EnterName({navigation}: NavProp) {
   }
 
   return (
-    <Screen className='bg-primary'>
+    <Wrap className='bg-primary'>
       <View className='h-screen flex-1 items-center justify-center px-5'>
         <PaddingTop />
         <Gradient
@@ -54,6 +54,6 @@ export default function EnterName({navigation}: NavProp) {
           <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Next' onPress={update} />}</View>
         </Gradient>
       </View>
-    </Screen>
+    </Wrap>
   )
 }

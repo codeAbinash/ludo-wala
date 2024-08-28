@@ -15,7 +15,7 @@ import {
 } from '@assets/icons/icons'
 import Gradient from '@components/Gradient'
 import {PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import Colors from '@utils/colors'
 import {aboutLink, conductLink, contactLink, privacyLink, rateLink, termsLink} from '@utils/constants'
@@ -35,7 +35,7 @@ const ic = {
 export default function Profile({navigation}: NavProp) {
   const user = userStore((state) => state.user)
   return (
-    <Screen>
+    <Wrap>
       <PaddingTop />
       <View className='px-4'>
         <SmallProfile navigation={navigation} />
@@ -70,7 +70,7 @@ export default function Profile({navigation}: NavProp) {
           />
         </Gradient>
       </ScrollView>
-    </Screen>
+    </Wrap>
   )
 }
 

@@ -180,3 +180,55 @@ export async function getTournamentList_f() {
 export async function joinTournament_f({tournament_id}: {tournament_id: string}) {
   return await postApi<ServerResponse>('tournament/joinTournament', {tournament_id})
 }
+
+export type Leaderboard = {
+  status: boolean
+  data: Player[]
+}
+
+export type Player = {
+  userId: number
+  fname: string
+  lname: string
+  total_deposit: string
+  profilePic: string
+}
+export async function leaderboard_f() {
+  return await postApi<Leaderboard>('refer/leaderBoard', null)
+}
+
+export type MyReferrals = {
+  status: boolean
+  data: {
+    current_page: number
+    data: ReferredUser[]
+    first_page_url: string
+    from: number
+    last_page: number
+    last_page_url: string
+    links: Link[]
+    next_page_url: null
+    path: string
+    per_page: number
+    prev_page_url: null
+    to: number
+    total: number
+  }
+}
+
+export type ReferredUser = {
+  fname: string
+  lname: string
+  total_winning: string
+  profilePic: string
+}
+
+export type Link = {
+  url: null | string
+  label: string
+  active: boolean
+}
+
+export async function my_referral_f() {
+  return await postApi<MyReferrals>('refer/myReferrals', null)
+}

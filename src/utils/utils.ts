@@ -68,3 +68,7 @@ export function getColor(player: number) {
       return 'Blue'
   }
 }
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

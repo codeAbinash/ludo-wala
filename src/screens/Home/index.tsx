@@ -6,9 +6,9 @@ import HomeScreen from '../HomeScreen'
 
 import {Home03Icon, UserAdd02Icon, UserIcon, Wallet01Icon} from '@assets/icons/icons'
 import Gradient from '@components/Gradient'
-import Refer from './Refer'
-import Wallet from './Wallet'
 import Profile from '@screens/Profile'
+import Refer from '../Refer/Refer'
+import Wallet from './Wallet'
 
 function HomeIcon(props: {focused: boolean; color: string; size: number}) {
   return <Home03Icon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />

@@ -2,14 +2,14 @@ import {Bold, Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import type {NavProp} from '@utils/types'
 import React from 'react'
 import {Image, Linking, View} from 'react-native'
 
 export default function UpdateAvailable({navigation}: NavProp) {
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1 items-center justify-center p-5'>
         <PaddingTop />
         <Image
@@ -33,6 +33,6 @@ export default function UpdateAvailable({navigation}: NavProp) {
         </View>
         <PaddingBottom />
       </View>
-    </Screen>
+    </Wrap>
   )
 }

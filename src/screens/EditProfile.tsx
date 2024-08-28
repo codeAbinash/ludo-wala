@@ -5,7 +5,7 @@ import BackHeader from '@components/BackHeader'
 import {FullGradientButton, LoadingButton} from '@components/Button'
 import KeyboardAvoidingContainer from '@components/KeyboardAvoidingContainer'
 import {PaddingBottom} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import {get_user_f, updateProfile_f, type UpdateProfileInput} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
 import type {NavProp} from '@utils/types'
@@ -68,7 +68,7 @@ export default function EditProfile({navigation}: NavProp) {
   }, [userMutation.data, navigation, setUser])
 
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1 bg-primary px-5'>
         <View>
           <BackHeader navigation={navigation} title='Profile' />
@@ -136,7 +136,7 @@ export default function EditProfile({navigation}: NavProp) {
           <PaddingBottom />
         </KeyboardAvoidingContainer>
       </View>
-    </Screen>
+    </Wrap>
   )
 }
 

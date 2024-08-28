@@ -8,7 +8,7 @@
 import Blank from '@/Blank'
 import {Medium, SemiBold} from '@/fonts'
 import Animations from '@assets/animations/animations'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import {useNetInfo} from '@react-native-community/netinfo'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
@@ -19,12 +19,14 @@ import OTP, {type OTPParamList} from '@screens/auth/Otp'
 import EditProfile from '@screens/EditProfile'
 import Game from '@screens/Game/Game'
 import Home from '@screens/Home'
-import Refer from '@screens/Home/Refer'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/HomeScreen'
 import JoinedTournament from '@screens/JoinedTournament'
 import Maintenance, {type MaintenanceParamList} from '@screens/Maintenance'
 import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
+import Leaderboard from '@screens/Refer/Leaderboard'
+import MyReferrals from '@screens/Refer/MyReferrals'
+import Refer from '@screens/Refer/Refer'
 import Splash from '@screens/Splash'
 import Tournament from '@screens/Tournament/Tournament'
 import TournamentDetails, {type TournamentDetailsParamList} from '@screens/Tournament/TournamentDetails'
@@ -73,7 +75,7 @@ function App(): React.JSX.Element {
       <GestureHandlerRootView style={{flex: 1}} className='bg-primary'>
         {/* <SafeAreaView style={{flex: 1, height: height, backgroundColor: 'red'}}> */}
         <StatusBar barStyle='light-content' backgroundColor={'transparent'} />
-        {!netInfo.isConnected ? (
+        {netInfo.isConnected === false ? (
           <NoInternet />
         ) : (
           <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -89,7 +91,7 @@ const size = W * 0.8
 
 function NoInternet() {
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1 items-center justify-center px-5'>
         <LottieView source={Animations.noInternet} autoPlay loop style={{width: size, height: size, backgroundColor: 'transparent'}} />
         <SemiBold className='mt-4 text-center text-3xl text-white/90'>No Internet</SemiBold>
@@ -97,7 +99,7 @@ function NoInternet() {
           Please check your internet connection! Check if you are connected to a Wi-Fi network or mobile data.
         </Medium>
       </View>
-    </Screen>
+    </Wrap>
   )
 }
 
@@ -121,6 +123,8 @@ export type RootStackParamList = {
   JoinedTournament: undefined
   Blank: undefined
   Game: undefined
+  Leaderboard: undefined
+  MyReferrals: undefined
 }
 function Navigation() {
   return (
@@ -149,6 +153,8 @@ function Navigation() {
       <Stack.Screen name='Maintenance' component={Maintenance} options={NO_ANIMATION} />
       <Stack.Screen name='Update' component={UpdateAvailable} />
       <Stack.Screen name='JoinedTournament' component={JoinedTournament} />
+      <Stack.Screen name='Leaderboard' component={Leaderboard} />
+      <Stack.Screen name='MyReferrals' component={MyReferrals} />
     </Stack.Navigator>
   )
 }

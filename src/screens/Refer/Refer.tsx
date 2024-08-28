@@ -3,9 +3,9 @@ import {userStore} from '@/zustand/userStore'
 import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import {GradientButton, OutlineButton} from '@components/Button'
-import Gradient, {Radial} from '@components/Gradient'
+import Gradient from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import Clipboard from '@react-native-clipboard/clipboard'
 import type {NavProp} from '@utils/types'
@@ -34,7 +34,7 @@ export default function Refer({navigation}: NavProp) {
   // }, [navigation])
 
   return (
-    <Screen>
+    <Wrap>
       <PaddingTop />
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <SmallProfile navigation={navigation} />
@@ -53,22 +53,18 @@ export default function Refer({navigation}: NavProp) {
                 ToastAndroid.show('Copied to clipboard', ToastAndroid.SHORT)
               }}
               activeOpacity={0.7}
-              style={{
-                borderWidth: 1,
-                borderColor: '#ffffff88',
-                borderStyle: 'dashed',
-              }}
+              style={{borderWidth: 1, borderColor: '#ffffff88', borderStyle: 'dashed'}}
               className='mt-5 flex-row items-center rounded-full py-3 pl-8 pr-6'>
               <Medium className='text-center text-sm text-b1'>{user?.data?.referCode || 'Loading...'}</Medium>
               <Copy01Icon className='ml-3 text-white opacity-80' height={16} width={16} />
             </TouchableOpacity>
           </View>
           <View className='mt-7 w-full flex-row' style={{gap: 15}}>
-            <OutlineButton className='rounded-full p-3.5'>
+            <OutlineButton className='rounded-full p-3.5' onPress={() => navigation.navigate('MyReferrals')}>
               <ArrowUpDownIcon className='text-b1' height={15} width={15} />
             </OutlineButton>
             <View style={{flexGrow: 1}}>
-              <OutlineButton title='Leaderboard' className='p-4' />
+              <OutlineButton title='Leaderboard' className='p-4' onPress={() => navigation.navigate('Leaderboard')} />
             </View>
             <View style={{flexGrow: 1}}>
               <GradientButton className='p-4' title='Invite' onPress={() => refer(user)} />
@@ -77,6 +73,6 @@ export default function Refer({navigation}: NavProp) {
         </Gradient>
         <PaddingBottom />
       </ScrollView>
-    </Screen>
+    </Wrap>
   )
 }

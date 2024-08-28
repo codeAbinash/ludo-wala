@@ -2,9 +2,9 @@ import {Bold, Medium, SemiBold} from '@/fonts'
 import {userStore} from '@/zustand/userStore'
 import {ArrowDown02Icon, ArrowRight01Icon} from '@assets/icons/icons'
 import {GradientButton} from '@components/Button'
-import Gradient, {Radial} from '@components/Gradient'
+import Gradient from '@components/Gradient'
 import {PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import type {NavProp} from '@utils/types'
 import {getTotal} from '@utils/utils'
 import React from 'react'
@@ -13,7 +13,7 @@ import {TouchableOpacity, View} from 'react-native'
 export default function Wallet({navigation}: NavProp) {
   const user = userStore((state) => state.user)
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1 px-5'>
         <PaddingTop />
         <Gradient className='mt-5 rounded-3xl border border-border p-5 pb-0'>
@@ -73,7 +73,7 @@ export default function Wallet({navigation}: NavProp) {
           </Gradient>
         </TouchableOpacity>
       </View>
-    </Screen>
+    </Wrap>
   )
 }
 

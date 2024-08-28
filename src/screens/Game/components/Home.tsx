@@ -1,20 +1,21 @@
 import {Radial} from '@components/Gradient'
 import React, {useEffect} from 'react'
 import {type ViewProps, View} from 'react-native'
+import Animated, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
+import gameStore from '../zustand/gameStore'
 import {w} from './MidBox'
-import Animated, {useAnimatedStyle, useDerivedValue, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 
 type HomeProps = {
   Col?: string[]
-  turn?: number
   no?: number
 } & ViewProps
-function HomeBox({Col, style, turn, no, ...props}: HomeProps) {
+function HomeBox({Col, style, no, ...props}: HomeProps) {
   const opacity = useSharedValue(1)
+  const currentPlayerChance = gameStore((state) => state.game.chancePlayer)
 
   useEffect(() => {
-    opacity.value = turn === no ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
-  }, [turn, no, opacity])
+    opacity.value = currentPlayerChance === no ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
+  }, [no, opacity, currentPlayerChance])
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

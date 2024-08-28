@@ -5,12 +5,11 @@ import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton} from '@components/Button'
 import Gradient, {Radial} from '@components/Gradient'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import {getTournamentList_f, type TournamentData} from '@query/api'
 import {useNavigation} from '@react-navigation/native'
 import {useQuery} from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import {W} from '@utils/dimensions'
 import type {NavProp, StackNav} from '@utils/types'
 import {print} from '@utils/utils'
 import LottieView from 'lottie-react-native'
@@ -29,7 +28,7 @@ export default function Tournament({navigation}: NavProp) {
   }, [data])
 
   return (
-    <Screen>
+    <Wrap>
       <BackHeader title='Tournament Mode' navigation={navigation} />
       <View className='px-5 pb-10' style={{gap: 20}}>
         <Gradient className='flex-row justify-between rounded-3xl border border-border p-5'>
@@ -64,7 +63,7 @@ export default function Tournament({navigation}: NavProp) {
           />
         ))}
       </View>
-    </Screen>
+    </Wrap>
   )
 }
 

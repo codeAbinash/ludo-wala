@@ -5,7 +5,7 @@ import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import {PaddingTop} from '@components/SafePadding'
-import Screen from '@components/Screen'
+import Wrap from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import {get_user_f} from '@query/api'
 import {useNavigation} from '@react-navigation/native'
@@ -143,7 +143,7 @@ export default function HomeScreen({navigation}: NavProp) {
   }, [mutate])
 
   return (
-    <Screen>
+    <Wrap>
       <View className='flex-1'>
         <PaddingTop />
         <View className='px-4'>
@@ -188,7 +188,7 @@ export default function HomeScreen({navigation}: NavProp) {
           </View>
         </View>
       </View>
-    </Screen>
+    </Wrap>
   )
 }
 
