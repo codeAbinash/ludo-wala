@@ -1,17 +1,18 @@
-import { Medium, SemiBold } from '@/fonts'
-import { userStore } from '@/zustand/userStore'
-import { ArrowUpDownIcon, Copy01Icon } from '@assets/icons/icons'
+import {Medium, SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
+import {ArrowUpDownIcon, Copy01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import { GradientButton, OutlineButton } from '@components/Button'
-import Gradient, { Radial } from '@components/Gradient'
-import { PaddingBottom, PaddingTop } from '@components/SafePadding'
+import {GradientButton, OutlineButton} from '@components/Button'
+import Gradient, {Radial} from '@components/Gradient'
+import {PaddingBottom, PaddingTop} from '@components/SafePadding'
+import Screen from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import Clipboard from '@react-native-clipboard/clipboard'
-import type { NavProp } from '@utils/types'
-import { refer } from '@utils/utils'
+import type {NavProp} from '@utils/types'
+import {refer} from '@utils/utils'
 import React from 'react'
-import { Image, ToastAndroid, TouchableOpacity, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
+import {ScrollView} from 'react-native-gesture-handler'
 
 export default function Refer({navigation}: NavProp) {
   // const {isPending, data, refetch} = useQuery({
@@ -33,7 +34,7 @@ export default function Refer({navigation}: NavProp) {
   // }, [navigation])
 
   return (
-    <Radial className='flex-1'>
+    <Screen>
       <PaddingTop />
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <SmallProfile navigation={navigation} />
@@ -76,6 +77,6 @@ export default function Refer({navigation}: NavProp) {
         </Gradient>
         <PaddingBottom />
       </ScrollView>
-    </Radial>
+    </Screen>
   )
 }

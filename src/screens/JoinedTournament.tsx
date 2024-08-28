@@ -1,5 +1,6 @@
 import {Medium} from '@/fonts'
 import {userStore} from '@/zustand/userStore'
+import Animations from '@assets/animations/animations'
 import {GradientButton} from '@components/Button'
 import {get_user_f} from '@query/api'
 import {useQuery} from '@tanstack/react-query'
@@ -26,13 +27,7 @@ export default function JoinedTournament({navigation}: NavProp) {
   return (
     <View className='flex-1 items-center justify-center bg-primary p-5'>
       <Medium className='text-center text-lg text-white'>You have successfully joined the tournament</Medium>
-      <LottieView
-        hardwareAccelerationAndroid
-        cacheComposition
-        source={require('@/assets/animations/payment.json')}
-        autoPlay
-        style={{width: W * 1.5, height: W * 1}}
-      />
+      <LottieView hardwareAccelerationAndroid cacheComposition source={Animations.payment} autoPlay style={{width: W * 1.5, height: W * 1}} />
       <GradientButton title='Go to Home' onPress={() => navigation.pop(3)} className='mt-10 rounded-full px-10 py-3' />
     </View>
   )

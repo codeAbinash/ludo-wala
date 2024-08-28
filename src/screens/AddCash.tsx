@@ -5,6 +5,7 @@ import BackHeader from '@components/BackHeader'
 import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
 import Input from '@components/Input'
+import Screen from '@components/Screen'
 import {deposit_f} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
@@ -76,7 +77,7 @@ export default function AddCash({navigation}: NavProp) {
   }
 
   return (
-    <View className='flex-1 bg-g1'>
+    <Screen className='flex-1'>
       <BackHeader title='Add Cash' navigation={navigation} />
       <View className='p-5'>
         <Gradient className='rounded-2xl border border-border p-5' style={{gap: 15}}>
@@ -108,6 +109,6 @@ export default function AddCash({navigation}: NavProp) {
           <SemiBold className='text-base text-green-500'>Your Payment is Safe and Secure.</SemiBold>
         </View>
       </View>
-    </View>
+    </Screen>
   )
 }

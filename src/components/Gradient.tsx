@@ -30,7 +30,7 @@ export function Radial({children, Col, ...props}: RadialProps) {
         <Defs>
           <RadialGradient id='grad' cx='50%' cy='50%' r='50%' fx='50%' fy='50%'>
             <Stop offset='0' stopColor={Col ? Col[0] : Colors.g2} />
-            <Stop offset='1' stopColor={Col ? Col[1] : Colors.g2} />
+            <Stop offset='1' stopColor={Col ? Col[1] : Colors.g1} />
           </RadialGradient>
         </Defs>
         <Rect width='100%' height='100%' fill='url(#grad)' />

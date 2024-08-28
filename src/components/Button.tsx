@@ -4,6 +4,7 @@ import LottieView from 'lottie-react-native'
 import React from 'react'
 import {TouchableOpacity, View, type TouchableOpacityProps} from 'react-native'
 import Gradient from './Gradient'
+import Animations from '@assets/animations/animations'
 
 export function Button() {
   return (
@@ -67,14 +68,7 @@ type LoadingButtonProps = TouchableOpacityProps
 export function LoadingButton({...props}: LoadingButtonProps) {
   return (
     <Gradient className={'w-full items-center justify-center rounded-full border border-bb'} colors={[Colors.b1, Colors.b2]} {...props}>
-      <LottieView
-        hardwareAccelerationAndroid
-        cacheComposition
-        source={require('@assets/animations/loader.json')}
-        autoPlay
-        loop
-        style={{width: 140, height: 45}}
-      />
+      <LottieView hardwareAccelerationAndroid cacheComposition source={Animations.loader} autoPlay loop style={{width: 140, height: 45}} />
     </Gradient>
   )
 }

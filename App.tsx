@@ -103,8 +103,8 @@ function Navigation() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen name='Game' component={Game} />
-      <Stack.Screen name='AddCash' component={AddCash} />
       <Stack.Screen name='Splash' component={Splash} />
+      <Stack.Screen name='AddCash' component={AddCash} />
       <Stack.Screen name='Blank' component={Blank} />
       <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='EnterPhone' component={EnterPhone} />

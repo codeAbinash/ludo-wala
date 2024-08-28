@@ -1,20 +1,21 @@
-import { Bangers, SemiBold } from '@/fonts'
-import { userStore } from '@/zustand/userStore'
-import { ArrowLeft01SolidIcon, ArrowRight01SolidIcon, ChampionIcon, ChessPawnIcon, PieChartIcon } from '@assets/icons/icons'
+import {Bangers, SemiBold} from '@/fonts'
+import {userStore} from '@/zustand/userStore'
+import {ArrowLeft01SolidIcon, ArrowRight01SolidIcon, ChampionIcon, ChessPawnIcon, PieChartIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import { FullGradientButton } from '@components/Button'
-import Gradient, { Radial } from '@components/Gradient'
-import { PaddingTop } from '@components/SafePadding'
+import {FullGradientButton} from '@components/Button'
+import Gradient from '@components/Gradient'
+import {PaddingTop} from '@components/SafePadding'
+import Screen from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
-import { get_user_f } from '@query/api'
-import { useNavigation } from '@react-navigation/native'
-import { useMutation } from '@tanstack/react-query'
+import {get_user_f} from '@query/api'
+import {useNavigation} from '@react-navigation/native'
+import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import { W } from '@utils/dimensions'
-import type { NavProp, StackNav } from '@utils/types'
-import React, { useEffect } from 'react'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated'
+import {W} from '@utils/dimensions'
+import type {NavProp, StackNav} from '@utils/types'
+import React, {useEffect} from 'react'
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native'
+import Animated, {useAnimatedStyle, useDerivedValue, useSharedValue, withTiming} from 'react-native-reanimated'
 
 type GameType = 'Classic' | 'Quick' | 'Challenge' | 'Tournament'
 
@@ -142,7 +143,7 @@ export default function HomeScreen({navigation}: NavProp) {
   }, [mutate])
 
   return (
-    <Radial>
+    <Screen>
       <View className='flex-1'>
         <PaddingTop />
         <View className='px-4'>
@@ -187,7 +188,7 @@ export default function HomeScreen({navigation}: NavProp) {
           </View>
         </View>
       </View>
-    </Radial>
+    </Screen>
   )
 }
 

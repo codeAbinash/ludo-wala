@@ -25,7 +25,10 @@ export default function SmallProfile({navigation}: NavProp) {
             ₹ {getTotal(user?.data?.deposit_wallet || '0', user?.data?.winning_wallet || '0', user?.data?.bonus_wallet || '0')}
           </Bold>
         </GradientButton>
-        <Image source={{uri: ppUrl}} className='h-10 w-10 rounded-full bg-white' />
+        <Image
+          source={{uri: `https://avatar.iran.liara.run/username?username=${user?.data?.fname} ${user?.data?.lname}`}}
+          className='h-10 w-10 rounded-full bg-white'
+        />
       </View>
     </View>
   )

@@ -1,22 +1,25 @@
 import {Medium, SemiBold} from '@/fonts'
+import {CheckmarkCircle02SolidIcon, D1, D2, D3, D4, D5, D6, UnavailableSolidIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Screen from '@components/Screen'
+import {useIsFocused} from '@react-navigation/native'
+import {Canvas, Path, Skia} from '@shopify/react-native-skia'
 import Colors, {Blue, Green, Red, Yellow} from '@utils/colors'
+import {W} from '@utils/dimensions'
+import {random3, randomNumber} from '@utils/utils'
+import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo} from 'react'
-import {Image, StyleSheet, View} from 'react-native'
+import {Image, View} from 'react-native'
+import {useSharedValue, withTiming} from 'react-native-reanimated'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
 import {HorizontalBoxes, VerticalBoxes} from './components/Path'
 import {Plot1Data, Plot2Data, Plot3Data, Plot4Data} from './plotData'
 import gameStore from './zustand/gameStore'
-import {useIsFocused} from '@react-navigation/native'
-import {CheckmarkCircle02SolidIcon, D1, D2, D3, D4, D5, D6, UnavailableSolidIcon} from '@assets/icons/icons'
-import {ppUrl} from '@utils/constants'
-import {Skia, Path, Canvas} from '@shopify/react-native-skia'
-import {W} from '@utils/dimensions'
-import {useSharedValue, withTiming} from 'react-native-reanimated'
-import {getColor, random3, randomNumber} from '@utils/utils'
+import Animations from '@assets/animations/animations'
+
+const dices = [Animations.d1, Animations.d2, Animations.d3, Animations.d4, Animations.d5, Animations.d6]
 
 export default function Game() {
   const game = gameStore((state) => state.game)
@@ -39,7 +42,7 @@ export default function Game() {
         <FirstPrice />
         <View>
           <TopPart />
-          <Board />
+          <Board turn={player} />
           <BottomPart />
         </View>
         <View className='pb-3'>{/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}</View>
@@ -69,7 +72,7 @@ function TopPart() {
   return (
     <View className='w-full justify-between'>
       <View className='flex-row justify-between'>
-        <User name='Abinash' diceNo={randomNumber()} life={2} />
+        <User name='Abinash' diceNo={randomNumber()} life={2} rolling />
         <User name='Sudipto' life={random3()} reversed active diceNo={3} />
       </View>
     </View>
@@ -84,8 +87,9 @@ type UserProps = {
   diceNo: number
   life: number
   active?: boolean
+  rolling?: boolean
 }
-function User({banned, name, life, active, reversed, bottom, diceNo}: UserProps) {
+function User({banned, name, rolling, life, active, reversed, bottom, diceNo}: UserProps) {
   const path = Skia.Path.Make()
   path.addCircle(W / 2, W / 2, r)
   const percent = useSharedValue(0)
@@ -109,8 +113,8 @@ function User({banned, name, life, active, reversed, bottom, diceNo}: UserProps)
         </View>
         <View className={'w-full'}>
           <View className={`w-full flex-row justify-between rounded-full bg-white/30 ${reversed ? 'flex-row-reverse' : 'items-end'}`}>
-            <View className='h-12 w-12 items-center justify-center overflow-hidden rounded-xl'>
-              <Dice n={diceNo} />
+            <View className='h-12 w-12 items-center justify-center rounded-xl'>
+              <LottieView source={dices[diceNo]} autoPlay loop={false} style={{height: 90, width: 90}} hardwareAccelerationAndroid cacheComposition />
             </View>
             <View className='relative h-12 w-12 items-center justify-center rounded-full'>
               {active && (
@@ -186,18 +190,18 @@ function BottomPart() {
   )
 }
 
-function Board() {
+function Board({turn}: {turn: number}) {
   return (
-    <View style={{height: w, width: w}} className='flex-row flex-wrap justify-between'>
-      <HomeBox Col={Green} style={{borderTopLeftRadius: 40}} />
+    <View style={{height: w, width: w}} className='mx-auto flex-row flex-wrap justify-between'>
+      <HomeBox Col={Green} style={{borderTopLeftRadius: 40}} turn={turn} no={1} />
       <VerticalBoxes cells={Plot2Data} color={Yellow[1]} />
-      <HomeBox Col={Yellow} style={{borderTopRightRadius: 40}} />
+      <HomeBox Col={Yellow} style={{borderTopRightRadius: 40}} turn={turn} no={2} />
       <HorizontalBoxes cells={Plot1Data} color={Green[1]} />
       <MidBox />
       <HorizontalBoxes cells={Plot3Data} color={Blue[1]} />
-      <HomeBox Col={Red} style={{borderBottomLeftRadius: 40}} />
+      <HomeBox Col={Red} style={{borderBottomLeftRadius: 40}} turn={turn} no={3} />
       <VerticalBoxes cells={Plot4Data} color={Red[1]} />
-      <HomeBox Col={Blue} style={{borderBottomRightRadius: 40}} />
+      <HomeBox Col={Blue} style={{borderBottomRightRadius: 40}} turn={turn} no={4} />
     </View>
   )
 }

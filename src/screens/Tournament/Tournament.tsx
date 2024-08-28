@@ -1,9 +1,10 @@
 import {Bold, Medium, Regular} from '@/fonts'
+import Animations from '@assets/animations/animations'
 import {DbFillIcon, LikeFillIcon, TrophyFillIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton} from '@components/Button'
-import Gradient from '@components/Gradient'
+import Gradient, {Radial} from '@components/Gradient'
 import Screen from '@components/Screen'
 import {getTournamentList_f, type TournamentData} from '@query/api'
 import {useNavigation} from '@react-navigation/native'
@@ -43,7 +44,7 @@ export default function Tournament({navigation}: NavProp) {
             <LottieView
               hardwareAccelerationAndroid
               cacheComposition
-              source={require('@assets/animations/dice-loading.json')}
+              source={Animations.diceLoading}
               autoPlay
               loop
               style={{width: 30, height: 30, opacity: 0.7}}
@@ -82,7 +83,7 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data
   const width = (joinedUsers / maxPlayers) * 100
   return (
     <TouchableOpacity onPress={() => navigation.navigate('TournamentDetails', data)} activeOpacity={0.7}>
-      <Gradient className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
+      <Radial className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
         <View className='w-1/2 bg-white py-5' style={{gap: 15}}>
           <Option text='First Price' Icon={DbFillIcon} value={firstPrice.split(' ')[0] + ' ' + firstPrice.split(' ')[1]} />
           <Option text='Entry Prize' Icon={TrophyFillIcon} value={'₹ ' + entryPrize} />
@@ -102,7 +103,7 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data
             <FullGradientButton className='rounded-full' title={buttonText} onPress={() => navigation.navigate('TournamentDetails', data)} />
           </View>
         </View>
-      </Gradient>
+      </Radial>
     </TouchableOpacity>
   )
 }

@@ -1,5 +1,6 @@
 import {navigationStore} from '@/zustand/navigationStore'
 import {userStore} from '@/zustand/userStore'
+import Animations from '@assets/animations/animations'
 import Images from '@assets/images/images'
 import Gradient from '@components/Gradient'
 import {PaddingBottom} from '@components/SafePadding'
@@ -73,14 +74,7 @@ export default function Splash({navigation}: NavProp) {
       <Image source={Images.logo} className='mt-52 h-44 w-44' />
       <View className='mt-40'>
         <View className='opacity-70'>
-          <LottieView
-            hardwareAccelerationAndroid
-            cacheComposition
-            source={require('@assets/animations/dice-loading.json')}
-            style={{width: 50, height: 50}}
-            autoPlay
-            loop
-          />
+          <LottieView hardwareAccelerationAndroid cacheComposition source={Animations.diceLoading} style={{width: 50, height: 50}} autoPlay loop />
         </View>
         <PaddingBottom />
       </View>
