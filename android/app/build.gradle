@@ -155,7 +155,8 @@ android {
                 output.versionCodeOverride =
                         defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
-
+            def newApkName = "Ludo_Wala_${defaultConfig.versionName}.apk"
+            output.outputFileName = newApkName
         }
     }
 }
