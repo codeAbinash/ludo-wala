@@ -12,6 +12,7 @@ import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo} from 'react'
 import {Alert, Image, ScrollView, TouchableOpacity, View} from 'react-native'
 import {Row, RowCard} from './components'
+import {nFormatter} from '@utils/utils'
 export default function Leaderboard({navigation}: NavProp) {
   const {data, isLoading} = useQuery({
     queryKey: ['leaderboard'],
@@ -61,7 +62,7 @@ export default function Leaderboard({navigation}: NavProp) {
               right={<SemiBold className='pr-2 text-right text-white/50'>Rank</SemiBold>}
             />
             {rest.map((player, index) => (
-              <RowCard key={index} pp={player.profilePic} rank={index + 3} deposit={player.total_deposit} name={player.fname} />
+              <RowCard key={index} pp={player.profilePic} rank={index + 3} deposit={nFormatter(+player.total_deposit)} name={player.fname} />
             ))}
           </View>
         </ScrollView>

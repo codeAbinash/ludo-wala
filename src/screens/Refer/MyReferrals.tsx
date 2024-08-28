@@ -11,6 +11,7 @@ import React, {useEffect, useMemo} from 'react'
 import {Alert, TouchableOpacity, View} from 'react-native'
 import {FlatList} from 'react-native-gesture-handler'
 import {Row, RowCard} from './components'
+import {nFormatter} from '@utils/utils'
 
 export default function MyReferrals({navigation}: NavProp) {
   const {data, fetchNextPage, isLoading} = useInfiniteQuery({
@@ -67,7 +68,9 @@ export default function MyReferrals({navigation}: NavProp) {
           ) : (
             <FlatList
               data={sortedData}
-              renderItem={({item, index}) => <RowCard pp={item.profilePic} rank={index + 1} deposit={item.total_winning} name={item.fname} />}
+              renderItem={({item, index}) => (
+                <RowCard pp={item.profilePic} rank={index + 1} deposit={nFormatter(+item.total_winning)} name={item.fname} />
+              )}
               onEndReached={loadNext}
               keyExtractor={(item) => item.fname}
             />

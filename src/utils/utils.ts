@@ -72,3 +72,8 @@ export function getColor(player: number) {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export function nFormatter(num: number) {
+  let formatter = Intl.NumberFormat('en', {notation: 'compact'})
+  return formatter.format(num)
+}
