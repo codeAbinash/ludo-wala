@@ -9,7 +9,7 @@ type ScreenProps = ScrollViewProps & {
 
 export default function Screen({children, Col, ...props}: ScreenProps) {
   return (
-    <KeyboardAvoidingContainer className='bg-primary' contentContainerStyle={{flex: 1}} {...props}>
+    <KeyboardAvoidingContainer contentContainerStyle={{flex: 1}} {...props}>
       <Radial Col={Col}>{children}</Radial>
     </KeyboardAvoidingContainer>
   )

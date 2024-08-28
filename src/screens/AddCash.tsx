@@ -1,5 +1,6 @@
-import {Medium, MediumS, SemiBold} from '@/fonts'
+import {Bold, Medium, MediumS, SemiBold} from '@/fonts'
 import {userStore} from '@/zustand/userStore'
+import {SecurityCheckSolidIcon} from '@assets/icons/icons'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
 import Gradient from '@components/Gradient'
@@ -15,7 +16,7 @@ import RazorpayCheckout from 'react-native-razorpay'
 const amounts = ['50', '100', '500', '1000', '1500', '2000']
 
 export default function AddCash({navigation}: NavProp) {
-  const [amount, setAmount] = React.useState('100')
+  const [amount, setAmount] = React.useState(amounts[0])
 
   const user = userStore((state) => state.user)
 
@@ -52,6 +53,9 @@ export default function AddCash({navigation}: NavProp) {
         })
       }
     },
+    onError: (error) => {
+      Alert.alert('Error', error.message || 'Something went wrong')
+    },
   })
 
   function addMoney() {
@@ -61,10 +65,14 @@ export default function AddCash({navigation}: NavProp) {
       return
     }
     if (amountInt < 1) {
-      Alert.alert('Error', 'Amount should be greater than 0')
+      Alert.alert('Error', 'Minimum Deposit is 1 Rupee.')
       return
     }
     mutate()
+  }
+
+  function successHandler(response: any) {
+    Alert.alert(`Success: ${response.razorpay_payment_id}`)
   }
 
   return (
@@ -94,7 +102,11 @@ export default function AddCash({navigation}: NavProp) {
             ))}
           </View>
         </Gradient>
-        <View className='mt-16'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money' onPress={addMoney} />}</View>
+        <View className='mt-10'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money' onPress={addMoney} />}</View>
+        <View className='mt-10 flex-row items-center justify-center' style={{gap: 10}}>
+          <SecurityCheckSolidIcon width={20} height={20} className='text-green-500' />
+          <SemiBold className='text-base text-green-500'>Your Payment is Safe and Secure.</SemiBold>
+        </View>
       </View>
     </View>
   )

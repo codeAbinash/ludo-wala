@@ -15,7 +15,7 @@ function HomeBox({Col, style, ...props}: HomeProps) {
         {
           width: w * 0.4,
           height: w * 0.4,
-          transform: [{scale: 0.95}],
+          transform: [{scale: 0.965}],
           borderRadius: 20,
         },
         style,

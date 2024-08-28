@@ -13,6 +13,7 @@ module.exports = {
         b2: '#FBBF35',
         g1: '#123745',
         g2: '#317383',
+        greenDefault: '#14FF00',
       },
     },
   },

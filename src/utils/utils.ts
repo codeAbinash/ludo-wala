@@ -41,3 +41,30 @@ export function refer(user: User | null) {
       err && console.log(err)
     })
 }
+
+/**
+ * Returns a random number between 1 and 6
+ */
+export function randomNumber() {
+  return Math.floor(Math.random() * 6) + 1
+}
+
+/**
+ * Returns a random number between 0 and 3
+ */
+export function random3() {
+  return Math.floor(Math.random() * 3)
+}
+
+export function getColor(player: number) {
+  switch (player) {
+    case 1:
+      return 'Red'
+    case 2:
+      return 'Green'
+    case 3:
+      return 'Yellow'
+    case 4:
+      return 'Blue'
+  }
+}

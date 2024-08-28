@@ -1,6 +1,7 @@
 import Tailwind from '../../tailwind.config'
 
 const Colors = {
+  greenDefault: '#14FF00',
   inherit: 'inherit',
   current: 'currentColor',
   transparent: 'transparent',
