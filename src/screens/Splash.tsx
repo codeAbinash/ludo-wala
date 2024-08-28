@@ -2,7 +2,7 @@ import {navigationStore} from '@/zustand/navigationStore'
 import {userStore} from '@/zustand/userStore'
 import Animations from '@assets/animations/animations'
 import Images from '@assets/images/images'
-import Gradient from '@components/Gradient'
+import Gradient, {Radial} from '@components/Gradient'
 import {PaddingBottom} from '@components/SafePadding'
 import {get_settings_f, get_user_f} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
@@ -70,7 +70,7 @@ export default function Splash({navigation}: NavProp) {
   }, [navigation, setNavigation])
 
   return (
-    <Gradient className='flex-1 items-center justify-center'>
+    <Radial className='flex-1 items-center justify-center'>
       <Image source={Images.logo} className='mt-52 h-44 w-44' />
       <View className='mt-40'>
         <View className='opacity-70'>
@@ -78,6 +78,6 @@ export default function Splash({navigation}: NavProp) {
         </View>
         <PaddingBottom />
       </View>
-    </Gradient>
+    </Radial>
   )
 }

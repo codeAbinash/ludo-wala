@@ -1,7 +1,7 @@
 import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
 import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
-import Gradient from '@components/Gradient'
+import Gradient, {Radial} from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
 import {setAuthToken, verifyOtp_f} from '@query/api'
@@ -40,19 +40,21 @@ export default function OTP({navigation, route}: {navigation: StackNav; route: R
   }
 
   return (
-    <View className='flex-1 items-center justify-center bg-primary px-5'>
-      <PaddingTop />
-      <Gradient
-        className='w-full items-center justify-center rounded-2xl border border-border px-5 py-10 pt-7'
-        style={{gap: 30}}
-        colors={[Colors.g1, Colors.g2]}>
-        <Image source={Images.logo} className='h-24 w-24' />
-        {/* <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold> */}
-        {/* <OTPInputView pinCount={4} style={{width: '80%', height: 200}} /> */}
-        <Input placeholder='Enter OTP' keyboardType='number-pad' maxLength={6} value={otp} onChangeText={setOtp} />
-        <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Verify' onPress={verifyOtp} />}</View>
-      </Gradient>
-      <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
-    </View>
+    <Radial>
+      <View className='flex-1 items-center justify-center px-5'>
+        <PaddingTop />
+        <Gradient
+          className='w-full items-center justify-center rounded-2xl border border-border px-5 py-10 pt-7'
+          style={{gap: 30}}
+          colors={[Colors.g1, Colors.g2]}>
+          <Image source={Images.logo} className='h-24 w-24' />
+          {/* <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold> */}
+          {/* <OTPInputView pinCount={4} style={{width: '80%', height: 200}} /> */}
+          <Input placeholder='Enter OTP' keyboardType='number-pad' maxLength={6} value={otp} onChangeText={setOtp} />
+          <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Verify' onPress={verifyOtp} />}</View>
+        </Gradient>
+        <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
+      </View>
+    </Radial>
   )
 }
