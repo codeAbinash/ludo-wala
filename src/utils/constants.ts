@@ -14,9 +14,9 @@ Download App : https://ludowala.co/download`
 
 const mainLink = 'https://ludowala.co/'
 
-export const contactLink = `${mainLink}contact/`
-export const privacyLink = `${mainLink}privacy-policy/`
-export const termsLink = `${mainLink}terms-and-conditions/`
-export const aboutLink = `${mainLink}about-us/`
-export const conductLink = `${mainLink}code-of-conduct/`
-export const rateLink = `${mainLink}review/`
+export const contactLink = `${mainLink}contact`
+export const privacyLink = `${mainLink}privacy-policy`
+export const termsLink = `${mainLink}terms-and-conditions`
+export const aboutLink = `${mainLink}about-us`
+export const conductLink = `${mainLink}code-of-conduct`
+export const rateLink = `${mainLink}review`
