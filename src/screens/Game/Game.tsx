@@ -96,6 +96,7 @@ function User({banned, name, rolling, life, active, reversed, bottom, diceNo}: U
   const redLife = 3 - life
   useEffect(() => {
     percent.value = withTiming(percentAge, {duration: 2000})
+    // percent.value = withTiming(100, {duration: 2000})
   }, [percent])
 
   return (
