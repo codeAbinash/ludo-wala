@@ -1,35 +1,59 @@
 import {create} from 'zustand'
-import {initialState, type GameState} from './initialState'
+import {player1InitialState, player2InitialState, player3InitialState, player4InitialState, type PlayerState} from './initialState'
+
+export type Num = 0 | 1 | 2 | 3
 
 type GameStore = {
-  game: GameState
-  resetGame: () => void
-  setGame: (game: GameState) => void
-  setDiceNo: (diceNo: number) => void
-  setChancePlayer: (chancePlayer: number) => void
+  player1: PlayerState[]
+  setPlayer1: (player1: PlayerState[]) => void
+  player2: PlayerState[]
+  setPlayer2: (player2: PlayerState[]) => void
+  player3: PlayerState[]
+  setPlayer3: (player3: PlayerState[]) => void
+  player4: PlayerState[]
+  setPlayer4: (player4: PlayerState[]) => void
+  isDiceRolling: boolean
+  isDiceRolled: boolean
+  isTouchDisabled: boolean
+  winner: null | Num
+  diceNumber: number
+  chancePlayer: Num
+  setIsDiceRolling: (isDiceRolling: boolean) => void
   setIsDiceRolled: (isDiceRolled: boolean) => void
-  enableCellSelection: (player: number) => void
-  disableTouch: () => void
-  enableTouch: () => void
-  updateFirework: (firework: boolean) => void
-  announceWinner: (winner: number) => void
-  updatePlayerChance: (player: number) => void
-  enablePileSelection: (player: number) => void
+  setIsTouchDisabled: (isTouchDisabled: boolean) => void
+  setWinner: (winner: null | Num) => void
+  setDiceNumber: (diceNumber: number) => void
+  setChancePlayer: (chancePlayer: Num) => void
+  pileSelectionEnabled: boolean
+  setPileSelectionEnabled: (pileSelectionEnabled: boolean) => void
+  currentPositions: PlayerState[]
+  updateCurrentPositions: (currentPositions: PlayerState[]) => void
 }
 const gameStore = create<GameStore>((set) => ({
-  game: initialState,
-  resetGame: () => set({game: initialState}),
-  setGame: (game) => set({game}),
-  setDiceNo: (diceNo) => set((state) => ({game: {...state.game, diceNo}})),
-  setChancePlayer: (chancePlayer) => set((state) => ({game: {...state.game, chancePlayer}})),
-  setIsDiceRolled: (isDiceRolled) => set((state) => ({game: {...state.game, isDiceRolled}})),
-  enableCellSelection: (player) => set((state) => ({game: {...state.game, touchDisabled: true, cellSelectionPlayer: player}})),
-  disableTouch: () => set((state) => ({game: {...state.game, touchDisabled: true, cellSelectionPlayer: -1, pileSelectionPlayer: -1}})),
-  enableTouch: () => set((state) => ({game: {...state.game, touchDisabled: false, isDiceRolled: true}})),
-  updateFirework: (firework) => set((state) => ({game: {...state.game, firework}})),
-  announceWinner: (winner) => set((state) => ({game: {...state.game, winner}})),
-  updatePlayerChance: (player) => set((state) => ({game: {...state.game, chancePlayer: player}})),
-  enablePileSelection: (player) => set((state) => ({game: {...state.game, touchDisabled: true, pileSelectionPlayer: player}})),
+  player1: player1InitialState,
+  setPlayer1: (player1) => set({player1}),
+  player2: player2InitialState,
+  setPlayer2: (player2) => set({player2}),
+  player3: player3InitialState,
+  setPlayer3: (player3) => set({player3}),
+  player4: player4InitialState,
+  setPlayer4: (player4) => set({player4}),
+  isDiceRolling: false,
+  isTouchDisabled: false,
+  winner: null,
+  diceNumber: 1,
+  setIsDiceRolling: (isDiceRolling) => set({isDiceRolling}),
+  setIsTouchDisabled: (isTouchDisabled) => set({isTouchDisabled}),
+  setWinner: (winner) => set({winner}),
+  setDiceNumber: (diceNumber) => set({diceNumber}),
+  chancePlayer: 3,
+  setChancePlayer: (chancePlayer) => set({chancePlayer}),
+  isDiceRolled: false,
+  setIsDiceRolled: (isDiceRolled) => set({isDiceRolled}),
+  pileSelectionEnabled: false,
+  setPileSelectionEnabled: (pileSelectionEnabled) => set({pileSelectionEnabled}),
+  currentPositions: [...player1InitialState, ...player2InitialState, ...player3InitialState, ...player4InitialState],
+  updateCurrentPositions: (currentPositions) => set({currentPositions}),
 }))
 
 export default gameStore

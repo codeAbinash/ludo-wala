@@ -5,32 +5,31 @@
  * @format
  */
 
-import Blank from '@/Blank'
 import {Medium, SemiBold} from '@/fonts'
 import Animations from '@assets/animations/animations'
 import Wrap from '@components/Screen'
 import {useNetInfo} from '@react-native-community/netinfo'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
-import AddCash from '@screens/AddCash'
-import EnterName from '@screens/auth/EnterName'
-import EnterPhone from '@screens/auth/EnterPhone'
-import OTP, {type OTPParamList} from '@screens/auth/Otp'
-import EditProfile from '@screens/EditProfile'
+import AddCash from '@screens/Tournament/AddCash'
+import EnterName from '@screens/Auth/EnterName'
+import EnterPhone from '@screens/Auth/EnterPhone'
+import OTP, {type OTPParamList} from '@screens/Auth/Otp'
+import EditProfile from '@screens/Profile/EditProfile'
 import Game from '@screens/Game/Game'
 import Home from '@screens/Home'
 import Wallet from '@screens/Home/Wallet'
-import HomeScreen from '@screens/HomeScreen'
-import JoinedTournament from '@screens/JoinedTournament'
-import Maintenance, {type MaintenanceParamList} from '@screens/Maintenance'
-import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/PaymentSuccessful'
+import HomeScreen from '@screens/Home/HomeScreen'
+import JoinedTournament from '@screens/Tournament/JoinedTournament'
+import Maintenance, {type MaintenanceParamList} from '@screens/Extra/Maintenance'
+import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/Extra/PaymentSuccessful'
 import Leaderboard from '@screens/Refer/Leaderboard'
 import MyReferrals from '@screens/Refer/MyReferrals'
 import Refer from '@screens/Refer/Refer'
-import Splash from '@screens/Splash'
+import Splash from '@screens/Extra/Splash'
 import Tournament from '@screens/Tournament/Tournament'
 import TournamentDetails, {type TournamentDetailsParamList} from '@screens/Tournament/TournamentDetails'
-import UpdateAvailable from '@screens/UpdateAvailable'
+import UpdateAvailable from '@screens/Extra/UpdateAvailable'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {W} from '@utils/dimensions'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
@@ -38,6 +37,7 @@ import LottieView from 'lottie-react-native'
 import React from 'react'
 import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import Blank from '@screens/Extra/Blank'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -134,9 +134,9 @@ function Navigation() {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Stack.Screen name='Game' component={Game} />
       <Stack.Screen name='Splash' component={Splash} />
       <Stack.Screen name='EnterName' component={EnterName} />
-      <Stack.Screen name='Game' component={Game} />
       <Stack.Screen name='AddCash' component={AddCash} />
       <Stack.Screen name='Blank' component={Blank} />
       <Stack.Screen name='Home' component={Home} />

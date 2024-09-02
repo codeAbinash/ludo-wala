@@ -2,11 +2,11 @@ import {PaddingBottom} from '@components/SafePadding'
 import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import React from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import HomeScreen from '../HomeScreen'
+import HomeScreen from './HomeScreen'
 
 import {Home03Icon, UserAdd02Icon, UserIcon, Wallet01Icon} from '@assets/icons/icons'
 import Gradient from '@components/Gradient'
-import Profile from '@screens/Profile'
+import Profile from '@screens/Profile/Profile'
 import Refer from '../Refer/Refer'
 import Wallet from './Wallet'
 

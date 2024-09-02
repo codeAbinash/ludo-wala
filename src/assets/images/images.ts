@@ -16,6 +16,10 @@ const Images = {
   tournament: require('./src/tournament.png'),
   logoText: require('./src/logo-text.png'),
   crown: require('./src/crown.png'),
+  G1: require('./src/1.png'),
+  G2: require('./src/2.png'),
+  G3: require('./src/3.png'),
+  G4: require('./src/4.png'),
 }
 
 export default Images

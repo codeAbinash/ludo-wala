@@ -1,3 +1,12 @@
 {
-  "cSpell.words": ["fname", "Gellix", "Leaderboard", "lname", "Pressable", "razorpay", "Wala"]
+  "cSpell.words": ["Favourite", "fname", "Forwardable", "Gellix", "Leaderboard", "lname", "pices", "Pressable", "razorpay", "Wala"],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/ios": true
+  }
 }

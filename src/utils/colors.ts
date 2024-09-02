@@ -1,5 +1,8 @@
 import Tailwind from '../../tailwind.config'
-
+export const Green = ['#86DA44', '#399703']
+export const Red = ['#FE514E', '#DA0200']
+export const Blue = ['#477BF2', '#0C2295']
+export const Yellow = ['#FAE523', '#FBC632']
 const Colors = {
   greenDefault: '#14FF00',
   inherit: 'inherit',
@@ -298,11 +301,14 @@ const Colors = {
     '900': '#881337',
     '950': '#4c0519',
   },
+  Green: Green[0],
+  Red: Red[0],
+  Blue: Blue[0],
+  Yellow: Yellow[0],
 }
 
 export default Colors
 
-export const Green = ['#86DA44', '#399703']
-export const Red = ['#FE514E', '#DA0200']
-export const Blue = ['#477BF2', '#0C2295']
-export const Yellow = ['#FAE523', '#FBC632']
+export const COLS = [Colors.Green, Colors.Yellow, Colors.Blue, Colors.Red]
+
+export const GRADS = [Green, Yellow, Blue, Red]
