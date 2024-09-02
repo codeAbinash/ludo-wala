@@ -31,6 +31,8 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const isStarting = useMemo(() => startingPoints.includes(cell), [cell])
   const isArrow = useMemo(() => ArrowSpot.includes(cell), [cell])
 
+  const chancePlayer = gameStore((state) => state.chancePlayer)
+
   const currentPositions = gameStore((state) => state.currentPositions)
 
   const picesAtThisCell = useMemo(() => currentPositions.filter((p) => p.pos === cell), [currentPositions, cell])
@@ -88,7 +90,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
                   {translateX},
                   {translateY},
                 ],
-                zIndex: zIndex.current,
+                zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
               }}>
               <Pile player={p.player} />
             </View>
