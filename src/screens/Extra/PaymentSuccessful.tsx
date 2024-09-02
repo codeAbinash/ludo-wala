@@ -21,7 +21,13 @@ export type PaymentSuccessfulParamList = {
   amount: string
 } & SuccessResponse
 
-export default function PaymentSuccessful({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'PaymentSuccessful'>}) {
+export default function PaymentSuccessful({
+  navigation,
+  route,
+}: {
+  navigation: StackNav
+  route: RouteProp<ParamList, 'PaymentSuccessful'>
+}) {
   const setUser = userStore((state) => state.setUser)
 
   const {isPending, data} = useQuery({

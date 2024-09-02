@@ -84,7 +84,11 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data
     <TouchableOpacity onPress={() => navigation.navigate('TournamentDetails', data)} activeOpacity={0.7}>
       <Radial className='flex-row justify-between overflow-hidden rounded-3xl border border-border'>
         <View className='w-1/2 bg-white py-5' style={{gap: 15}}>
-          <Option text='First Price' Icon={DbFillIcon} value={firstPrice.split(' ')[0] + ' ' + firstPrice.split(' ')[1]} />
+          <Option
+            text='First Price'
+            Icon={DbFillIcon}
+            value={firstPrice.split(' ')[0] + ' ' + firstPrice.split(' ')[1]}
+          />
           <Option text='Entry Prize' Icon={TrophyFillIcon} value={'₹ ' + entryPrize} />
           <Option text='ASSURED WINNERS' Icon={LikeFillIcon} value={'100%'} />
         </View>
@@ -99,7 +103,11 @@ function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data
             </Medium>
           </View>
           <View>
-            <FullGradientButton className='rounded-full' title={buttonText} onPress={() => navigation.navigate('TournamentDetails', data)} />
+            <FullGradientButton
+              className='rounded-full'
+              title={buttonText}
+              onPress={() => navigation.navigate('TournamentDetails', data)}
+            />
           </View>
         </View>
       </Radial>

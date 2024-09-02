@@ -42,7 +42,11 @@ export default function Profile({navigation}: NavProp) {
       </View>
       <ScrollView className='mt-7 h-full px-5' contentContainerStyle={{paddingBottom: 15}}>
         <Gradient className='rounded-2xl border border-border p-5'>
-          <Option Icon={<UserSolidIcon {...ic} />} text='My Account' onPress={() => navigation.navigate('EditProfile')} />
+          <Option
+            Icon={<UserSolidIcon {...ic} />}
+            text='My Account'
+            onPress={() => navigation.navigate('EditProfile')}
+          />
           <Option Icon={<Clock01SolidIcon {...ic} />} text='Transaction History' />
           <Option Icon={<Notification03SolidIcon {...ic} />} text='Notification' />
           <Option Icon={<SecurityCheckSolidIcon {...ic} />} text='Privacy Policy' onPress={() => open(privacyLink)} />

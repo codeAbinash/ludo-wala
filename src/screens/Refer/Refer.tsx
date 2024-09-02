@@ -39,11 +39,15 @@ export default function Refer({navigation}: NavProp) {
       <ScrollView className='flex-1 px-4' showsVerticalScrollIndicator={false}>
         <SmallProfile navigation={navigation} />
         <Gradient className='mt-5 flex-1 rounded-2xl border border-border p-5 pb-7 pt-7'>
-          <Medium className='text-center text-base text-white opacity-70'>Refer your friends and earn cash prizes!</Medium>
+          <Medium className='text-center text-base text-white opacity-70'>
+            Refer your friends and earn cash prizes!
+          </Medium>
           <Image source={Images.refer} className='mx-auto h-40 w-40' />
           <SemiBold className='mt-7 text-center text-lg text-b1 underline underline-offset-1'>Referral Rank</SemiBold>
           <SemiBold className='mt-7 text-center text-3xl text-white'>Get 2%</SemiBold>
-          <SemiBold className='mt-2 text-center text-base text-white opacity-70'>of your referral’s every deposit</SemiBold>
+          <SemiBold className='mt-2 text-center text-base text-white opacity-70'>
+            of your referral’s every deposit
+          </SemiBold>
           <SemiBold className='mt-7 text-center text-lg text-white'>Referral code</SemiBold>
           <View className='flex-row items-center justify-center'>
             <TouchableOpacity

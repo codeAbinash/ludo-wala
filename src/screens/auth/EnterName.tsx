@@ -51,7 +51,13 @@ export default function EnterName({navigation}: NavProp) {
             <Input placeholder='Last Name' value={lastName} onChangeText={setLastName} />
             <Input placeholder='Refer Code' value={referCode} onChangeText={setReferCode} maxLength={9} />
           </View>
-          <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Next' onPress={update} />}</View>
+          <View>
+            {isPending ? (
+              <LoadingButton />
+            ) : (
+              <FullGradientButton className='rounded-full px-10' title='Next' onPress={update} />
+            )}
+          </View>
         </Gradient>
       </View>
     </Wrap>

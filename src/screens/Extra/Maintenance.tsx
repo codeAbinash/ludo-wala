@@ -16,7 +16,13 @@ export type MaintenanceParamList = {
   message: string
 }
 
-export default function Maintenance({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'Maintenance'>}) {
+export default function Maintenance({
+  navigation,
+  route,
+}: {
+  navigation: StackNav
+  route: RouteProp<ParamList, 'Maintenance'>
+}) {
   return (
     <Wrap>
       <View className='flex-1 items-center justify-center p-5'>
@@ -29,7 +35,9 @@ export default function Maintenance({navigation, route}: {navigation: StackNav; 
           }}
         />
         <Bold className='text-2xl text-white'>APP UNDER MAINTENANCE</Bold>
-        <Medium className='mt-2 text-center text-base text-white/50'>{route.params.message || 'Something is wrong. Try again after sometime'}</Medium>
+        <Medium className='mt-2 text-center text-base text-white/50'>
+          {route.params.message || 'Something is wrong. Try again after sometime'}
+        </Medium>
         <View className='mt-10 w-full'>
           <FullGradientButton
             onPress={() => {

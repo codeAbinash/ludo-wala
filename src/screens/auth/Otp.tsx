@@ -51,7 +51,13 @@ export default function OTP({navigation, route}: {navigation: StackNav; route: R
           {/* <SemiBold className='w-full text-white opacity-60'>Enter OTP</SemiBold> */}
           {/* <OTPInputView pinCount={4} style={{width: '80%', height: 200}} /> */}
           <Input placeholder='Enter OTP' keyboardType='number-pad' maxLength={6} value={otp} onChangeText={setOtp} />
-          <View>{isPending ? <LoadingButton /> : <FullGradientButton className='rounded-full px-10' title='Verify' onPress={verifyOtp} />}</View>
+          <View>
+            {isPending ? (
+              <LoadingButton />
+            ) : (
+              <FullGradientButton className='rounded-full px-10' title='Verify' onPress={verifyOtp} />
+            )}
+          </View>
         </Gradient>
         <Medium className='mt-5 text-white opacity-50'>Terms and Condition Applied</Medium>
       </View>

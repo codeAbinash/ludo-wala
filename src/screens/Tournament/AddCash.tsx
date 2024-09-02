@@ -95,7 +95,9 @@ export default function AddCash({navigation}: NavProp) {
               <TouchableOpacity className='w-[31%]' onPress={() => setAmount(item)} key={index}>
                 <Gradient
                   key={index}
-                  className={`items-center rounded-full border ${amount === item ? 'border-bb' : 'border-border'} p-3 px-1`}
+                  className={`items-center rounded-full border ${
+                    amount === item ? 'border-bb' : 'border-border'
+                  } p-3 px-1`}
                   colors={amount === item ? [Colors.b1, Colors.b2] : [Colors.g1, Colors.g1]}>
                   <SemiBold className={`${amount === item ? 'text-black' : 'text-white'}`}>+ ₹ {item}</SemiBold>
                 </Gradient>
@@ -103,7 +105,9 @@ export default function AddCash({navigation}: NavProp) {
             ))}
           </View>
         </Gradient>
-        <View className='mt-10'>{isPending ? <LoadingButton /> : <FullGradientButton title='Add Money' onPress={addMoney} />}</View>
+        <View className='mt-10'>
+          {isPending ? <LoadingButton /> : <FullGradientButton title='Add Money' onPress={addMoney} />}
+        </View>
         <View className='mt-10 flex-row items-center justify-center' style={{gap: 10}}>
           <SecurityCheckSolidIcon width={20} height={20} className='text-green-500' />
           <SemiBold className='text-base text-green-500'>Your Payment is Safe and Secure.</SemiBold>

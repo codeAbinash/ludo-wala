@@ -20,7 +20,12 @@ export default function Wallet({navigation}: NavProp) {
           <View className='mb-3 mt-2'>
             <Medium className='text-center text-lg text-white'>Total Balance</Medium>
             <Bold className='mt-3 text-center text-4xl text-white'>
-              ₹ {getTotal(user?.data?.deposit_wallet || '0', user?.data?.winning_wallet || '0', user?.data?.bonus_wallet || '0')}
+              ₹{' '}
+              {getTotal(
+                user?.data?.deposit_wallet || '0',
+                user?.data?.winning_wallet || '0',
+                user?.data?.bonus_wallet || '0',
+              )}
             </Bold>
           </View>
           <Hr />

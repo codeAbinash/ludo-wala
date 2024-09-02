@@ -22,7 +22,12 @@ export default function SmallProfile({navigation}: NavProp) {
             navigation.navigate('Wallet')
           }}>
           <Bold className='text-base text-black'>
-            ₹ {getTotal(user?.data?.deposit_wallet || '0', user?.data?.winning_wallet || '0', user?.data?.bonus_wallet || '0')}
+            ₹{' '}
+            {getTotal(
+              user?.data?.deposit_wallet || '0',
+              user?.data?.winning_wallet || '0',
+              user?.data?.bonus_wallet || '0',
+            )}
           </Bold>
         </GradientButton>
         <Image

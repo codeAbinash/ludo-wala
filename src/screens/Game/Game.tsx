@@ -49,7 +49,9 @@ export default function Game() {
           <Board turn={player} />
           <BottomPart />
         </View>
-        <View className='pb-3'>{/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}</View>
+        <View className='pb-3'>
+          {/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}
+        </View>
       </View>
       <PaddingBottom />
     </Wrap>
@@ -61,7 +63,9 @@ function FirstPrice() {
     <View className='w-full flex-row justify-between px-3'>
       <View style={{flex: 0.5}}></View>
       <View className='mt-2 flex-1 flex-row'>
-        <View className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5' style={{columnGap: 10}}>
+        <View
+          className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5'
+          style={{columnGap: 10}}>
           <Image source={Images.trophy} style={{width: 40, height: 40}} />
           <View>
             <SemiBold className='text-blue-600'>1st Prize</SemiBold>

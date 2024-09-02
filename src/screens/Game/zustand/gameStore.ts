@@ -1,5 +1,11 @@
 import {create} from 'zustand'
-import {player1InitialState, player2InitialState, player3InitialState, player4InitialState, type PlayerState} from './initialState'
+import {
+  player1InitialState,
+  player2InitialState,
+  player3InitialState,
+  player4InitialState,
+  type PlayerState,
+} from './initialState'
 
 export type Num = 0 | 1 | 2 | 3
 

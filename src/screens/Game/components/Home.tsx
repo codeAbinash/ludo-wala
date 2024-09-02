@@ -66,7 +66,13 @@ function Plot({pieceNo, player, color}: {pieceNo: number; player: Num; color: st
 const Icons = [G3Icon, G4Icon, G2Icon, G1Icon]
 function Pile({no}: {no: Num}) {
   const Icon = Icons[no]
-  return <Icon width={w * 0.07} height={w * 0.07} style={{transform: [{translateX: -w * 0.012}, {translateY: -w * 0.035}]}} />
+  return (
+    <Icon
+      width={w * 0.07}
+      height={w * 0.07}
+      style={{transform: [{translateX: -w * 0.012}, {translateY: -w * 0.035}]}}
+    />
+  )
 }
 
 export default React.memo(HomeBox)

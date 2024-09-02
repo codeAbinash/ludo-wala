@@ -1,10 +1,10 @@
 import Images from '@assets/images/images'
-import { W } from '@utils/dimensions'
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Animated, Easing, StyleSheet, View } from 'react-native'
-import Anim, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated'
-import { Circle, Svg } from 'react-native-svg'
-import type { Num } from '../zustand/gameStore'
+import {W} from '@utils/dimensions'
+import React, {useEffect, useMemo, useRef} from 'react'
+import {Animated, Easing, StyleSheet, View} from 'react-native'
+import Anim, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
+import {Circle, Svg} from 'react-native-svg'
+import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 
 type PileProps = {
@@ -62,7 +62,16 @@ export default function Pile({player}: PileProps) {
           <View style={styles.dashedCircleContainer}>
             <Animated.View style={[styles.dashedCircle, {transform: [{rotate: rotateInterpolate}]}]}>
               <Svg height='18' width='18'>
-                <Circle cx='9' cy='9' r='8' stroke='white' strokeWidth='2' strokeDasharray='4 4' strokeDashoffset='0' fill='transparent' />
+                <Circle
+                  cx='9'
+                  cy='9'
+                  r='8'
+                  stroke='white'
+                  strokeWidth='2'
+                  strokeDasharray='4 4'
+                  strokeDashoffset='0'
+                  fill='transparent'
+                />
               </Svg>
             </Animated.View>
           </View>

@@ -93,7 +93,12 @@ function NoInternet() {
   return (
     <Wrap>
       <View className='flex-1 items-center justify-center px-5'>
-        <LottieView source={Animations.noInternet} autoPlay loop style={{width: size, height: size, backgroundColor: 'transparent'}} />
+        <LottieView
+          source={Animations.noInternet}
+          autoPlay
+          loop
+          style={{width: size, height: size, backgroundColor: 'transparent'}}
+        />
         <SemiBold className='mt-4 text-center text-3xl text-white/90'>No Internet</SemiBold>
         <Medium className='mt-4 text-center text-base text-white/70'>
           Please check your internet connection! Check if you are connected to a Wi-Fi network or mobile data.

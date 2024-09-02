@@ -11,16 +11,44 @@ import Refer from '../Refer/Refer'
 import Wallet from './Wallet'
 
 function HomeIcon(props: {focused: boolean; color: string; size: number}) {
-  return <Home03Icon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />
+  return (
+    <Home03Icon
+      {...props}
+      height={props.size}
+      width={props.size}
+      className={props.focused ? 'text-b1' : 'text-white opacity-80'}
+    />
+  )
 }
 function ReferIcon(props: {focused: boolean; color: string; size: number}) {
-  return <UserAdd02Icon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />
+  return (
+    <UserAdd02Icon
+      {...props}
+      height={props.size}
+      width={props.size}
+      className={props.focused ? 'text-b1' : 'text-white opacity-80'}
+    />
+  )
 }
 function WalletIcon(props: {focused: boolean; color: string; size: number}) {
-  return <Wallet01Icon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />
+  return (
+    <Wallet01Icon
+      {...props}
+      height={props.size}
+      width={props.size}
+      className={props.focused ? 'text-b1' : 'text-white opacity-80'}
+    />
+  )
 }
 function UserIconN(props: {focused: boolean; color: string; size: number}) {
-  return <UserIcon {...props} height={props.size} width={props.size} className={props.focused ? 'text-b1' : 'text-white opacity-80'} />
+  return (
+    <UserIcon
+      {...props}
+      height={props.size}
+      width={props.size}
+      className={props.focused ? 'text-b1' : 'text-white opacity-80'}
+    />
+  )
 }
 
 // function GameZoneIcon(props: {focused: boolean; color: string; size: number}) {

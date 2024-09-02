@@ -1,4 +1,4 @@
-import { Medium } from '@/fonts'
+import {Medium} from '@/fonts'
 import {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import type {NavProp} from '@utils/types'

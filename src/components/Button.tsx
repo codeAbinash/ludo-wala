@@ -21,7 +21,10 @@ type GradientButtonProps = TouchableOpacityProps & {
 export function GradientButton({title, children, onPress, ...props}: GradientButtonProps) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={props.activeOpacity ?? 0.7}>
-      <Gradient className={'w-full items-center justify-center rounded-2xl border border-bb p-2.5 px-4'} colors={[Colors.b1, Colors.b2]} {...props}>
+      <Gradient
+        className={'w-full items-center justify-center rounded-2xl border border-bb p-2.5 px-4'}
+        colors={[Colors.b1, Colors.b2]}
+        {...props}>
         {title && <SemiBold className='text-black'>{title}</SemiBold>}
         {children}
       </Gradient>
@@ -67,8 +70,18 @@ export function OutlineButton({title, children, onPress, ...props}: GradientButt
 type LoadingButtonProps = TouchableOpacityProps
 export function LoadingButton({...props}: LoadingButtonProps) {
   return (
-    <Gradient className={'w-full items-center justify-center rounded-full border border-bb'} colors={[Colors.b1, Colors.b2]} {...props}>
-      <LottieView hardwareAccelerationAndroid cacheComposition source={Animations.loader} autoPlay loop style={{width: 140, height: 45}} />
+    <Gradient
+      className={'w-full items-center justify-center rounded-full border border-bb'}
+      colors={[Colors.b1, Colors.b2]}
+      {...props}>
+      <LottieView
+        hardwareAccelerationAndroid
+        cacheComposition
+        source={Animations.loader}
+        autoPlay
+        loop
+        style={{width: 140, height: 45}}
+      />
     </Gradient>
   )
 }

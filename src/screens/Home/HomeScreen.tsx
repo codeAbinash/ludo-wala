@@ -1,6 +1,12 @@
 import {Bangers, SemiBold} from '@/fonts'
 import {userStore} from '@/zustand/userStore'
-import {ArrowLeft01SolidIcon, ArrowRight01SolidIcon, ChampionIcon, ChessPawnIcon, PieChartIcon} from '@assets/icons/icons'
+import {
+  ArrowLeft01SolidIcon,
+  ArrowRight01SolidIcon,
+  ChampionIcon,
+  ChessPawnIcon,
+  PieChartIcon,
+} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import Gradient from '@components/Gradient'
@@ -78,7 +84,9 @@ function GameMode({
   return (
     <View className='w-screen flex-row items-center justify-center'>
       <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(decrementOption(option))}>
-        <Gradient className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0' colors={[Colors.b1, Colors.b1]}>
+        <Gradient
+          className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0'
+          colors={[Colors.b1, Colors.b1]}>
           <ArrowLeft01SolidIcon height={25} width={25} className='text-black' />
         </Gradient>
       </TouchableOpacity>
@@ -102,13 +110,23 @@ function GameMode({
           {game} Mode
         </Bangers>
         {disabled ? (
-          <FullGradientButton className='mt-12 rounded-full border-transparent px-10 opacity-50' title='Coming Soon' activeOpacity={1} />
+          <FullGradientButton
+            className='mt-12 rounded-full border-transparent px-10 opacity-50'
+            title='Coming Soon'
+            activeOpacity={1}
+          />
         ) : (
-          <FullGradientButton className='mt-12 rounded-full px-10' title='Play Now' onPress={() => to && navigation.navigate(to as any)} />
+          <FullGradientButton
+            className='mt-12 rounded-full px-10'
+            title='Play Now'
+            onPress={() => to && navigation.navigate(to as any)}
+          />
         )}
       </Gradient>
       <TouchableOpacity className='px-3 py-16' onPress={() => setCurrentOption(incrementOption(option))}>
-        <Gradient className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0' colors={[Colors.b1, Colors.b1]}>
+        <Gradient
+          className='h-8 w-8 items-center justify-center rounded-full border border-bb px-0'
+          colors={[Colors.b1, Colors.b1]}>
           <ArrowRight01SolidIcon height={25} width={25} className='text-black' />
         </Gradient>
       </TouchableOpacity>
@@ -151,7 +169,13 @@ export default function HomeScreen({navigation}: NavProp) {
         </View>
         <View className='flex-1 justify-center'>
           <Animated.View className='flex-row pt-16' style={animStyle}>
-            <GameMode to='Tournament' setCurrentOption={setCurrentOption} option={0} game='Tournament' img={Images.tournament} />
+            <GameMode
+              to='Tournament'
+              setCurrentOption={setCurrentOption}
+              option={0}
+              game='Tournament'
+              img={Images.tournament}
+            />
             <GameMode disabled setCurrentOption={setCurrentOption} option={1} game='Challenge' img={Images.challenge} />
             <GameMode disabled setCurrentOption={setCurrentOption} option={2} game='Classic' img={Images.classic} />
             <GameMode disabled setCurrentOption={setCurrentOption} option={3} game='Quick' img={Images.quick_mode} />
@@ -162,7 +186,13 @@ export default function HomeScreen({navigation}: NavProp) {
             <RoundButton
               active={currentOption === 'Tournament'}
               onPress={() => setCurrentOption('Tournament')}
-              icon={<ChampionIcon height={25} width={25} className={currentOption === 'Tournament' ? 'text-b1' : 'text-border'} />}
+              icon={
+                <ChampionIcon
+                  height={25}
+                  width={25}
+                  className={currentOption === 'Tournament' ? 'text-b1' : 'text-border'}
+                />
+              }
             />
             <RoundButton
               active={currentOption === 'Challenge'}
@@ -178,12 +208,24 @@ export default function HomeScreen({navigation}: NavProp) {
             <RoundButton
               active={currentOption === 'Classic'}
               onPress={() => setCurrentOption('Classic')}
-              icon={<ChessPawnIcon height={25} width={25} className={currentOption === 'Classic' ? 'text-b1' : 'text-border'} />}
+              icon={
+                <ChessPawnIcon
+                  height={25}
+                  width={25}
+                  className={currentOption === 'Classic' ? 'text-b1' : 'text-border'}
+                />
+              }
             />
             <RoundButton
               active={currentOption === 'Quick'}
               onPress={() => setCurrentOption('Quick')}
-              icon={<PieChartIcon height={25} width={25} className={currentOption === 'Quick' ? 'text-b1' : 'text-border'} />}
+              icon={
+                <PieChartIcon
+                  height={25}
+                  width={25}
+                  className={currentOption === 'Quick' ? 'text-b1' : 'text-border'}
+                />
+              }
             />
           </View>
         </View>
@@ -204,7 +246,9 @@ function RoundButton({icon, onPress, active}: {icon: React.ReactNode; onPress?: 
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`aspect-square items-center justify-center rounded-full border p-3.5 ${active ? 'border-b1' : 'border-border'}`}>
+      className={`aspect-square items-center justify-center rounded-full border p-3.5 ${
+        active ? 'border-b1' : 'border-border'
+      }`}>
       {icon}
     </TouchableOpacity>
   )

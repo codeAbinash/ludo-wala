@@ -53,7 +53,10 @@ export default function Leaderboard({navigation}: NavProp) {
                   <TouchableOpacity
                     className='p-1'
                     onPress={() =>
-                      Alert.alert('Deposit', 'This is the amount of money that the referred users of the players have deposited to their account.')
+                      Alert.alert(
+                        'Deposit',
+                        'This is the amount of money that the referred users of the players have deposited to their account.',
+                      )
                     }>
                     <InformationCircleIcon height={15} width={15} className='text-white/70' />
                   </TouchableOpacity>
@@ -62,7 +65,13 @@ export default function Leaderboard({navigation}: NavProp) {
               right={<SemiBold className='pr-2 text-right text-white/50'>Rank</SemiBold>}
             />
             {rest.map((player, index) => (
-              <RowCard key={index} pp={player.profilePic} rank={index + 3} deposit={nFormatter(+player.total_deposit)} name={player.fname} />
+              <RowCard
+                key={index}
+                pp={player.profilePic}
+                rank={index + 3}
+                deposit={nFormatter(+player.total_deposit)}
+                name={player.fname}
+              />
             ))}
           </View>
         </ScrollView>

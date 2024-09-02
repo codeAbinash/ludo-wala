@@ -77,7 +77,11 @@ export default function User({banned, name, data, life, active, reversed, bottom
   }
 
   return (
-    <View className={`flex-row ${reversed ? 'flex-row-reverse' : 'flex'} ${banned ? 'opacity-40' : ''} w-1/2 items-center p-5`} style={{gap: 10}}>
+    <View
+      className={`flex-row ${reversed ? 'flex-row-reverse' : 'flex'} ${
+        banned ? 'opacity-40' : ''
+      } w-1/2 items-center p-5`}
+      style={{gap: 10}}>
       <View style={{gap: 5}} className={`w-10/12 ${bottom ? 'flex-col-reverse' : ''}`}>
         <View className='flex-row' style={{gap: 5}}>
           {banned ? (
@@ -90,7 +94,10 @@ export default function User({banned, name, data, life, active, reversed, bottom
           </View>
         </View>
         <View className={'w-full'}>
-          <View className={`w-full flex-row justify-between rounded-full bg-white/30 ${reversed ? 'flex-row-reverse' : 'items-end'}`}>
+          <View
+            className={`w-full flex-row justify-between rounded-full bg-white/30 ${
+              reversed ? 'flex-row-reverse' : 'items-end'
+            }`}>
             <TouchableOpacity
               className='h-12 w-12 items-center justify-center rounded-xl'
               onPress={handlePress}

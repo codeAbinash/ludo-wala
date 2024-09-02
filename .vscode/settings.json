@@ -1,5 +1,16 @@
 {
-  "cSpell.words": ["Favourite", "fname", "Forwardable", "Gellix", "Leaderboard", "lname", "pices", "Pressable", "razorpay", "Wala"],
+  "cSpell.words": [
+    "Favourite",
+    "fname",
+    "Forwardable",
+    "Gellix",
+    "Leaderboard",
+    "lname",
+    "pices",
+    "Pressable",
+    "razorpay",
+    "Wala"
+  ],
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

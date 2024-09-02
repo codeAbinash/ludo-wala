@@ -30,6 +30,14 @@ export function DiceRolling() {
   const animationRef = useRef<LottieView>(null)
   useEffect(() => animationRef.current?.play(5, 15), [])
   return (
-    <LottieView source={dices[4]} autoPlay loop style={{height: 90, width: 90}} hardwareAccelerationAndroid cacheComposition ref={animationRef} />
+    <LottieView
+      source={dices[4]}
+      autoPlay
+      loop
+      style={{height: 90, width: 90}}
+      hardwareAccelerationAndroid
+      cacheComposition
+      ref={animationRef}
+    />
   )
 }

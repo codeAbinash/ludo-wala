@@ -69,7 +69,12 @@ export default function MyReferrals({navigation}: NavProp) {
             <FlatList
               data={sortedData}
               renderItem={({item, index}) => (
-                <RowCard pp={item.profilePic} rank={index + 1} deposit={nFormatter(+item.total_winning)} name={item.fname} />
+                <RowCard
+                  pp={item.profilePic}
+                  rank={index + 1}
+                  deposit={nFormatter(+item.total_winning)}
+                  name={item.fname}
+                />
               )}
               onEndReached={loadNext}
               keyExtractor={(item) => item.fname}

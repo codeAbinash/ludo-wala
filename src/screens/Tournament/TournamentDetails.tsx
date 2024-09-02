@@ -24,7 +24,13 @@ type ParamList = {
 
 export type TournamentDetailsParamList = TournamentData
 
-export default function TournamentDetails({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'TournamentDetails'>}) {
+export default function TournamentDetails({
+  navigation,
+  route,
+}: {
+  navigation: StackNav
+  route: RouteProp<ParamList, 'TournamentDetails'>
+}) {
   const [more, setMore] = useState(false)
 
   const data = route.params
@@ -222,7 +228,15 @@ function Row({left, right, mid}: {left: string; right: string; mid?: string}) {
   )
 }
 
-function ModalAlert({data, visible, setVisible}: {data: TournamentData; visible: boolean; setVisible: (visible: boolean) => void}) {
+function ModalAlert({
+  data,
+  visible,
+  setVisible,
+}: {
+  data: TournamentData
+  visible: boolean
+  setVisible: (visible: boolean) => void
+}) {
   const navigation = useNavigation<StackNav>()
   const {isPending, mutate} = useMutation({
     mutationKey: ['joinTournament', data.id],
@@ -256,7 +270,11 @@ function ModalAlert({data, visible, setVisible}: {data: TournamentData; visible:
               <SemiBold className='py-10 text-center text-6xl text-white'>₹ {data.entryFee}</SemiBold>
             </View>
             <View style={{gap: 15}}>
-              {isPending ? <LoadingButton className='rounded-2xl' /> : <FullGradientButton title='Confirm ' onPress={() => mutate()} />}
+              {isPending ? (
+                <LoadingButton className='rounded-2xl' />
+              ) : (
+                <FullGradientButton title='Confirm ' onPress={() => mutate()} />
+              )}
               <FullOutlineButton title='Cancel' onPress={() => setVisible(!visible)} />
             </View>
             <PaddingBottom />
