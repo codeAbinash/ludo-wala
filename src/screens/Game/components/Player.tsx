@@ -5,13 +5,14 @@ import {useIsFocused} from '@react-navigation/native'
 import {Skia} from '@shopify/react-native-skia'
 import Colors, {GRADS} from '@utils/colors'
 import {W} from '@utils/dimensions'
-import {delay, getNextTurn, randomNumber} from '@utils/utils'
+import {delay, getNextTurn, print, randomNumber} from '@utils/utils'
 import React, {useEffect, useMemo, useState} from 'react'
-import {Image, TouchableOpacity, View} from 'react-native'
+import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native'
 import {useSharedValue, withTiming} from 'react-native-reanimated'
 import gameStore, {type Num} from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
 import Dice, {DiceRolling} from './Dice'
+import {isMovePossible} from '../utils'
 
 type PlayerProps = {
   banned?: boolean
@@ -31,7 +32,7 @@ const strokeW = 3
 const bgColor = Colors.greenDefault
 const percentAge = 0.5
 
-export default function Player({banned, name, data, life, active, reversed, bottom, player}: PlayerProps) {
+export default function Player({banned, name, life, active, reversed, bottom, player}: PlayerProps) {
   const [diceRolling, setDiceRolling] = useState(false)
   const currentPlayerChange = gameStore((state) => state.chancePlayer)
   const isRolled = gameStore((state) => state.isDiceRolled)
@@ -45,6 +46,7 @@ export default function Player({banned, name, data, life, active, reversed, bott
   const turn = gameStore((state) => state.chancePlayer)
   const enableCellSelection = gameStore((state) => state.enableCellSelection)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
+  const currentPositions = gameStore((state) => state.currentPositions)
 
   const isFocused = useIsFocused()
 
@@ -67,37 +69,46 @@ export default function Player({banned, name, data, life, active, reversed, bott
     setDiceNo(newDiceNo)
     // await delay(1000)
 
-    const isAnyTokenAlive = data.findIndex((t) => t.pos !== 0 && t.pos !== 57) // 57 is the end position
-    const isAnyTokenLocked = data.findIndex((t) => t.pos === 0)
+    const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1
+    // const isAnyTokenLocked = currentPositions.findIndex((t) => t.pos === 0)
 
-    if (isAnyTokenAlive === -1) {
-      if (newDiceNo === 6) {
-        enablePileSelection(player)
-      } else {
-        await delay(1000)
-        setChancePlayer(getNextTurn(turn))
-      }
+    // If there is not any token alive then change the turn
+    if (!isAnyTokenAlive) return setChancePlayer(getNextTurn(turn))
+
+    const canMove = isMovePossible(currentPositions, newDiceNo, player)
+
+    // If it can move then move the token
+
+    if (canMove) {
+      // Logic to move the dice
+      /**
+       * -------------------
+       * -------------------
+       * -------------------
+       * -------------------
+       */
+      ToastAndroid.show('Token can move', ToastAndroid.SHORT)
+      enablePileSelection(player)
+      // Enable Pile selection and return
+      return
     } else {
-      const canMove = data.findIndex((t) => t.travelCount + newDiceNo <= 57 && t.pos !== 0)
-      if (
-        (!canMove && diceNo === 6 && isAnyTokenLocked !== -1) ||
-        (!canMove && diceNo !== 6 && isAnyTokenLocked !== -1) ||
-        (!canMove && diceNo !== 6 && isAnyTokenLocked === -1)
-      ) {
-        delay(1000)
-        setChancePlayer(getNextTurn(turn))
-        return
-      }
-      if(diceNo === 6){
-        enablePileSelection(player)
-      }
-      enableCellSelection(player)
+      // If it can't move then change the turn
+      setChancePlayer(getNextTurn(turn))
+      setDiceTouchDisabled(false)
     }
 
-    // const newTurn = getNextTurn(turn)
-    // setTurn(newTurn as Num)
+    // if dice is 6 then try again
 
-    setDiceTouchDisabled(false)
+    // if (newDiceNo === 6) {
+    //   // The current chance is the same.
+    //   // enable
+    //   ToastAndroid.show('Dice is 6', ToastAndroid.SHORT)
+    //   setDiceTouchDisabled(false)
+    //   return
+    // } else {
+    //   setChancePlayer(getNextTurn(turn))
+    // }
+    // setDiceTouchDisabled(false)
   }
 
   return (

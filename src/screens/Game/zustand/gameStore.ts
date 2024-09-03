@@ -41,6 +41,7 @@ type GameStore = {
   disableTouch: () => void
   updateFireWorks: (fireWorks: boolean) => void
   unfreezeDice: () => void
+  // updatePlayerPiece: (player: Num, pieceId: string, position: number, travelCount: number) => void
 }
 const gameStore = create<GameStore>((set) => ({
   player0: player0InitialState,
@@ -74,7 +75,33 @@ const gameStore = create<GameStore>((set) => ({
   disableTouch,
   unfreezeDice,
   updateFireWorks,
+  // updatePlayerPiece,
 }))
+
+// function updatePlayerPiece(player: Num, pieceId: string, position: number, travelCount: number) {
+//   const state = gameStore.getState()
+//   const playerState = state[`player${player}` as 'player0' | 'player1' | 'player2' | 'player3']
+//   const piece = playerState.find((p) => p.id === pieceId)
+//   state.setPileSelectionEnabled(-1)
+
+//   if (piece) {
+//     piece.pos = position
+//     piece.travelCount = travelCount
+//     const currentPositions = state.currentPositions.findIndex((p) => p.id === pieceId)
+
+//     if (position === 0) {
+//       if (currentPositions !== -1) {
+//         state.currentPositions.splice(currentPositions, 1)
+//       }
+//     } else {
+//       if (currentPositions === -1) {
+//         state.currentPositions[currentPositions] = piece
+//       } else {
+//         state.currentPositions.push(piece)
+//       }
+//     }
+//   }
+// }
 
 function setChancePlayer(chancePlayer: Num) {
   gameStore.setState({chancePlayer})

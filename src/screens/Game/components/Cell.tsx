@@ -31,6 +31,12 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const isStar = useMemo(() => StarSpots.includes(cell), [cell])
   const isStarting = useMemo(() => startingPoints.includes(cell), [cell])
   const isArrow = useMemo(() => ArrowSpot.includes(cell), [cell])
+  const isTouchDisabled = gameStore((state) => state.isTouchDisabled)
+  const isDiceRolled = gameStore((state) => state.isDiceRolled)
+  const setDiceRolled = gameStore((state) => state.setIsDiceRolled)
+  const setDiceNumber = gameStore((state) => state.setDiceNumber)
+  const setPileSelectionEnabled = gameStore((state) => state.setPileSelectionEnabled)
+  const setChancePlayer = gameStore((state) => state.setChancePlayer)
 
   const chancePlayer = gameStore((state) => state.chancePlayer)
 
@@ -40,16 +46,18 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const zIndex = useRef(100)
 
   useEffect(() => {
-    // Reset the value of zIndex to 100 if the player is not the current player
     zIndex.current = 100
   }, [chancePlayer, picesAtThisCell])
 
-  // useEffect(() => {
-  //   console.log(picesAtThisCell)
-  // }, [picesAtThisCell])
+  function handelPress() {}
 
   return (
-    <TouchableOpacity key={cell} className='flex-1 items-center justify-center' style={{padding: 1.5}}>
+    <View
+      key={cell}
+      className='flex-1 items-center justify-center'
+      style={{padding: 1.5}}
+      // onPress={handelPress}
+      {...props}>
       <View
         className='relative h-full w-full flex-1 items-center justify-center'
         style={{borderRadius: 5, backgroundColor: isStar ? '#ffffff55' : isSafe ? color : 'white'}}>
@@ -114,7 +122,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
           {cell}
         </Medium> */}
       </View>
-    </TouchableOpacity>
+    </View>
   )
 }
 

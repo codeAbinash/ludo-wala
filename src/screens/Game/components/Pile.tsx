@@ -1,11 +1,12 @@
 import Images from '@assets/images/images'
 import {W} from '@utils/dimensions'
 import React, {useEffect, useMemo, useRef} from 'react'
-import {Animated, Easing, StyleSheet, View} from 'react-native'
+import {Animated, Easing, StyleSheet, TouchableOpacity, View} from 'react-native'
 import Anim, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
+import {isMovePossible} from '../utils'
 
 type PileProps = {
   player: Num
@@ -15,11 +16,12 @@ type PileProps = {
 const PileIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
 export default function Pile({player}: PileProps) {
-  const isForwardable = () => true
   const rotation = useRef(new Animated.Value(0)).current
   const activePlayer = gameStore((state) => state.chancePlayer)
-
+  const currentPositions = gameStore((state) => state.currentPositions)
+  const diceNo = gameStore((state) => state.diceNumber)
   const opacity = useSharedValue(1)
+  const isPileSelectionEnabled = gameStore((state) => state.pileSelection)
 
   useEffect(() => {
     opacity.value = activePlayer === player ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
@@ -28,6 +30,9 @@ export default function Pile({player}: PileProps) {
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }))
+
+  const isForwardable =
+    isMovePossible(currentPositions, diceNo, player) && isPileSelectionEnabled === player && player === activePlayer
 
   useEffect(() => {
     const rotateAnimation = Animated.loop(
@@ -52,32 +57,36 @@ export default function Pile({player}: PileProps) {
     [rotation],
   )
 
+  function handelPress() {
+    console.log('Move piece', diceNo)
+  }
+
   const PileIcon = PileIcons[player]
-  const isCell = true
 
   return (
-    <Anim.View className='absolute items-center justify-center'>
-      {isForwardable() && player === activePlayer && (
-        <View style={styles.hollowCircle}>
-          <View style={styles.dashedCircleContainer}>
-            <Animated.View style={[styles.dashedCircle, {transform: [{rotate: rotateInterpolate}]}]}>
-              <Svg height='18' width='18'>
-                <Circle
-                  cx='9'
-                  cy='9'
-                  r='8'
-                  stroke='white'
-                  strokeWidth='2'
-                  strokeDasharray='4 4'
-                  strokeDashoffset='0'
-                  fill='transparent'
-                />
-              </Svg>
-            </Animated.View>
+    <TouchableOpacity onPress={handelPress} disabled={!isForwardable}>
+      <Anim.View className='absolute items-center justify-center'>
+        {isForwardable && player === activePlayer && (
+          <View style={styles.hollowCircle}>
+            <View style={styles.dashedCircleContainer}>
+              <Animated.View style={[styles.dashedCircle, {transform: [{rotate: rotateInterpolate}]}]}>
+                <Svg height='18' width='18'>
+                  <Circle
+                    cx='9'
+                    cy='9'
+                    r='8'
+                    stroke='white'
+                    strokeWidth='2'
+                    strokeDasharray='4 4'
+                    strokeDashoffset='0'
+                    fill='transparent'
+                  />
+                </Svg>
+              </Animated.View>
+            </View>
           </View>
-        </View>
-      )}
-      {/* <PileIcon
+        )}
+        {/* <PileIcon
         // width={W * 0.07}
         // height={W * 0.07}
         style={{
@@ -88,20 +97,21 @@ export default function Pile({player}: PileProps) {
           width: W * 0.06,
         }}
       /> */}
-      <Anim.Image
-        source={PileIcon}
-        style={[
-          {
-            width: W * 0.06,
-            position: 'absolute',
-            height: W * 0.075,
-            zIndex: 100,
-            transform: [{translateY: -W * 0.02}],
-          },
-          animatedStyle,
-        ]}
-      />
-    </Anim.View>
+        <Anim.Image
+          source={PileIcon}
+          style={[
+            {
+              width: W * 0.06,
+              position: 'absolute',
+              height: W * 0.075,
+              zIndex: 100,
+              transform: [{translateY: -W * 0.02}],
+            },
+            isForwardable && animatedStyle,
+          ]}
+        />
+      </Anim.View>
+    </TouchableOpacity>
   )
 }
 
