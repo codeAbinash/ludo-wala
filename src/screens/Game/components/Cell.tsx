@@ -5,6 +5,7 @@ import {ArrowSpot, SafeSpots, StarSpots, startingPoints} from '../plotData'
 import gameStore from '../zustand/gameStore'
 import {w} from './MidBox'
 import Pile from './Pile'
+import {Medium} from '@/fonts'
 
 type CellProps = {
   i: number
@@ -39,8 +40,13 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const zIndex = useRef(100)
 
   useEffect(() => {
-    console.log(picesAtThisCell)
-  }, [picesAtThisCell])
+    // Reset the value of zIndex to 100 if the player is not the current player
+    zIndex.current = 100
+  }, [chancePlayer, picesAtThisCell])
+
+  // useEffect(() => {
+  //   console.log(picesAtThisCell)
+  // }, [picesAtThisCell])
 
   return (
     <TouchableOpacity key={cell} className='flex-1 items-center justify-center' style={{padding: 1.5}}>
@@ -96,8 +102,8 @@ function Cell({cell, i, color, ...props}: CellProps) {
             </View>
           )
         })}
-        {/*
-        <Medium
+
+        {/* <Medium
           className='text-center text-xs'
           style={[
             {

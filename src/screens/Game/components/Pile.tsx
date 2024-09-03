@@ -12,7 +12,7 @@ type PileProps = {
 }
 
 // const PileIcons = [G1Icon, G2Icon, G3Icon, G4Icon]
-const PileIcons = [Images.G1, Images.G2, Images.G3, Images.G4]
+const PileIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
 export default function Pile({player}: PileProps) {
   const isForwardable = () => true

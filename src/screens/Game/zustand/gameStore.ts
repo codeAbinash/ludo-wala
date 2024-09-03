@@ -1,23 +1,23 @@
 import {create} from 'zustand'
 import {
-  player1InitialState,
+  player0InitialState,
   player2InitialState,
   player3InitialState,
   player4InitialState,
   type PlayerState,
 } from './initialState'
 
-export type Num = 0 | 1 | 2 | 3
+export type Num = 0 | 1 | 2 | 3 | -1
 
 type GameStore = {
+  player0: PlayerState[]
+  setPlayer0: (player1: PlayerState[]) => void
   player1: PlayerState[]
-  setPlayer1: (player1: PlayerState[]) => void
+  setPlayer1: (player2: PlayerState[]) => void
   player2: PlayerState[]
-  setPlayer2: (player2: PlayerState[]) => void
+  setPlayer2: (player3: PlayerState[]) => void
   player3: PlayerState[]
-  setPlayer3: (player3: PlayerState[]) => void
-  player4: PlayerState[]
-  setPlayer4: (player4: PlayerState[]) => void
+  setPlayer3: (player4: PlayerState[]) => void
   isDiceRolling: boolean
   isDiceRolled: boolean
   isTouchDisabled: boolean
@@ -36,14 +36,14 @@ type GameStore = {
   updateCurrentPositions: (currentPositions: PlayerState[]) => void
 }
 const gameStore = create<GameStore>((set) => ({
-  player1: player1InitialState,
+  player0: player0InitialState,
+  setPlayer0: (player0) => set({player0}),
+  player1: player2InitialState,
   setPlayer1: (player1) => set({player1}),
-  player2: player2InitialState,
+  player2: player3InitialState,
   setPlayer2: (player2) => set({player2}),
-  player3: player3InitialState,
+  player3: player4InitialState,
   setPlayer3: (player3) => set({player3}),
-  player4: player4InitialState,
-  setPlayer4: (player4) => set({player4}),
   isDiceRolling: false,
   isTouchDisabled: false,
   winner: null,
@@ -52,13 +52,13 @@ const gameStore = create<GameStore>((set) => ({
   setIsTouchDisabled: (isTouchDisabled) => set({isTouchDisabled}),
   setWinner: (winner) => set({winner}),
   setDiceNumber: (diceNumber) => set({diceNumber}),
-  chancePlayer: 3,
+  chancePlayer: 0,
   setChancePlayer: (chancePlayer) => set({chancePlayer}),
   isDiceRolled: false,
   setIsDiceRolled: (isDiceRolled) => set({isDiceRolled}),
   pileSelectionEnabled: false,
   setPileSelectionEnabled: (pileSelectionEnabled) => set({pileSelectionEnabled}),
-  currentPositions: [...player1InitialState, ...player2InitialState, ...player3InitialState, ...player4InitialState],
+  currentPositions: [...player0InitialState, ...player2InitialState, ...player3InitialState, ...player4InitialState],
   updateCurrentPositions: (currentPositions) => set({currentPositions}),
 }))
 

@@ -1,43 +1,27 @@
 import {Medium, SemiBold} from '@/fonts'
-import {CheckmarkCircle02SolidIcon, UnavailableSolidIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
-import {useIsFocused} from '@react-navigation/native'
-import {Canvas, Path, Skia} from '@shopify/react-native-skia'
-import Colors, {Blue, COLS, GRADS, Green, Red, Yellow} from '@utils/colors'
-import {W} from '@utils/dimensions'
-import {delay, random3, randomNumber} from '@utils/utils'
-import LottieView from 'lottie-react-native'
-import React, {useEffect, useMemo, useRef, useState} from 'react'
-import {Image, TouchableOpacity, View} from 'react-native'
-import {useSharedValue, withTiming} from 'react-native-reanimated'
+import {GRADS} from '@utils/colors'
+import React from 'react'
+import {Image, View} from 'react-native'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
 import {HorizontalBoxes, VerticalBoxes} from './components/Path'
+import Player from './components/Player'
 import {Plot1Data, Plot2Data, Plot3Data, Plot4Data} from './plotData'
-import gameStore, {type Num} from './zustand/gameStore'
-import type {PlayerState} from './zustand/initialState'
-import {playSound} from '@/helpers/SoundUtility'
-import User from './components/User'
-const d1 = require('@animations/d1.lottie')
-const d2 = require('@animations/d2.lottie')
-const d3 = require('@animations/d3.lottie')
-const d4 = require('@animations/d4.lottie')
-const d5 = require('@animations/d5.lottie')
-const d6 = require('@animations/d6.lottie')
-const dices = [d1, d2, d3, d4, d5, d6]
+import gameStore from './zustand/gameStore'
 
 export default function Game() {
-  const p1 = gameStore((state) => state.player1)
-  const p2 = gameStore((state) => state.player2)
-  const p3 = gameStore((state) => state.player3)
-  const p4 = gameStore((state) => state.player4)
+  const p1 = gameStore((state) => state.player0)
+  const p2 = gameStore((state) => state.player1)
+  const p3 = gameStore((state) => state.player2)
+  const p4 = gameStore((state) => state.player3)
   const isDiceTouch = gameStore((state) => state.isTouchDisabled)
   const winner = gameStore((state) => state.winner)
   const diceNo = gameStore((state) => state.diceNumber)
-  const player = gameStore((state) => state.chancePlayer)
-  const playerPiece = player === 1 ? p1 : player === 2 ? p2 : player === 3 ? p3 : p4
+  const chance = gameStore((state) => state.chancePlayer)
+  const playerPiece = chance === 1 ? p1 : chance === 2 ? p2 : chance === 3 ? p3 : p4
 
   return (
     <Wrap Col={['#215962', '#0b1e22']}>
@@ -46,7 +30,7 @@ export default function Game() {
         <FirstPrice />
         <View>
           <TopPart />
-          <Board turn={player} />
+          <Board turn={chance} />
           <BottomPart />
         </View>
         <View className='pb-3'>
@@ -81,26 +65,26 @@ function FirstPrice() {
 }
 
 function TopPart() {
-  const p1 = gameStore((state) => state.player1)
-  const p2 = gameStore((state) => state.player2)
+  const p1 = gameStore((state) => state.player0)
+  const p2 = gameStore((state) => state.player1)
   return (
     <View className='w-full justify-between'>
       <View className='flex-row justify-between'>
-        <User name='Abinash' life={2} player={0} data={p1} />
-        <User name='Sudipto' life={3} reversed player={1} data={p2} />
+        <Player name='Abinash' life={2} player={0} data={p1} />
+        <Player name='Sudipto' life={3} reversed player={1} data={p2} />
       </View>
     </View>
   )
 }
 
 function BottomPart() {
-  const p3 = gameStore((state) => state.player3)
-  const p4 = gameStore((state) => state.player4)
+  const p3 = gameStore((state) => state.player2)
+  const p4 = gameStore((state) => state.player3)
   return (
     <View className=''>
       <View className='flex-row justify-between'>
-        <User life={2} name='Sujal' bottom player={3} data={p4} />
-        <User name='Raju' life={2} reversed bottom player={2} data={p3} />
+        <Player life={2} name='Sujal' bottom player={3} data={p4} />
+        <Player name='Raju' life={2} reversed bottom player={2} data={p3} />
       </View>
     </View>
   )

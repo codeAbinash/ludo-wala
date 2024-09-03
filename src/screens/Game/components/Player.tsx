@@ -5,7 +5,7 @@ import {useIsFocused} from '@react-navigation/native'
 import {Skia} from '@shopify/react-native-skia'
 import Colors, {GRADS} from '@utils/colors'
 import {W} from '@utils/dimensions'
-import {delay, randomNumber} from '@utils/utils'
+import {delay, getNextTurn, randomNumber} from '@utils/utils'
 import React, {useEffect, useMemo, useState} from 'react'
 import {Image, TouchableOpacity, View} from 'react-native'
 import {useSharedValue, withTiming} from 'react-native-reanimated'
@@ -13,7 +13,7 @@ import gameStore, {type Num} from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
 import Dice, {DiceRolling} from './Dice'
 
-type UserProps = {
+type PlayerProps = {
   banned?: boolean
   name: string
   reversed?: boolean
@@ -31,7 +31,7 @@ const strokeW = 3
 const bgColor = Colors.greenDefault
 const percentAge = 0.5
 
-export default function User({banned, name, data, life, active, reversed, bottom, player}: UserProps) {
+export default function Player({banned, name, data, life, active, reversed, bottom, player}: PlayerProps) {
   const [diceRolling, setDiceRolling] = useState(false)
   const currentPlayerChange = gameStore((state) => state.chancePlayer)
   const isRolled = gameStore((state) => state.isDiceRolled)
@@ -56,7 +56,6 @@ export default function User({banned, name, data, life, active, reversed, bottom
   }, [percent])
 
   async function handlePress() {
-    console.log('Dice pressed')
     const newDiceNo = randomNumber()
     setDiceRolling(true)
     setDiceTouchDisabled(true)
@@ -64,14 +63,10 @@ export default function User({banned, name, data, life, active, reversed, bottom
     await delay(300)
     setDiceRolling(false)
     setDiceNo(newDiceNo)
+    // await delay(1000)
 
-    const newTurn = turn + 1 > 3 ? 0 : turn + 1
-
+    const newTurn = getNextTurn(turn)
     setTurn(newTurn as Num)
-
-    // let newTurn = turn === 1 ? 2 : 1
-
-    // setTurn(newTurn as 1 | 2 | 3 | 4)
 
     setDiceTouchDisabled(false)
   }

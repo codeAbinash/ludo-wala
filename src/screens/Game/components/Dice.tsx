@@ -11,7 +11,7 @@ const dices = [d1, d2, d3, d4, d5, d6]
 
 export default function Dice({diceNo}: {diceNo: number}) {
   const animationRef = useRef<LottieView>(null)
-  useEffect(() => animationRef.current?.play(15, 30), [])
+  useEffect(() => animationRef.current?.play(30, 30), [])
 
   return (
     <LottieView

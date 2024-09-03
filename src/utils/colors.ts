@@ -309,6 +309,6 @@ const Colors = {
 
 export default Colors
 
-export const COLS = [Colors.Green, Colors.Yellow, Colors.Blue, Colors.Red]
+export const COLS = [Colors.Red, Colors.Blue, Colors.Yellow, Colors.Green]
 
-export const GRADS = [Green, Yellow, Blue, Red]
+export const GRADS = [Red, Blue, Yellow, Green]

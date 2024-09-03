@@ -77,3 +77,7 @@ export function nFormatter(num: number) {
   let formatter = Intl.NumberFormat('en', {notation: 'compact'})
   return formatter.format(num)
 }
+
+export function getNextTurn(turn: number) {
+  return turn + 1 > 3 ? 0 : turn + 1
+}
