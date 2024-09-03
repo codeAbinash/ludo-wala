@@ -3,6 +3,7 @@ import type {User} from '@query/api'
 import {getShareText} from './constants'
 import Share from 'react-native-share'
 import {Linking} from 'react-native'
+import type {Num} from '@screens/Game/zustand/gameStore'
 
 export function getTotal(s1: string, s2: string, s3: string) {
   return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
@@ -78,6 +79,6 @@ export function nFormatter(num: number) {
   return formatter.format(num)
 }
 
-export function getNextTurn(turn: number) {
-  return turn + 1 > 3 ? 0 : turn + 1
+export function getNextTurn(turn: number): Num {
+  return turn + 1 > 3 ? 0 : ((turn + 1) as Num)
 }

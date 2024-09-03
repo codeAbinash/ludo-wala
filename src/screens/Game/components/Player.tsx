@@ -43,6 +43,8 @@ export default function Player({banned, name, data, life, active, reversed, bott
   const isDiceTouchDisabled = gameStore((state) => state.isTouchDisabled)
   const setTurn = gameStore((state) => state.setChancePlayer)
   const turn = gameStore((state) => state.chancePlayer)
+  const enableCellSelection = gameStore((state) => state.enableCellSelection)
+  const setChancePlayer = gameStore((state) => state.setChancePlayer)
 
   const isFocused = useIsFocused()
 
@@ -65,8 +67,35 @@ export default function Player({banned, name, data, life, active, reversed, bott
     setDiceNo(newDiceNo)
     // await delay(1000)
 
-    const newTurn = getNextTurn(turn)
-    setTurn(newTurn as Num)
+    const isAnyTokenAlive = data.findIndex((t) => t.pos !== 0 && t.pos !== 57) // 57 is the end position
+    const isAnyTokenLocked = data.findIndex((t) => t.pos === 0)
+
+    if (isAnyTokenAlive === -1) {
+      if (newDiceNo === 6) {
+        enablePileSelection(player)
+      } else {
+        await delay(1000)
+        setChancePlayer(getNextTurn(turn))
+      }
+    } else {
+      const canMove = data.findIndex((t) => t.travelCount + newDiceNo <= 57 && t.pos !== 0)
+      if (
+        (!canMove && diceNo === 6 && isAnyTokenLocked !== -1) ||
+        (!canMove && diceNo !== 6 && isAnyTokenLocked !== -1) ||
+        (!canMove && diceNo !== 6 && isAnyTokenLocked === -1)
+      ) {
+        delay(1000)
+        setChancePlayer(getNextTurn(turn))
+        return
+      }
+      if(diceNo === 6){
+        enablePileSelection(player)
+      }
+      enableCellSelection(player)
+    }
+
+    // const newTurn = getNextTurn(turn)
+    // setTurn(newTurn as Num)
 
     setDiceTouchDisabled(false)
   }
