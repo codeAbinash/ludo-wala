@@ -31,11 +31,6 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const isStar = useMemo(() => StarSpots.includes(cell), [cell])
   const isStarting = useMemo(() => startingPoints.includes(cell), [cell])
   const isArrow = useMemo(() => ArrowSpot.includes(cell), [cell])
-  const isTouchDisabled = gameStore((state) => state.isTouchDisabled)
-  const isDiceRolled = gameStore((state) => state.isDiceRolled)
-  const setDiceRolled = gameStore((state) => state.setIsDiceRolled)
-  const setDiceNumber = gameStore((state) => state.setDiceNumber)
-  const setChancePlayer = gameStore((state) => state.setChancePlayer)
 
   const chancePlayer = gameStore((state) => state.chancePlayer)
 
@@ -47,8 +42,6 @@ function Cell({cell, i, color, ...props}: CellProps) {
   useEffect(() => {
     zIndex.current = 100
   }, [chancePlayer, picesAtThisCell])
-
-  function handelPress() {}
 
   return (
     <View
@@ -105,9 +98,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
                 ],
                 zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
               }}>
-              <Token player={p.player}
-                id={p.id}
-              />
+              <Token player={p.player} id={p.id} />
             </View>
           )
         })}

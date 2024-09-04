@@ -61,6 +61,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
 
   async function handlePress() {
     const newDiceNo = randomNumber()
+    // const newDiceNo = 3
     setDiceRolling(true)
     setDiceTouchDisabled(true)
     playSound('dice_roll')

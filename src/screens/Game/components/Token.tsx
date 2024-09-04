@@ -7,8 +7,10 @@ import {Circle, Svg} from 'react-native-svg'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 import {isMovePossible} from '../utils'
-import {delay} from '@utils/utils'
+import {delay, getNextTurn} from '@utils/utils'
 import {playSound} from '@/helpers/SoundUtility'
+import {StarLocalIcon} from '@assets/icons/icons'
+import {StarSpots, startingPoints} from '../plotData'
 
 type TokenProps = {
   player: Num
@@ -19,23 +21,25 @@ const TokenIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
 const Token = React.memo<TokenProps>(({player, id}) => {
   const rotation = useRef(new Animated.Value(0)).current
-  const activePlayer = gameStore((state) => state.chancePlayer)
+  const chancePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
   const opacity = useSharedValue(1)
-  const isTokenSelectionEnabled = gameStore((state) => state.tokenSelection)
+  const tokenSelection = gameStore((state) => state.tokenSelection)
+  const setTokenSelection = gameStore((state) => state.enableTokenSelection)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
+  const setChancePlayer = gameStore((state) => state.setChancePlayer)
 
   useEffect(() => {
-    opacity.value = activePlayer === player ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
-  }, [activePlayer, opacity, player])
+    opacity.value = chancePlayer === player ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
+  }, [chancePlayer, opacity, player])
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }))
 
   const isForwardable =
-    isMovePossible(currentPositions, diceNo, player) && isTokenSelectionEnabled === player && player === activePlayer
+    isMovePossible(currentPositions, diceNo, player) && tokenSelection === player && player === chancePlayer
 
   useEffect(() => {
     const rotateAnimation = Animated.loop(
@@ -61,6 +65,10 @@ const Token = React.memo<TokenProps>(({player, id}) => {
   )
 
   async function handelPress() {
+    if (!isForwardable) return
+
+    setTokenSelection(-1) // Disable token selection
+
     const index = currentPositions.findIndex((t) => t.id === id)
     const token = currentPositions[index]
 
@@ -68,11 +76,47 @@ const Token = React.memo<TokenProps>(({player, id}) => {
       token.pos += 1
       token.travelCount += 1
       setCurrentPositions([...currentPositions])
-      await delay(100)
+      await delay(0)
       playSound('token_move')
     }
 
-    // Update the currentPositions array
+    // Check if the token is on another token and not in star or starting point
+    // Get all tokens that are on the same position
+    const tokensOnThisPosition = currentPositions.filter(
+      (t) => t.pos === token.pos && t.id !== token.id && token.player !== t.player,
+    )
+
+    const isInStar = StarSpots.includes(token.pos)
+    const isInStarting = startingPoints.includes(token.pos)
+
+    if (isInStar || isInStarting) {
+      playSound('safe_spot')
+    }
+
+    const isAllowedToKill = !(isInStar || isInStarting)
+
+    // If there is any token on this position then kill that token
+    if (isAllowedToKill) {
+      for (const t of tokensOnThisPosition) {
+        const travelCount = t.travelCount
+        console.log(travelCount)
+        playSound('collide')
+        for (let i = 0; i < travelCount; i++) {
+          t.pos -= 1
+          t.travelCount -= 1
+          setCurrentPositions([...currentPositions])
+          await delay(0)
+        }
+        console.log('Token killed')
+      }
+    }
+
+    // If the dice is not 6 then change the turn
+    if (diceNo !== 6) {
+      setChancePlayer(getNextTurn(chancePlayer))
+    } else {
+      setChancePlayer(chancePlayer)
+    }
   }
 
   const TokenIcon = TokenIcons[player]
@@ -80,7 +124,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
   return (
     <TouchableOpacity onPress={handelPress} disabled={!isForwardable}>
       <Anim.View className='absolute items-center justify-center'>
-        {isForwardable && player === activePlayer && (
+        {isForwardable && player === chancePlayer && (
           <View style={styles.hollowCircle}>
             <View style={styles.dashedCircleContainer}>
               <Animated.View style={[styles.dashedCircle, {transform: [{rotate: rotateInterpolate}]}]}>

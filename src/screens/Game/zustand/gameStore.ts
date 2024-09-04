@@ -47,7 +47,7 @@ const gameStore = create<GameStore>((set) => ({
   player1: player2InitialState,
   player2: player3InitialState,
   player3: player4InitialState,
-  chancePlayer: 0,
+  chancePlayer: 3,
   isDiceRolled: false,
   tokenSelection: -1,
   cellSelection: -1,
@@ -75,7 +75,6 @@ const gameStore = create<GameStore>((set) => ({
   updateFireWorks,
   // updatePlayerPiece,
 }))
-
 
 function setChancePlayer(chancePlayer: Num) {
   gameStore.setState({chancePlayer})
