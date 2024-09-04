@@ -1,16 +1,15 @@
+import {playSound} from '@/helpers/SoundUtility'
 import Images from '@assets/images/images'
 import {W} from '@utils/dimensions'
+import {delay, getNextTurn} from '@utils/utils'
 import React, {useEffect, useMemo, useRef} from 'react'
-import {Animated, Easing, StyleSheet, TouchableOpacity, View} from 'react-native'
-import Anim, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
+import {Animated, Easing, Image, StyleSheet, TouchableOpacity, View} from 'react-native'
+import Anim from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
+import {StarSpots, startingPoints} from '../plotData'
+import {isMovePossible} from '../utils'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
-import {isMovePossible} from '../utils'
-import {delay, getNextTurn} from '@utils/utils'
-import {playSound} from '@/helpers/SoundUtility'
-import {StarLocalIcon} from '@assets/icons/icons'
-import {StarSpots, startingPoints} from '../plotData'
 
 type TokenProps = {
   player: Num
@@ -24,20 +23,10 @@ const Token = React.memo<TokenProps>(({player, id}) => {
   const chancePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
-  const opacity = useSharedValue(1)
   const tokenSelection = gameStore((state) => state.tokenSelection)
   const setTokenSelection = gameStore((state) => state.enableTokenSelection)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
-
-  useEffect(() => {
-    opacity.value = chancePlayer === player ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
-  }, [chancePlayer, opacity, player])
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }))
-
   const isForwardable =
     isMovePossible(currentPositions, diceNo, player) && tokenSelection === player && player === chancePlayer
 
@@ -51,7 +40,6 @@ const Token = React.memo<TokenProps>(({player, id}) => {
       }),
     )
     rotateAnimation.start()
-
     return () => rotateAnimation.stop()
   }, [rotation])
 
@@ -155,7 +143,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
           width: W * 0.06,
         }}
       /> */}
-        <Anim.Image
+        <Image
           source={TokenIcon}
           style={[
             {
@@ -165,7 +153,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
               zIndex: 100,
               transform: [{translateY: -W * 0.02}],
             },
-            isForwardable && animatedStyle,
+            // isForwardable && animatedStyle,
           ]}
         />
       </Anim.View>
