@@ -27,6 +27,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
   const setTokenSelection = gameStore((state) => state.enableTokenSelection)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
+  const points = gameStore((state) => state.points)
   const isForwardable =
     isMovePossible(currentPositions, diceNo, player) && tokenSelection === player && player === chancePlayer
 
@@ -63,6 +64,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
     for (let i = 0; i < diceNo; i++) {
       token.pos += 1
       token.travelCount += 1
+      if (token.pos === 53) token.pos = 1
       setCurrentPositions([...currentPositions])
       await delay(0)
       playSound('token_move')
@@ -77,9 +79,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
     const isInStar = StarSpots.includes(token.pos)
     const isInStarting = startingPoints.includes(token.pos)
 
-    if (isInStar || isInStarting) {
-      playSound('safe_spot')
-    }
+    if (isInStar || isInStarting) playSound('safe_spot')
 
     const isAllowedToKill = !(isInStar || isInStarting)
 
@@ -98,6 +98,8 @@ const Token = React.memo<TokenProps>(({player, id}) => {
         console.log('Token killed')
       }
     }
+
+    // Update the points
 
     // If the dice is not 6 then change the turn
     if (diceNo !== 6) {

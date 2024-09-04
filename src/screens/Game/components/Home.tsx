@@ -1,9 +1,8 @@
 import {SemiBold} from '@/fonts'
-import {G1Icon, G2Icon, G3Icon, G4Icon} from '@assets/icons/icons'
 import {Radial} from '@components/Gradient'
-import {COLS, GRADS} from '@utils/colors'
-import React, {useEffect} from 'react'
-import {type ViewProps, TouchableOpacity, View} from 'react-native'
+import {GRADS} from '@utils/colors'
+import React, {useEffect, useMemo} from 'react'
+import {type ViewProps, View} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 import gameStore, {type Num} from '../zustand/gameStore'
 import {w} from './MidBox'
@@ -12,6 +11,13 @@ type HomeProps = {no: Num} & ViewProps
 function HomeBox({style, no, ...props}: HomeProps) {
   const opacity = useSharedValue(1)
   const currentPlayerChance = gameStore((state) => state.chancePlayer)
+  const currentPositions = gameStore((state) => state.currentPositions)
+
+  const travelCount = useMemo(() => {
+    const playerTokens = currentPositions.filter((p) => p.player === no)
+    const totalWin = 4 - playerTokens.length
+    return playerTokens.reduce((acc, token) => acc + token.travelCount, 0) + totalWin * 100
+  }, [currentPositions, no])
 
   useEffect(() => {
     opacity.value = currentPlayerChance === no ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
@@ -41,8 +47,8 @@ function HomeBox({style, no, ...props}: HomeProps) {
           <Plot pieceNo={1} player={no} color='blue' />
           <Plot pieceNo={2} player={no} color='green' />
           <Plot pieceNo={3} player={no} color='yellow' /> */}
+          <SemiBold className='text-lg text-black/70'>{travelCount}</SemiBold>
           <SemiBold className='text-lg text-black/70'>Steps</SemiBold>
-          <SemiBold className='text-lg text-black/70'>142</SemiBold>
         </View>
       </Radial>
     </Animated.View>

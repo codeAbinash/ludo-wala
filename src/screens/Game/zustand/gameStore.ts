@@ -24,6 +24,7 @@ type GameStore = {
   cellSelection: Num
   currentPositions: PlayerState[]
   fireWorks: boolean
+  points: number[]
   setPlayer0: (player1: PlayerState[]) => void
   setPlayer1: (player2: PlayerState[]) => void
   setPlayer2: (player3: PlayerState[]) => void
@@ -57,6 +58,7 @@ const gameStore = create<GameStore>((set) => ({
   diceNumber: 1,
   currentPositions: [...player0InitialState, ...player2InitialState, ...player3InitialState, ...player4InitialState],
   fireWorks: false,
+  points: [0, 0, 0, 0],
   setPlayer0: (player0) => set({player0}),
   setPlayer1: (player1) => set({player1}),
   setPlayer2: (player2) => set({player2}),
