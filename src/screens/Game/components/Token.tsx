@@ -92,6 +92,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
         for (let i = 0; i < travelCount; i++) {
           t.pos -= 1
           t.travelCount -= 1
+          if (t.pos === 0) t.pos = 52
           setCurrentPositions([...currentPositions])
           await delay(0)
         }
