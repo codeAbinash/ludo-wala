@@ -106,7 +106,9 @@ function Cell({cell, i, color, ...props}: CellProps) {
                 ],
                 zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
               }}>
-              <Pile player={p.player} />
+              <Pile player={p.player}
+                id={p.id}
+              />
             </View>
           )
         })}

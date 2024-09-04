@@ -7,21 +7,25 @@ import {Circle, Svg} from 'react-native-svg'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 import {isMovePossible} from '../utils'
+import {delay} from '@utils/utils'
+import {playSound} from '@/helpers/SoundUtility'
 
 type PileProps = {
   player: Num
+  id: string
 }
 
 // const PileIcons = [G1Icon, G2Icon, G3Icon, G4Icon]
 const PileIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
-export default function Pile({player}: PileProps) {
+export default function Pile({player, id}: PileProps) {
   const rotation = useRef(new Animated.Value(0)).current
   const activePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
   const opacity = useSharedValue(1)
   const isPileSelectionEnabled = gameStore((state) => state.pileSelection)
+  const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
 
   useEffect(() => {
     opacity.value = activePlayer === player ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
@@ -57,8 +61,19 @@ export default function Pile({player}: PileProps) {
     [rotation],
   )
 
-  function handelPress() {
-    console.log('Move piece', diceNo)
+  async function handelPress() {
+    const index = currentPositions.findIndex((t) => t.id === id)
+    const token = currentPositions[index]
+
+    for (let i = 0; i < diceNo; i++) {
+      token.pos += 1
+      token.travelCount += 1
+      setCurrentPositions([...currentPositions])
+      await delay(50)
+      playSound('pile_move')
+    }
+
+    // Update the currentPositions array
   }
 
   const PileIcon = PileIcons[player]
