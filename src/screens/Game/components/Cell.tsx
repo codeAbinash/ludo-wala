@@ -4,7 +4,7 @@ import {type StyleProp, type ViewProps, StyleSheet, TouchableOpacity, View} from
 import {ArrowSpot, SafeSpots, StarSpots, startingPoints} from '../plotData'
 import gameStore from '../zustand/gameStore'
 import {w} from './MidBox'
-import Pile from './Pile'
+import Token from './Token'
 import {Medium} from '@/fonts'
 
 type CellProps = {
@@ -35,7 +35,6 @@ function Cell({cell, i, color, ...props}: CellProps) {
   const isDiceRolled = gameStore((state) => state.isDiceRolled)
   const setDiceRolled = gameStore((state) => state.setIsDiceRolled)
   const setDiceNumber = gameStore((state) => state.setDiceNumber)
-  const setPileSelectionEnabled = gameStore((state) => state.setPileSelectionEnabled)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
 
   const chancePlayer = gameStore((state) => state.chancePlayer)
@@ -106,7 +105,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
                 ],
                 zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
               }}>
-              <Pile player={p.player}
+              <Token player={p.player}
                 id={p.id}
               />
             </View>

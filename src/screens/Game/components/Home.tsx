@@ -49,30 +49,4 @@ function HomeBox({style, no, ...props}: HomeProps) {
   )
 }
 
-function Plot({pieceNo, player, color}: {pieceNo: number; player: Num; color: string}) {
-  return (
-    <TouchableOpacity
-      className='h-1/2 w-1/2 items-center justify-center'
-      onPress={() => {
-        console.log(pieceNo)
-      }}>
-      <View className='h-1/2 w-1/2 rounded-md' style={{backgroundColor: COLS[player]}}>
-        <Pile no={player} />
-      </View>
-    </TouchableOpacity>
-  )
-}
-
-const Icons = [G3Icon, G4Icon, G2Icon, G1Icon]
-function Pile({no}: {no: Num}) {
-  const Icon = Icons[no]
-  return (
-    <Icon
-      width={w * 0.07}
-      height={w * 0.07}
-      style={{transform: [{translateX: -w * 0.012}, {translateY: -w * 0.035}]}}
-    />
-  )
-}
-
 export default React.memo(HomeBox)

@@ -15,7 +15,7 @@ type SoundName =
   | 'game_start'
   | 'collide'
   | 'home_win'
-  | 'pile_move'
+  | 'token_move'
   | 'safe_spot'
   | 'ui'
   | 'home'
@@ -35,8 +35,8 @@ const getSoundPath = (soundName: SoundName) => {
       return require('../assets/sfx/collide.mp3')
     case 'home_win':
       return require('../assets/sfx/home_win.mp3')
-    case 'pile_move':
-      return require('../assets/sfx/pile_move.mp3')
+    case 'token_move':
+      return require('../assets/sfx/token_move.mp3')
     case 'safe_spot':
       return require('../assets/sfx/safe_spot.mp3')
     case 'ui':

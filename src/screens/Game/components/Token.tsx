@@ -10,21 +10,20 @@ import {isMovePossible} from '../utils'
 import {delay} from '@utils/utils'
 import {playSound} from '@/helpers/SoundUtility'
 
-type PileProps = {
+type TokenProps = {
   player: Num
   id: string
 }
 
-// const PileIcons = [G1Icon, G2Icon, G3Icon, G4Icon]
-const PileIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
+const TokenIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
-export default function Pile({player, id}: PileProps) {
+const Token = React.memo<TokenProps>(({player, id}) => {
   const rotation = useRef(new Animated.Value(0)).current
   const activePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
   const opacity = useSharedValue(1)
-  const isPileSelectionEnabled = gameStore((state) => state.pileSelection)
+  const isTokenSelectionEnabled = gameStore((state) => state.tokenSelection)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function Pile({player, id}: PileProps) {
   }))
 
   const isForwardable =
-    isMovePossible(currentPositions, diceNo, player) && isPileSelectionEnabled === player && player === activePlayer
+    isMovePossible(currentPositions, diceNo, player) && isTokenSelectionEnabled === player && player === activePlayer
 
   useEffect(() => {
     const rotateAnimation = Animated.loop(
@@ -69,14 +68,14 @@ export default function Pile({player, id}: PileProps) {
       token.pos += 1
       token.travelCount += 1
       setCurrentPositions([...currentPositions])
-      await delay(50)
-      playSound('pile_move')
+      await delay(100)
+      playSound('token_move')
     }
 
     // Update the currentPositions array
   }
 
-  const PileIcon = PileIcons[player]
+  const TokenIcon = TokenIcons[player]
 
   return (
     <TouchableOpacity onPress={handelPress} disabled={!isForwardable}>
@@ -101,7 +100,7 @@ export default function Pile({player, id}: PileProps) {
             </View>
           </View>
         )}
-        {/* <PileIcon
+        {/* <TokenIcon
         // width={W * 0.07}
         // height={W * 0.07}
         style={{
@@ -113,7 +112,7 @@ export default function Pile({player, id}: PileProps) {
         }}
       /> */}
         <Anim.Image
-          source={PileIcon}
+          source={TokenIcon}
           style={[
             {
               width: W * 0.06,
@@ -128,7 +127,9 @@ export default function Pile({player, id}: PileProps) {
       </Anim.View>
     </TouchableOpacity>
   )
-}
+})
+
+export default Token
 
 const styles = StyleSheet.create({
   hollowCircle: {

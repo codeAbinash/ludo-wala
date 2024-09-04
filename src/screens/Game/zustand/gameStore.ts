@@ -20,7 +20,7 @@ type GameStore = {
   winner: null | Num
   diceNumber: number
   chancePlayer: Num
-  pileSelection: Num
+  tokenSelection: Num
   cellSelection: Num
   currentPositions: PlayerState[]
   fireWorks: boolean
@@ -34,9 +34,8 @@ type GameStore = {
   setWinner: (winner: null | Num) => void
   setDiceNumber: (diceNumber: number) => void
   setChancePlayer: (chancePlayer: Num) => void
-  setPileSelectionEnabled: (pileSelectionEnabled: Num) => void
   updateCurrentPositions: (currentPositions: PlayerState[]) => void
-  enablePileSelection: (player: Num) => void
+  enableTokenSelection: (player: Num) => void
   enableCellSelection: (player: Num) => void
   disableTouch: () => void
   updateFireWorks: (fireWorks: boolean) => void
@@ -50,7 +49,7 @@ const gameStore = create<GameStore>((set) => ({
   player3: player4InitialState,
   chancePlayer: 0,
   isDiceRolled: false,
-  pileSelection: -1,
+  tokenSelection: -1,
   cellSelection: -1,
   isDiceRolling: false,
   isTouchDisabled: false,
@@ -68,9 +67,8 @@ const gameStore = create<GameStore>((set) => ({
   setDiceNumber: (diceNumber) => set({diceNumber}),
   setChancePlayer,
   setIsDiceRolled: (isDiceRolled) => set({isDiceRolled}),
-  setPileSelectionEnabled: (pileSelectionEnabled) => set({pileSelection: pileSelectionEnabled}),
   updateCurrentPositions: (currentPositions) => set({currentPositions}),
-  enablePileSelection: enablePieceSelection,
+  enableTokenSelection: enablePieceSelection,
   enableCellSelection: enableCellSelection,
   disableTouch,
   unfreezeDice,
@@ -78,30 +76,6 @@ const gameStore = create<GameStore>((set) => ({
   // updatePlayerPiece,
 }))
 
-// function updatePlayerPiece(player: Num, pieceId: string, position: number, travelCount: number) {
-//   const state = gameStore.getState()
-//   const playerState = state[`player${player}` as 'player0' | 'player1' | 'player2' | 'player3']
-//   const piece = playerState.find((p) => p.id === pieceId)
-//   state.setPileSelectionEnabled(-1)
-
-//   if (piece) {
-//     piece.pos = position
-//     piece.travelCount = travelCount
-//     const currentPositions = state.currentPositions.findIndex((p) => p.id === pieceId)
-
-//     if (position === 0) {
-//       if (currentPositions !== -1) {
-//         state.currentPositions.splice(currentPositions, 1)
-//       }
-//     } else {
-//       if (currentPositions === -1) {
-//         state.currentPositions[currentPositions] = piece
-//       } else {
-//         state.currentPositions.push(piece)
-//       }
-//     }
-//   }
-// }
 
 function setChancePlayer(chancePlayer: Num) {
   gameStore.setState({chancePlayer})
@@ -111,7 +85,7 @@ function setChancePlayer(chancePlayer: Num) {
 
 function enablePieceSelection(player: Num) {
   gameStore.setState({isTouchDisabled: true})
-  gameStore.setState({pileSelection: player})
+  gameStore.setState({tokenSelection: player})
 }
 
 function enableCellSelection(player: Num) {
@@ -121,7 +95,7 @@ function enableCellSelection(player: Num) {
 
 function disableTouch() {
   gameStore.setState({isTouchDisabled: true})
-  gameStore.setState({pileSelection: -1})
+  gameStore.setState({tokenSelection: -1})
   gameStore.setState({cellSelection: -1})
 }
 

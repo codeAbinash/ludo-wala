@@ -39,7 +39,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const setIsDiceRolled = gameStore((state) => state.setIsDiceRolled)
   const setDiceNo = gameStore((state) => state.setDiceNumber)
   const diceNo = gameStore((state) => state.diceNumber)
-  const enablePileSelection = gameStore((state) => state.setPileSelectionEnabled)
+  const enableTokenSelection = gameStore((state) => state.enableTokenSelection)
   const setDiceTouchDisabled = gameStore((state) => state.setIsTouchDisabled)
   const isDiceTouchDisabled = gameStore((state) => state.isTouchDisabled)
   const setTurn = gameStore((state) => state.setChancePlayer)
@@ -88,8 +88,8 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
        * -------------------
        */
       ToastAndroid.show('Token can move', ToastAndroid.SHORT)
-      enablePileSelection(player)
-      // Enable Pile selection and return
+      enableTokenSelection(player)
+      // Enable Token selection and return
       return
     } else {
       // If it can't move then change the turn
