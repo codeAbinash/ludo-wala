@@ -15,8 +15,8 @@ function HomeBox({style, no, ...props}: HomeProps) {
 
   const travelCount = useMemo(() => {
     const playerTokens = currentPositions.filter((p) => p.player === no)
-    const totalWin = 4 - playerTokens.length
-    return playerTokens.reduce((acc, token) => acc + token.travelCount, 0) + totalWin * 100
+    const totalWinned = 4 - playerTokens.length
+    return playerTokens.reduce((acc, token) => acc + token.travelCount, 0) + totalWinned * (100 + 57)
   }, [currentPositions, no])
 
   useEffect(() => {
