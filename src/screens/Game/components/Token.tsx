@@ -65,9 +65,9 @@ const Token = React.memo<TokenProps>(({player, id}) => {
       token.pos += 1
       token.travelCount += 1
       if (token.pos === 53) token.pos = 1
-      setCurrentPositions([...currentPositions])
-      await delay(0)
       playSound('token_move')
+      setCurrentPositions([...currentPositions])
+      await delay(__DEV__ ? 0 : 200)
     }
 
     // Check if the token is on another token and not in star or starting point

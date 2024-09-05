@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "dev": "react-native start",
     "test": "jest",
-    "build": "cd android && gradlew assembleRelease && cd .. && npm run open && node install-apk.js",
+    "build": "cd android && gradlew assembleRelease && cd .. && npm run install-release-apk && npm run open",
     "assembleRelease": "cd android && gradlew assembleRelease",
     "open": "cd android/app/build/outputs/apk/release/ && explorer .",
     "bundle": "cd android && gradlew bundleRelease",
