@@ -1,4 +1,4 @@
-import type { PlayerState } from './zustand/initialState';
+import type { PlayerState } from './zustand/initialState'
 
 
 export function isMovePossible(currentPositions: PlayerState[], newDiceNo: number, player: number) {
