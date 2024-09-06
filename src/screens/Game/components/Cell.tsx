@@ -104,7 +104,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
           )
         })}
 
-        <Medium
+        {/* <Medium
           className='text-center text-xs'
           style={[
             {
@@ -113,7 +113,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
             },
           ]}>
           {cell}
-        </Medium>
+        </Medium> */}
       </View>
     </View>
   )

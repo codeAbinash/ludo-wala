@@ -3,13 +3,14 @@ import Images from '@assets/images/images'
 import {W} from '@utils/dimensions'
 import {delay, getNextTurn} from '@utils/utils'
 import React, {useEffect, useMemo, useRef} from 'react'
-import {Animated, Easing, Image, StyleSheet, TouchableOpacity, View} from 'react-native'
-import Anim from 'react-native-reanimated'
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native'
+import Anim, {useAnimatedStyle, Easing, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
 import {StarSpots, startingPoints, turningPoints, victoryStart} from '../plotData'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
+import Animated from 'react-native-reanimated'
 
 type TokenProps = {
   token: PlayerState
@@ -23,7 +24,7 @@ function canTheTokenMove(token: PlayerState, diceNo: Num) {
 
 const Token = React.memo<TokenProps>(({token}) => {
   const {id, player} = token
-  const rotation = useRef(new Animated.Value(0)).current
+  // const rotation = useRef(new Animated.Value(0)).current
   const chancePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
@@ -34,27 +35,43 @@ const Token = React.memo<TokenProps>(({token}) => {
   const points = gameStore((state) => state.points)
   const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer && tokenSelection === player
 
-  useEffect(() => {
-    const rotateAnimation = Animated.loop(
-      Animated.timing(rotation, {
-        toValue: 1,
-        duration: 1000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-    )
-    rotateAnimation.start()
-    return () => rotateAnimation.stop()
-  }, [rotation])
+  const rotation = useSharedValue(0)
 
-  const rotateInterpolate = useMemo(
-    () =>
-      rotation.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg'],
-      }),
-    [rotation],
-  )
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{rotate: `${rotation.value}deg`}],
+    }
+  })
+
+  // Example to start infinite rotation
+  React.useEffect(() => {
+    rotation.value = withRepeat(withTiming(360, {duration: 2000, easing: Easing.linear}), -1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // const animatedStyle = useAnimatedStyle({})
+
+  // useEffect(() => {
+  //   const rotateAnimation = Animated.loop(
+  //     Animated.timing(rotation, {
+  //       toValue: 1,
+  //       duration: 1000,
+  //       easing: Easing.linear,
+  //       useNativeDriver: true,
+  //     }),
+  //   )
+  //   rotateAnimation.start()
+  //   return () => rotateAnimation.stop()
+  // }, [rotation])
+
+  // const rotateInterpolate = useMemo(
+  //   () =>
+  //     rotation.interpolate({
+  //       inputRange: [0, 1],
+  //       outputRange: ['0deg', '360deg'],
+  //     }),
+  //   [rotation],
+  // )
 
   async function handelPress() {
     setTokenSelection(-1) // Disable token selection
@@ -135,7 +152,7 @@ const Token = React.memo<TokenProps>(({token}) => {
         {isForwardable && player === chancePlayer && (
           <View style={styles.hollowCircle}>
             <View style={styles.dashedCircleContainer}>
-              <Animated.View style={[styles.dashedCircle, {transform: [{rotate: rotateInterpolate}]}]}>
+              <Animated.View style={[styles.dashedCircle, animatedStyle]}>
                 <Svg height='18' width='18'>
                   <Circle
                     cx='9'

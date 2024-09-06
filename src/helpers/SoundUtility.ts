@@ -1,55 +1,42 @@
-import SoundPlayer from 'react-native-sound-player'
+import Sound from 'react-native-sound'
 
-export const playSound = (soundName: SoundName, loop = false) => {
+Sound.setCategory('Playback')
+
+export const playSound = (soundName: SoundName, loop = false, volume = 1) => {
   try {
-    const soundPath = getSoundPath(soundName)
-    SoundPlayer.playAsset(soundPath)
+    const soundPath = soundName
+    const sound = new Sound(soundPath, Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('Failed to load the sound', error)
+        return
+      }
+      sound.setNumberOfLoops(loop ? -1 : 0)
+      sound.setVolume(volume)
+      sound.play((success) => {
+        sound.release()
+      })
+    })
   } catch (e) {
-    console.log('cannot play the sound file', e)
+    console.log('Cannot play the sound file', e)
   }
 }
 
-type SoundName =
-  | 'dice_roll'
-  | 'cheer'
-  | 'game_start'
-  | 'collide'
-  | 'home_win'
-  | 'token_move'
-  | 'safe_spot'
-  | 'ui'
-  | 'home'
-  | 'girl1'
-  | 'girl2'
-  | 'girl3'
+setTimeout(() => {
+  playSound('home', true, 0.2)
+}, 1000)
 
-const getSoundPath = (soundName: SoundName) => {
-  switch (soundName) {
-    case 'dice_roll':
-      return require('../assets/sfx/dice_roll.mp3')
-    case 'cheer':
-      return require('../assets/sfx/cheer.mp3')
-    case 'game_start':
-      return require('../assets/sfx/game_start.mp3')
-    case 'collide':
-      return require('../assets/sfx/collide.mp3')
-    case 'home_win':
-      return require('../assets/sfx/home_win.mp3')
-    case 'token_move':
-      return require('../assets/sfx/token_move.mp3')
-    case 'safe_spot':
-      return require('../assets/sfx/safe_spot.mp3')
-    case 'ui':
-      return require('../assets/sfx/ui.mp3')
-    case 'home':
-      return require('../assets/sfx/home.mp3')
-    case 'girl2':
-      return require('../assets/sfx/girl2.mp3')
-    case 'girl1':
-      return require('../assets/sfx/girl1.mp3')
-    case 'girl3':
-      return require('../assets/sfx/girl3.mp3')
-    default:
-      throw new Error(`Sound ${soundName} not found`)
-  }
-}
+const sounds = [
+  'dice_roll',
+  'cheer',
+  'game_start',
+  'collide',
+  'home_win',
+  'token_move',
+  'safe_spot',
+  'ui',
+  'home',
+  'girl1',
+  'girl2',
+  'girl3',
+]
+type SoundName = (typeof sounds)[number]

@@ -3,7 +3,7 @@ import Images from '@assets/images/images'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
 import {GRADS} from '@utils/colors'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Image, View} from 'react-native'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
@@ -11,6 +11,7 @@ import {HorizontalBoxes, VerticalBoxes} from './components/Path'
 import Player from './components/Player'
 import {Plot1Data, Plot2Data, Plot3Data, Plot4Data} from './plotData'
 import gameStore from './zustand/gameStore'
+import {playSound} from '@/helpers/SoundUtility'
 
 export default function Game() {
   const p1 = gameStore((state) => state.player0)
