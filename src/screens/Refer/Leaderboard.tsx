@@ -21,7 +21,7 @@ export default function Leaderboard({navigation}: NavProp) {
 
   const sortedData = useMemo(() => {
     if (!data) return []
-    return data.data.sort((a: any, b: any) => b.rank - a.rank)
+    return data.data.sort((a: Player, b: Player) => +b.total_deposit - +a.total_deposit)
   }, [data])
 
   const firstThree = useMemo(() => sortedData.slice(0, 3), [sortedData])

@@ -187,12 +187,15 @@ export type Leaderboard = {
 }
 
 export type Player = {
-  userId: number
+  id: number
   fname: string
   lname: string
+  referral_count: number
+  total_referral_deposits: string
   total_deposit: string
   profilePic: string
 }
+
 export async function leaderboard_f() {
   return await postApi<Leaderboard>('refer/leaderBoard', null)
 }
