@@ -93,9 +93,10 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
       // Enable Token selection and return
       return
     } else {
+      // If it is 6 then try again
+      if (newDiceNo === 6) return setChancePlayer(player)
       // If it can't move then change the turn
       setChancePlayer(getNextTurn(turn))
-      setDiceTouchDisabled(false)
     }
 
     // if dice is 6 then try again

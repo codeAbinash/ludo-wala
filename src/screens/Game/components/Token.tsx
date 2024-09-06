@@ -6,19 +6,24 @@ import React, {useEffect, useMemo, useRef} from 'react'
 import {Animated, Easing, Image, StyleSheet, TouchableOpacity, View} from 'react-native'
 import Anim from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
-import {StarSpots, startingPoints} from '../plotData'
+import {StarSpots, startingPoints, turningPoints, victoryStart} from '../plotData'
 import {isMovePossible} from '../utils'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
+import type {PlayerState} from '../zustand/initialState'
 
 type TokenProps = {
-  player: Num
-  id: string
+  token: PlayerState
 }
 
 const TokenIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
-const Token = React.memo<TokenProps>(({player, id}) => {
+function canTheTokenMove(token: PlayerState, diceNo: Num) {
+  return token.travelCount + diceNo <= 57
+}
+
+const Token = React.memo<TokenProps>(({token}) => {
+  const {id, player} = token
   const rotation = useRef(new Animated.Value(0)).current
   const chancePlayer = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
@@ -28,8 +33,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
   const points = gameStore((state) => state.points)
-  const isForwardable =
-    isMovePossible(currentPositions, diceNo, player) && tokenSelection === player && player === chancePlayer
+  const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer
 
   useEffect(() => {
     const rotateAnimation = Animated.loop(
@@ -58,16 +62,28 @@ const Token = React.memo<TokenProps>(({player, id}) => {
 
     setTokenSelection(-1) // Disable token selection
 
-    const index = currentPositions.findIndex((t) => t.id === id)
-    const token = currentPositions[index]!
+    const turningPoint = turningPoints[player]
 
     for (let i = 0; i < diceNo; i++) {
+      playSound('token_move')
       token.pos += 1
       token.travelCount += 1
+      if (token.pos === turningPoint) token.pos = victoryStart[player]!
       if (token.pos === 53) token.pos = 1
-      playSound('token_move')
       setCurrentPositions([...currentPositions])
       await delay(__DEV__ ? 0 : 200)
+    }
+
+    // Check for victory
+    if (token.travelCount === 56) {
+      playSound('home_win')
+      // Remove the token from the board
+      currentPositions.splice(
+        currentPositions.findIndex((t) => t.id === token.id),
+        1,
+      )
+      setCurrentPositions([...currentPositions])
+      setChancePlayer(player)
     }
 
     // Check if the token is on another token and not in star or starting point
@@ -98,6 +114,8 @@ const Token = React.memo<TokenProps>(({player, id}) => {
         }
         console.log('Token killed')
       }
+      // Set the chance to the player who killed the token
+      setChancePlayer(player)
     }
 
     // Update the points

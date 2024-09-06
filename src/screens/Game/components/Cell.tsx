@@ -72,6 +72,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
         )}
         {picesAtThisCell.map((p, index) => {
           const n = picesAtThisCell.length
+
           let translateX = 0
           let translateY = 0
 
@@ -98,12 +99,12 @@ function Cell({cell, i, color, ...props}: CellProps) {
                 ],
                 zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
               }}>
-              <Token player={p.player} id={p.id} />
+              <Token token={p} />
             </View>
           )
         })}
 
-        {/* <Medium
+        <Medium
           className='text-center text-xs'
           style={[
             {
@@ -112,7 +113,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
             },
           ]}>
           {cell}
-        </Medium> */}
+        </Medium>
       </View>
     </View>
   )

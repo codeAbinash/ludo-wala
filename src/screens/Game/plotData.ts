@@ -15,8 +15,8 @@ export const SafeSpots = [
 export const StarSpots = [9, 22, 35, 48]
 
 export const ArrowSpot = [12, 51, 38, 25]
-export const turningPoints = [52, 13, 26, 39]
-export const victoryStart = [111, 221, 331, 441]
+export const turningPoints = [13, 26, 39, 52]
+export const victoryStart = [221, 331, 441, 111]
 
 export const startingPoints = [1, 14, 27, 40]
 
