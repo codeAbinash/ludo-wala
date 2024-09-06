@@ -94,13 +94,13 @@ function Board({turn}: {turn: number}) {
   return (
     <View style={{height: w, width: w}} className='mx-auto flex-row flex-wrap justify-between'>
       <HomeBox style={{borderTopLeftRadius: 40}} no={0} />
-      <VerticalBoxes cells={Plot2Data} color={GRADS[1][1]} />
+      <VerticalBoxes cells={Plot2Data} color={GRADS[1]![1]!} />
       <HomeBox style={{borderTopRightRadius: 40}} no={1} />
-      <HorizontalBoxes cells={Plot1Data} color={GRADS[0][1]} />
+      <HorizontalBoxes cells={Plot1Data} color={GRADS[0]![1]!} />
       <MidBox />
-      <HorizontalBoxes cells={Plot3Data} color={GRADS[2][1]} />
+      <HorizontalBoxes cells={Plot3Data} color={GRADS[2]![1]!} />
       <HomeBox style={{borderBottomLeftRadius: 40}} no={3} />
-      <VerticalBoxes cells={Plot4Data} color={GRADS[3][1]} />
+      <VerticalBoxes cells={Plot4Data} color={GRADS[3]![1]!} />
       <HomeBox style={{borderBottomRightRadius: 40}} no={2} />
     </View>
   )

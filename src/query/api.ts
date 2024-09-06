@@ -35,7 +35,7 @@ async function postApi<T>(url: string, data: any) {
     }
     console.log(JSON.stringify(error.response.data, null, 2))
     const errors = error?.response.data.errors
-    const singleError = errors[Object.keys(errors)[0]][0]
+    const singleError = errors[Object.keys(errors)[0]!][0]
     throw new Error(singleError || DEFAULT_ERR)
   }
 }

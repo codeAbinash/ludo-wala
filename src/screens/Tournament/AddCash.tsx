@@ -17,7 +17,7 @@ import RazorpayCheckout from 'react-native-razorpay'
 const amounts = ['50', '100', '500', '1000', '1500', '2000']
 
 export default function AddCash({navigation}: NavProp) {
-  const [amount, setAmount] = React.useState(amounts[0])
+  const [amount, setAmount] = React.useState(amounts[0]!)
 
   const user = userStore((state) => state.user)
 

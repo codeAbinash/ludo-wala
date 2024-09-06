@@ -111,14 +111,14 @@ function TopUi({data}: {data: Player[]}) {
   return (
     <View>
       <View className='mx-auto w-4/5 flex-row items-end justify-between'>
-        <SideImage name={data[1].fname} pp={data[1].profilePic} rank={2} />
+        <SideImage name={data[1]!.fname} pp={data[1]!.profilePic} rank={2} />
         <View className='mb-5 items-center justify-center' style={{gap: 5}}>
           <Image source={Images.crown} className='-mb-2 h-10 w-10' />
-          <Image source={{uri: data[0].profilePic}} style={{height: 65, width: 65}} className='rounded-full' />
+          <Image source={{uri: data[0]!.profilePic}} style={{height: 65, width: 65}} className='rounded-full' />
           <Star count={1} />
-          <SemiBold className='text-lg text-white/50'>{data[0].fname}</SemiBold>
+          <SemiBold className='text-lg text-white/50'>{data[0]!.fname}</SemiBold>
         </View>
-        <SideImage name={data[2].fname} pp={data[2].profilePic} rank={3} />
+        <SideImage name={data[2]!.fname} pp={data[2]!.profilePic} rank={3} />
       </View>
     </View>
   )

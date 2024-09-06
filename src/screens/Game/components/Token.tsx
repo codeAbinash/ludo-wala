@@ -59,7 +59,7 @@ const Token = React.memo<TokenProps>(({player, id}) => {
     setTokenSelection(-1) // Disable token selection
 
     const index = currentPositions.findIndex((t) => t.id === id)
-    const token = currentPositions[index]
+    const token = currentPositions[index]!
 
     for (let i = 0; i < diceNo; i++) {
       token.pos += 1

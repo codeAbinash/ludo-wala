@@ -196,7 +196,7 @@ function Dots({n, player}: {n: number; player: Num}) {
       ))}
       {redDots.map((_, i) => (
         // <View key={i} style={{height: 10, width: 10, backgroundColor: Colors.greenDefault, borderRadius: 5}} />
-        <FavouriteSolidIcon key={i} width={13} height={13} color={GRADS[player][0]} />
+        <FavouriteSolidIcon key={i} width={13} height={13} color={GRADS[player]![0]} />
       ))}
     </View>
   )

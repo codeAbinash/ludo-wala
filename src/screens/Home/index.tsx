@@ -90,7 +90,7 @@ function BottomTabBar({state, descriptors, navigation}: BottomTabBarProps) {
     <View className='bg-primary px-5 pb-2'>
       <Gradient style={{flexDirection: 'row', paddingHorizontal: 10}} className='rounded-full border border-border'>
         {state.routes.map((route, index) => {
-          const {options} = descriptors[route.key]
+          const {options} = descriptors[route.key]!
           // const label =
           //   options.tabBarLabel !== undefined
           //     ? options.tabBarLabel
