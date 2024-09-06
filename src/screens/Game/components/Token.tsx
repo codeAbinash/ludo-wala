@@ -7,7 +7,6 @@ import {Animated, Easing, Image, StyleSheet, TouchableOpacity, View} from 'react
 import Anim from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
 import {StarSpots, startingPoints, turningPoints, victoryStart} from '../plotData'
-import {isMovePossible} from '../utils'
 import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
@@ -33,7 +32,7 @@ const Token = React.memo<TokenProps>(({token}) => {
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   const setChancePlayer = gameStore((state) => state.setChancePlayer)
   const points = gameStore((state) => state.points)
-  const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer
+  const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer && tokenSelection === player
 
   useEffect(() => {
     const rotateAnimation = Animated.loop(
@@ -58,9 +57,9 @@ const Token = React.memo<TokenProps>(({token}) => {
   )
 
   async function handelPress() {
-    if (!isForwardable) return
-
     setTokenSelection(-1) // Disable token selection
+
+    if (!isForwardable) return
 
     const turningPoint = turningPoints[player]
 
@@ -71,7 +70,7 @@ const Token = React.memo<TokenProps>(({token}) => {
       if (token.pos === turningPoint) token.pos = victoryStart[player]!
       if (token.pos === 53) token.pos = 1
       setCurrentPositions([...currentPositions])
-      await delay(__DEV__ ? 0 : 200)
+      await delay(__DEV__ ? 0 : 150)
     }
 
     // Check for victory

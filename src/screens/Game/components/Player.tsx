@@ -88,7 +88,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
        * -------------------
        * -------------------
        */
-      ToastAndroid.show('Token can move', ToastAndroid.SHORT)
+      // ToastAndroid.show('Token can move', ToastAndroid.SHORT)
       enableTokenSelection(player)
       // Enable Token selection and return
       return
