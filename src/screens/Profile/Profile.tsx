@@ -1,4 +1,4 @@
-import {SemiBold} from '@/fonts'
+import {Medium, SemiBold} from '@/fonts'
 import {userStore} from '@/zustand/userStore'
 import {
   BubbleChatSolidIcon,
@@ -22,9 +22,10 @@ import {aboutLink, conductLink, contactLink, privacyLink, rateLink, termsLink} f
 import {secureLs} from '@utils/storage'
 import type {NavProp} from '@utils/types'
 import {open, refer} from '@utils/utils'
-import React from 'react'
-import {Alert, TouchableOpacity, View} from 'react-native'
+import React, {useMemo} from 'react'
+import {Alert, ToastAndroid, TouchableOpacity, View} from 'react-native'
 import {ScrollView, type TouchableOpacityProps} from 'react-native-gesture-handler'
+import Clipboard from '@react-native-clipboard/clipboard'
 
 const ic = {
   height: 20,
@@ -34,6 +35,7 @@ const ic = {
 
 export default function Profile({navigation}: NavProp) {
   const user = userStore((state) => state.user)
+  const token = useMemo(() => secureLs.getString('token'), [])
   return (
     <Wrap>
       <PaddingTop />
@@ -73,6 +75,18 @@ export default function Profile({navigation}: NavProp) {
             }}
           />
         </Gradient>
+        {__DEV__ && (
+          <View className='mt-3 p-2'>
+            <Medium
+              className='text-xs'
+              onPress={() => {
+                Clipboard.setString(token || '')
+                ToastAndroid.show('Token copied to clipboard', ToastAndroid.SHORT)
+              }}>
+              {token}
+            </Medium>
+          </View>
+        )}
       </ScrollView>
     </Wrap>
   )
