@@ -290,6 +290,11 @@ async function handelDiceRoll(data: DiceRolled) {
   setDiceRolling(false)
   setDiceNo(newDiceNo)
 
+  if (data.playerId === self) {
+    console.log('My turn')
+    setTokenSelection(self)
+  }
+
   // const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1
   // // const isAnyTokenLocked = currentPositions.findIndex((t) => t.pos === 0)
 
