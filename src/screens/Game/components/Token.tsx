@@ -33,8 +33,8 @@ const Token = React.memo<TokenProps>(({token}) => {
   const tokenSelection = gameStore((state) => state.tokenSelection)
   const setTokenSelection = gameStore((state) => state.enableTokenSelection)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
-  const setChancePlayer = gameStore((state) => state.setChancePlayer)
-  const points = gameStore((state) => state.points)
+  // const setChancePlayer = gameStore((state) => state.setChancePlayer)
+  // const points = gameStore((state) => state.points)
   const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer && tokenSelection === player
 
   const rotation = useSharedValue(0)
@@ -110,7 +110,7 @@ const Token = React.memo<TokenProps>(({token}) => {
         1,
       )
       setCurrentPositions([...currentPositions])
-      setChancePlayer(player)
+      // setChancePlayer(player)
     }
 
     // Check if the token is on another token and not in star or starting point
@@ -142,17 +142,17 @@ const Token = React.memo<TokenProps>(({token}) => {
         console.log('Token killed')
       }
       // Set the chance to the player who killed the token
-      setChancePlayer(player)
+      // setChancePlayer(player)
     }
 
     // Update the points
 
     // If the dice is not 6 then change the turn
-    if (diceNo !== 6) {
-      setChancePlayer(getNextTurn(chancePlayer))
-    } else {
-      setChancePlayer(chancePlayer)
-    }
+    // if (diceNo !== 6) {
+    //   setChancePlayer(getNextTurn(chancePlayer))
+    // } else {
+    //   setChancePlayer(chancePlayer)
+    // }
   }
 
   const TokenIcon = TokenIcons[player]

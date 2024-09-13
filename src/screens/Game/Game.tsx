@@ -1,29 +1,28 @@
 import {Medium, SemiBold} from '@/fonts'
+import {playSound} from '@/helpers/SoundUtility'
+import {socketStore} from '@/zustand/socketStore'
+import Animations from '@assets/animations/animations'
 import Images from '@assets/images/images'
+import {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
+import {join_tournament_room, type InitialState} from '@query/api'
+import {useMutation} from '@tanstack/react-query'
 import {GRADS} from '@utils/colors'
+import {webSocketLink} from '@utils/constants'
+import {H} from '@utils/dimensions'
+import {secureLs} from '@utils/storage'
+import {delay} from '@utils/utils'
+import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo, useState} from 'react'
 import {Alert, Image, View} from 'react-native'
+import {io} from 'socket.io-client'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
 import {HorizontalBoxes, VerticalBoxes} from './components/Path'
 import Player from './components/Player'
-import {Plot1Data, Plot2Data, Plot3Data, Plot4Data, startingPoints, turningPoints, victoryStart} from './plotData'
+import {Plot1Data, Plot2Data, Plot3Data, Plot4Data, turningPoints, victoryStart} from './plotData'
 import gameStore, {type Num} from './zustand/gameStore'
-import {playSound} from '@/helpers/SoundUtility'
-import {io, type Socket} from 'socket.io-client'
-import {secureLs} from '@utils/storage'
-import {socketStore} from '@/zustand/socketStore'
-import {delay, getNextTurn} from '@utils/utils'
-import {webSocketLink} from '@utils/constants'
-import {isMovePossible} from './utils'
-import {Radial} from '@components/Gradient'
-import {H} from '@utils/dimensions'
-import LottieView from 'lottie-react-native'
-import Animations from '@assets/animations/animations'
-import {useMutation} from '@tanstack/react-query'
-import {join_tournament_room, joinTournament_f, refetch_tournament_room, type InitialState} from '@query/api'
 import type {PlayerState} from './zustand/initialState'
 
 export type Message = {
@@ -48,9 +47,9 @@ const setDiceTouchDisabled = gameStore.getState().setIsTouchDisabled
 const setDiceNo = gameStore.getState().setDiceNumber
 const currentPositions = gameStore.getState().currentPositions
 const setChancePlayer = gameStore.getState().setChancePlayer
-const self = gameStore.getState().self
 const setTokenSelection = gameStore.getState().enableTokenSelection
 const setCurrentPositions = gameStore.getState().updateCurrentPositions
+const setMyId = gameStore.getState().setMyId
 
 function getInitialPositions(data: InitialState[]): PlayerState[] {
   const positions: PlayerState[] = []
@@ -70,7 +69,6 @@ function getInitialPositions(data: InitialState[]): PlayerState[] {
 
 export default function Game() {
   const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
-  const setSelf = gameStore((state) => state.setSelf)
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
 
@@ -79,7 +77,7 @@ export default function Game() {
     mutationFn: join_tournament_room,
     onSuccess: (data) => {
       if (!data.status) return Alert.alert('Error', data.message)
-      setSelf(data.playerId as Num) // Set the player id
+      gameStore.getState().setMyId(data.playerId as Num) // Directly set the player id
       setChancePlayer(data.currentTurn) // Set the current turn
       data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
       console.log(JSON.stringify(data, null, 2))
@@ -230,8 +228,12 @@ function Board() {
 
 async function handelTokenMove(data: TokenMoved) {
   setTokenSelection(-1) // Disable token selection
+  setDiceTouchDisabled(true)
 
-  if (data.playerId === self) return
+  if (data.playerId === gameStore.getState().myId) {
+    setChancePlayer(data.nextTurn)
+    return
+  }
 
   const player = data.playerId as Num
   const tokenId = data.tokenId
@@ -290,9 +292,8 @@ async function handelDiceRoll(data: DiceRolled) {
   setDiceRolling(false)
   setDiceNo(newDiceNo)
 
-  if (data.playerId === self) {
-    console.log('My turn')
-    setTokenSelection(self)
+  if (data.playerId === gameStore.getState().myId) {
+    setTokenSelection(gameStore.getState().myId)
   }
 
   // const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1

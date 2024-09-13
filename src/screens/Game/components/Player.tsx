@@ -37,7 +37,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const isDiceTouchDisabled = gameStore((state) => state.isTouchDisabled)
   const setDiceRolling = gameStore((state) => state.setIsDiceRolling)
   const isDiceRolling = gameStore((state) => state.isDiceRolling)
-  const self = gameStore((state) => state.self)
+  const myId = gameStore((state) => state.myId)
 
   const rollDiceMutation = useMutation({
     mutationKey: ['rollDice'],
@@ -46,6 +46,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
       playSound('dice_roll')
       console.log('Dice Roll Request Success')
       console.log(data)
+      setDiceRolling(false)
     },
   })
 
@@ -89,7 +90,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
               className='h-12 w-12 items-center justify-center rounded-xl'
               onPress={press}
               activeOpacity={0.7}
-              disabled={isDiceTouchDisabled || currentPlayerChange !== player || self !== player}>
+              disabled={isDiceRolling || isDiceTouchDisabled || currentPlayerChange !== player || myId !== player}>
               {!isDiceRolling && currentPlayerChange === player && <Dice diceNo={diceNo - 1} />}
               {currentPlayerChange === player && isDiceRolling ? <DiceRolling /> : null}
             </TouchableOpacity>

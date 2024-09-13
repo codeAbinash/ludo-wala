@@ -25,8 +25,8 @@ type GameStore = {
   currentPositions: PlayerState[]
   fireWorks: boolean
   points: number[]
-  self: Num
-  setSelf: (self: Num) => void
+  myId: Num
+  setMyId: (id: Num) => void
   setPlayer0: (player1: PlayerState[]) => void
   setPlayer1: (player2: PlayerState[]) => void
   setPlayer2: (player3: PlayerState[]) => void
@@ -62,8 +62,8 @@ const gameStore = create<GameStore>((set) => ({
   // currentPositions: [],
   fireWorks: false,
   points: [0, 0, 0, 0],
-  self: -1,
-  setSelf: (self) => set({self}),
+  myId: -1,
+  setMyId: (id) => set({myId: id}),
   setPlayer0: (player0) => set({player0}),
   setPlayer1: (player1) => set({player1}),
   setPlayer2: (player2) => set({player2}),
@@ -75,7 +75,7 @@ const gameStore = create<GameStore>((set) => ({
   setChancePlayer,
   setIsDiceRolled: (isDiceRolled) => set({isDiceRolled}),
   updateCurrentPositions: (currentPositions) => set({currentPositions}),
-  enableTokenSelection: enablePieceSelection,
+  enableTokenSelection: enableTokenSelection,
   enableCellSelection: enableCellSelection,
   disableTouch,
   unfreezeDice,
@@ -89,7 +89,7 @@ function setChancePlayer(chancePlayer: Num) {
   gameStore.setState({isDiceRolled: false})
 }
 
-function enablePieceSelection(player: Num) {
+function enableTokenSelection(player: Num) {
   gameStore.setState({isTouchDisabled: true})
   gameStore.setState({tokenSelection: player})
 }
