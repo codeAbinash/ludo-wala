@@ -22,3 +22,5 @@ export const conductLink = `${mainLink}code-of-conduct`
 export const rateLink = `${mainLink}review`
 
 export const ppUrl = 'https://avatar.iran.liara.run/username?username=Abinash Karmakar'
+
+export const webSocketLink = 'ws://socket.ludowalagames.com:3000'

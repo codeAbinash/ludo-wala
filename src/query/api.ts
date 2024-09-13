@@ -1,4 +1,5 @@
 import {navigationStore} from '@/zustand/navigationStore'
+import type {Num} from '@screens/Game/zustand/gameStore'
 import {ls, secureLs} from '@utils/storage'
 import axios from 'axios'
 import {Alert} from 'react-native'
@@ -234,4 +235,37 @@ export type Link = {
 
 export async function my_referral_f() {
   return await postApi<MyReferrals>('refer/myReferrals', null)
+}
+
+export async function roll_dice_tournament({playerId}: {playerId: number}) {
+  return await postApi<ServerResponse>('boardConnector/rollDice', {playerId, roomType: 'tournament'})
+}
+
+export function move_token_tournament(tokenId: string) {
+  return postApi<ServerResponse>('boardConnector/eventStore', {tokenId, roomType: 'tournament'})
+}
+
+export type JoinTournamentRoom = {
+  events?: InitialState[]
+  message: string
+  playerId: number
+  roomId: string
+  status: boolean
+  currentTurn: Num
+}
+
+export type InitialState = {
+  playerId: number
+  position: number
+  tokenId: string
+  travelCount: number
+  userId: number
+}
+
+export function join_tournament_room() {
+  return postApi<JoinTournamentRoom>('boardConnector/joinRoom', {roomType: 'tournament'})
+}
+
+export function refetch_tournament_room() {
+  return postApi<JoinTournamentRoom>('boardConnector/reFetch', {roomType: 'tournament'})
 }

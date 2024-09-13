@@ -38,6 +38,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
 
   const picesAtThisCell = useMemo(() => currentPositions.filter((p) => p.pos === cell), [currentPositions, cell])
   const zIndex = useRef(100)
+  const tokenSelection = gameStore((state) => state.tokenSelection)
 
   useEffect(() => {
     zIndex.current = 100
@@ -97,7 +98,7 @@ function Cell({cell, i, color, ...props}: CellProps) {
                   {translateX},
                   {translateY},
                 ],
-                zIndex: p.player === chancePlayer ? 10000 : zIndex.current,
+                zIndex: p.player === tokenSelection ? 10000 : zIndex.current,
               }}>
               <Token token={p} />
             </View>

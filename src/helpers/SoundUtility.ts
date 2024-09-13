@@ -21,9 +21,9 @@ export const playSound = (soundName: SoundName, loop = false, volume = 1) => {
   }
 }
 
-setTimeout(() => {
-  playSound('home', true, 0.2)
-}, 1000)
+// setTimeout(() => {
+//   playSound('home', true, 0.2)
+// }, 1000)
 
 const sounds = [
   'dice_roll',

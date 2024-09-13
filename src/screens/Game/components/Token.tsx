@@ -11,6 +11,8 @@ import type {Num} from '../zustand/gameStore'
 import gameStore from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
 import Animated from 'react-native-reanimated'
+import {useMutation} from '@tanstack/react-query'
+import {move_token_tournament} from '@query/api'
 
 type TokenProps = {
   token: PlayerState
@@ -41,6 +43,14 @@ const Token = React.memo<TokenProps>(({token}) => {
     return {
       transform: [{rotate: `${rotation.value}deg`}],
     }
+  })
+
+  const {mutate} = useMutation({
+    mutationKey: ['tokenMove', token.id],
+    mutationFn: () => move_token_tournament(token.id),
+    onSuccess: (data) => {
+      // console.log(data)
+    },
   })
 
   // Example to start infinite rotation
@@ -80,6 +90,7 @@ const Token = React.memo<TokenProps>(({token}) => {
 
     const turningPoint = turningPoints[player]
 
+    mutate()
     for (let i = 0; i < diceNo; i++) {
       playSound('token_move')
       token.pos += 1
@@ -113,7 +124,7 @@ const Token = React.memo<TokenProps>(({token}) => {
 
     if (isInStar || isInStarting) playSound('safe_spot')
 
-    const isAllowedToKill = !(isInStar || isInStarting)
+    const isAllowedToKill = !(isInStar || isInStarting || tokensOnThisPosition.length > 1)
 
     // If there is any token on this position then kill that token
     if (isAllowedToKill) {

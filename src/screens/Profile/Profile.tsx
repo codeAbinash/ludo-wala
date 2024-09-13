@@ -58,6 +58,7 @@ export default function Profile({navigation}: NavProp) {
           <Option Icon={<StarSolidIcon {...ic} />} text='Rate us' onPress={() => open(rateLink)} />
           <Option Icon={<BubbleChatSolidIcon {...ic} />} text='24/7 Support' onPress={() => open(contactLink)} />
           <Option Icon={<SentSolidIcon {...ic} />} text='Share with others' onPress={() => refer(user)} />
+          <Option Icon={<SentSolidIcon {...ic} />} text='Game' onPress={() => navigation.navigate('Game')} />
           <Option
             Icon={<Door01SolidIcon {...ic} />}
             text='Logout'

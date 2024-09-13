@@ -3,43 +3,154 @@ import Images from '@assets/images/images'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
 import {GRADS} from '@utils/colors'
-import React, {useEffect} from 'react'
-import {Image, View} from 'react-native'
+import React, {useEffect, useMemo, useState} from 'react'
+import {Alert, Image, View} from 'react-native'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
 import {HorizontalBoxes, VerticalBoxes} from './components/Path'
 import Player from './components/Player'
-import {Plot1Data, Plot2Data, Plot3Data, Plot4Data} from './plotData'
-import gameStore from './zustand/gameStore'
+import {Plot1Data, Plot2Data, Plot3Data, Plot4Data, startingPoints, turningPoints, victoryStart} from './plotData'
+import gameStore, {type Num} from './zustand/gameStore'
 import {playSound} from '@/helpers/SoundUtility'
+import {io, type Socket} from 'socket.io-client'
+import {secureLs} from '@utils/storage'
+import {socketStore} from '@/zustand/socketStore'
+import {delay, getNextTurn} from '@utils/utils'
+import {webSocketLink} from '@utils/constants'
+import {isMovePossible} from './utils'
+import {Radial} from '@components/Gradient'
+import {H} from '@utils/dimensions'
+import LottieView from 'lottie-react-native'
+import Animations from '@assets/animations/animations'
+import {useMutation} from '@tanstack/react-query'
+import {join_tournament_room, joinTournament_f, refetch_tournament_room, type InitialState} from '@query/api'
+import type {PlayerState} from './zustand/initialState'
+
+export type Message = {
+  diceRolled?: DiceRolled
+  tokenMoved?: TokenMoved
+}
+
+export type DiceRolled = {
+  diceValue: number
+  playerId: number
+}
+export type TokenMoved = {
+  playerId: number
+  position: number
+  tokenId: string
+  travelCount: number
+  nextTurn: Num
+}
+
+const setDiceRolling = gameStore.getState().setIsDiceRolling
+const setDiceTouchDisabled = gameStore.getState().setIsTouchDisabled
+const setDiceNo = gameStore.getState().setDiceNumber
+const currentPositions = gameStore.getState().currentPositions
+const setChancePlayer = gameStore.getState().setChancePlayer
+const self = gameStore.getState().self
+const setTokenSelection = gameStore.getState().enableTokenSelection
+const setCurrentPositions = gameStore.getState().updateCurrentPositions
+
+function getInitialPositions(data: InitialState[]): PlayerState[] {
+  const positions: PlayerState[] = []
+
+  for (const token of data) {
+    const newToken: PlayerState = {
+      id: token.tokenId,
+      pos: token.position,
+      travelCount: token.travelCount,
+      player: token.playerId as Num,
+    }
+    positions.push(newToken)
+  }
+
+  return positions
+}
 
 export default function Game() {
-  const p1 = gameStore((state) => state.player0)
-  const p2 = gameStore((state) => state.player1)
-  const p3 = gameStore((state) => state.player2)
-  const p4 = gameStore((state) => state.player3)
-  const isDiceTouch = gameStore((state) => state.isTouchDisabled)
-  const winner = gameStore((state) => state.winner)
-  const diceNo = gameStore((state) => state.diceNumber)
-  const chance = gameStore((state) => state.chancePlayer)
-  const playerPiece = chance === 1 ? p1 : chance === 2 ? p2 : chance === 3 ? p3 : p4
+  const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
+  const setSelf = gameStore((state) => state.setSelf)
+  const setSocket = socketStore((state) => state.setSocket)
+  const [isConnected, setIsConnected] = useState(false)
 
+  const {isPending, isError, mutate} = useMutation({
+    mutationKey: ['joinTournamentRoom'],
+    mutationFn: join_tournament_room,
+    onSuccess: (data) => {
+      if (!data.status) return Alert.alert('Error', data.message)
+      setSelf(data.playerId as Num) // Set the player id
+      setChancePlayer(data.currentTurn) // Set the current turn
+      data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
+      console.log(JSON.stringify(data, null, 2))
+    },
+  })
+  useEffect(() => {
+    mutate()
+    // const s = io('ws://192.168.21.12:3000', {
+    const s = io(webSocketLink, {
+      reconnectionDelayMax: 10000,
+      transports: ['websocket'],
+      auth: {token: token, roomType: 'tournament'},
+    })
+
+    s.on('connect', () => {
+      setSocket(s)
+      setIsConnected(true)
+    })
+    s.on('fail', console.log)
+    s.on('message', async (message: Message) => {
+      if (message.diceRolled) handelDiceRoll(message.diceRolled)
+      if (message.tokenMoved) handelTokenMove(message.tokenMoved)
+      console.log(message)
+    })
+    s.on('error', (e) => {
+      Alert.alert('Error', e)
+      console.log(e)
+    })
+    s.on('connect_error', (e) => {
+      Alert.alert('Error', e.toString())
+      console.log(JSON.stringify(e, null, 2))
+    })
+    s.on('disconnect', () => {
+      console.log('Disconnected')
+      setIsConnected(false)
+    })
+
+    setSocket(s)
+
+    return () => {
+      s.close()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
-    <Wrap Col={['#215962', '#0b1e22']}>
-      <PaddingTop />
-      <View className='flex-1 items-center justify-between'>
-        <FirstPrice />
-        <View>
-          <TopPart />
-          <Board turn={chance} />
-          <BottomPart />
-        </View>
-        <View className='pb-3'>
-          {/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}
-        </View>
+    <View className='flex-1'>
+      <View className={`${isConnected && !isPending ? 'flex-0' : 'flex-1'}`}>
+        <Radial className='flex-1 justify-center'>
+          <LottieView source={Animations.connecting} autoPlay loop style={{height: H / 4, width: '100%'}} />
+          <SemiBold className='text-center text-xl text-white'>Connecting...</SemiBold>
+          <Medium className='mt-3 text-center text-white/70'>Please wait while we connect you to the server</Medium>
+        </Radial>
       </View>
-      <PaddingBottom />
-    </Wrap>
+      <View className={`${isConnected && !isPending ? 'flex-1' : 'flex-0'}`}>
+        <Wrap Col={['#215962', '#0b1e22']}>
+          <PaddingTop />
+          <View className='flex-1 items-center justify-between'>
+            <FirstPrice />
+            <View>
+              <TopPart />
+              <Board />
+              <BottomPart />
+            </View>
+            <View className='pb-3'>
+              {/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}
+            </View>
+          </View>
+          <PaddingBottom />
+        </Wrap>
+      </View>
+    </View>
   )
 }
 
@@ -91,18 +202,119 @@ function BottomPart() {
   )
 }
 
-function Board({turn}: {turn: number}) {
+function Board() {
+  // const handlePress = () => {
+  //   if (socket) {
+  //     socket.emit('sendMessage', {
+  //       playerId,
+  //       type: 'diceRoll',
+  //     })
+  //   }
+  // }
   return (
-    <View style={{height: w, width: w}} className='mx-auto flex-row flex-wrap justify-between'>
-      <HomeBox style={{borderTopLeftRadius: 40}} no={0} />
-      <VerticalBoxes cells={Plot2Data} color={GRADS[1]![1]!} />
-      <HomeBox style={{borderTopRightRadius: 40}} no={1} />
-      <HorizontalBoxes cells={Plot1Data} color={GRADS[0]![1]!} />
-      <MidBox />
-      <HorizontalBoxes cells={Plot3Data} color={GRADS[2]![1]!} />
-      <HomeBox style={{borderBottomLeftRadius: 40}} no={3} />
-      <VerticalBoxes cells={Plot4Data} color={GRADS[3]![1]!} />
-      <HomeBox style={{borderBottomRightRadius: 40}} no={2} />
-    </View>
+    <>
+      <View style={{height: w, width: w}} className='mx-auto flex-row flex-wrap justify-between'>
+        <HomeBox style={{borderTopLeftRadius: 40}} no={0} />
+        <VerticalBoxes cells={Plot2Data} color={GRADS[1]![1]!} />
+        <HomeBox style={{borderTopRightRadius: 40}} no={1} />
+        <HorizontalBoxes cells={Plot1Data} color={GRADS[0]![1]!} />
+        <MidBox />
+        <HorizontalBoxes cells={Plot3Data} color={GRADS[2]![1]!} />
+        <HomeBox style={{borderBottomLeftRadius: 40}} no={3} />
+        <VerticalBoxes cells={Plot4Data} color={GRADS[3]![1]!} />
+        <HomeBox style={{borderBottomRightRadius: 40}} no={2} />
+      </View>
+    </>
   )
+}
+
+async function handelTokenMove(data: TokenMoved) {
+  setTokenSelection(-1) // Disable token selection
+
+  if (data.playerId === self) return
+
+  const player = data.playerId as Num
+  const tokenId = data.tokenId
+  const newTravelCount = data.travelCount
+  const token = currentPositions.find((t) => t.id === tokenId)
+  if (!token) return
+  const travelCount = token.travelCount
+
+  if (newTravelCount === 0) {
+    playSound('collide')
+    for (let i = 0; i < travelCount; i++) {
+      token.pos -= 1
+      token.travelCount -= 1
+      if (token.pos === 0) token.pos = 52
+      setCurrentPositions([...currentPositions])
+      await delay(0)
+    }
+  }
+
+  const travelDiff = newTravelCount - travelCount
+
+  for (let i = 0; i < travelDiff; i++) {
+    playSound('token_move')
+    token.pos += 1
+    token.travelCount += 1
+    if (token.pos === turningPoints[player]) token.pos = victoryStart[player]!
+    if (token.pos === 53) token.pos = 1
+    setCurrentPositions([...currentPositions])
+    await delay(__DEV__ ? 0 : 150)
+  }
+
+  // Check for victory
+  if (token.travelCount === 56) {
+    playSound('home_win')
+    // Remove the token from the board
+    currentPositions.splice(
+      currentPositions.findIndex((t) => t.id === token.id),
+      1,
+    )
+    setCurrentPositions([...currentPositions])
+    // setChancePlayer(data.nextTurn)
+  }
+
+  // Check if the chance is of the player who moved the token
+  // if (travelDiff === 6) return setChancePlayer(player)
+  // else setChancePlayer(data.nextTurn)
+  setChancePlayer(data.nextTurn)
+}
+
+async function handelDiceRoll(data: DiceRolled) {
+  const newDiceNo = data.diceValue
+  setDiceRolling(true)
+  setDiceTouchDisabled(true)
+  playSound('dice_roll')
+  // await delay(0)
+  setDiceRolling(false)
+  setDiceNo(newDiceNo)
+
+  // const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1
+  // // const isAnyTokenLocked = currentPositions.findIndex((t) => t.pos === 0)
+
+  // // If there is not any token alive then change the turn
+  // if (!isAnyTokenAlive) return setChancePlayer(getNextTurn(turn))
+
+  // const canMove = isMovePossible(currentPositions, newDiceNo, player)
+
+  // // If it can move then move the token
+  // if (canMove) {
+  //   // Logic to move the dice
+  //   /**
+  //    * -------------------
+  //    * -------------------
+  //    * -------------------
+  //    * -------------------
+  //    */
+  //   // ToastAndroid.show('Token can move', ToastAndroid.SHORT)
+  //   enableTokenSelection(player)
+  //   // Enable Token selection and return
+  //   return
+  // } else {
+  //   // If it is 6 then try again
+  //   if (newDiceNo === 6) return setChancePlayer(player)
+  //   // If it can't move then change the turn
+  //   setChancePlayer(getNextTurn(turn))
+  // }
 }

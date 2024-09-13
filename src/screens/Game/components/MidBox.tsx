@@ -25,7 +25,7 @@ export function MidBox() {
             style={{
               marginTop: -1.5,
             }}
-            color={Yellow[1]}
+            color={Blue[1]}
           />
         </View>
         <View className='flex-row justify-between'>
@@ -33,7 +33,7 @@ export function MidBox() {
             <Arrow
               height={17}
               width={17}
-              color={Green[1]}
+              color={Red[1]}
               style={{
                 transform: [{rotate: '-90deg'}],
                 marginLeft: -1.5,
@@ -45,7 +45,7 @@ export function MidBox() {
             <Arrow
               height={17}
               width={17}
-              color={Blue[1]}
+              color={Yellow[1]}
               style={{
                 transform: [{rotate: '90deg'}],
                 marginRight: -1.5,
@@ -57,7 +57,7 @@ export function MidBox() {
           <Arrow
             height={17}
             width={17}
-            color={Red[1]}
+            color={Green[1]}
             style={{
               transform: [{rotate: '180deg'}],
               marginBottom: -1.5,

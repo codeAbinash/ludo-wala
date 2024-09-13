@@ -25,6 +25,8 @@ type GameStore = {
   currentPositions: PlayerState[]
   fireWorks: boolean
   points: number[]
+  self: Num
+  setSelf: (self: Num) => void
   setPlayer0: (player1: PlayerState[]) => void
   setPlayer1: (player2: PlayerState[]) => void
   setPlayer2: (player3: PlayerState[]) => void
@@ -57,8 +59,11 @@ const gameStore = create<GameStore>((set) => ({
   winner: null,
   diceNumber: 1,
   currentPositions: [...player0InitialState, ...player2InitialState, ...player3InitialState, ...player4InitialState],
+  // currentPositions: [],
   fireWorks: false,
   points: [0, 0, 0, 0],
+  self: -1,
+  setSelf: (self) => set({self}),
   setPlayer0: (player0) => set({player0}),
   setPlayer1: (player1) => set({player1}),
   setPlayer2: (player2) => set({player2}),
