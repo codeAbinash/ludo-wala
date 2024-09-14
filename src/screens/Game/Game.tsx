@@ -47,7 +47,6 @@ const setDiceTouchDisabled = gameStore.getState().setIsTouchDisabled
 const setDiceNo = gameStore.getState().setDiceNumber
 const setChancePlayer = gameStore.getState().setChancePlayer
 const setTokenSelection = gameStore.getState().enableTokenSelection
-const setCurrentPositions = gameStore.getState().updateCurrentPositions
 
 function getInitialPositions(data: InitialState[]): PlayerState[] {
   const positions: PlayerState[] = []
@@ -70,6 +69,7 @@ export default function Game() {
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
   const setPlayersData = gameStore((state) => state.setPlayersData)
+  const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
@@ -230,20 +230,23 @@ async function handelTokenMove(data: TokenMoved) {
   setTokenSelection(-1) // Disable token selection
   setDiceTouchDisabled(true)
 
-  if (data.playerId === gameStore.getState().myId) {
+  if (data.playerId === gameStore.getState().myId && data.travelCount !== 0) {
     setChancePlayer(data.nextTurn)
     return
   }
 
   const currentPositions = gameStore.getState().currentPositions
+  const setCurrentPositions = gameStore.getState().updateCurrentPositions
   const player = data.playerId as Num
   const tokenId = data.tokenId
   const newTravelCount = data.travelCount
   const token = currentPositions.find((t) => t.id === tokenId)
   if (!token) return
   const travelCount = token.travelCount
+  const travelDiff = newTravelCount - travelCount
 
   if (newTravelCount === 0) {
+    console.log('Token killed')
     playSound('collide')
     for (let i = 0; i < travelCount; i++) {
       token.pos -= 1
@@ -253,8 +256,6 @@ async function handelTokenMove(data: TokenMoved) {
       await delay(0)
     }
   }
-
-  const travelDiff = newTravelCount - travelCount
 
   for (let i = 0; i < travelDiff; i++) {
     playSound('token_move')
