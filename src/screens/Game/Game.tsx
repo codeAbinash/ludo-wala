@@ -45,11 +45,9 @@ export type TokenMoved = {
 const setDiceRolling = gameStore.getState().setIsDiceRolling
 const setDiceTouchDisabled = gameStore.getState().setIsTouchDisabled
 const setDiceNo = gameStore.getState().setDiceNumber
-const currentPositions = gameStore.getState().currentPositions
 const setChancePlayer = gameStore.getState().setChancePlayer
 const setTokenSelection = gameStore.getState().enableTokenSelection
 const setCurrentPositions = gameStore.getState().updateCurrentPositions
-const setMyId = gameStore.getState().setMyId
 
 function getInitialPositions(data: InitialState[]): PlayerState[] {
   const positions: PlayerState[] = []
@@ -235,6 +233,7 @@ async function handelTokenMove(data: TokenMoved) {
     return
   }
 
+  const currentPositions = gameStore.getState().currentPositions
   const player = data.playerId as Num
   const tokenId = data.tokenId
   const newTravelCount = data.travelCount
