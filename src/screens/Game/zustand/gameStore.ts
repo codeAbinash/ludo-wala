@@ -6,6 +6,7 @@ import {
   player4InitialState,
   type PlayerState,
 } from './initialState'
+import type {PlayerTournamentRoom} from '@query/api'
 
 export type Num = 0 | 1 | 2 | 3 | -1
 
@@ -26,6 +27,8 @@ type GameStore = {
   fireWorks: boolean
   points: number[]
   myId: Num
+  playersData: PlayerTournamentRoom[]
+  setPlayersData: (playersData: PlayerTournamentRoom[]) => void
   setMyId: (id: Num) => void
   setPlayer0: (player1: PlayerState[]) => void
   setPlayer1: (player2: PlayerState[]) => void
@@ -63,6 +66,8 @@ const gameStore = create<GameStore>((set) => ({
   fireWorks: false,
   points: [0, 0, 0, 0],
   myId: -1,
+  playersData: [],
+  setPlayersData: (playersData) => set({playersData}),
   setMyId: (id) => set({myId: id}),
   setPlayer0: (player0) => set({player0}),
   setPlayer1: (player1) => set({player1}),

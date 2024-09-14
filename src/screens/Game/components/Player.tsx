@@ -38,6 +38,8 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const setDiceRolling = gameStore((state) => state.setIsDiceRolling)
   const isDiceRolling = gameStore((state) => state.isDiceRolling)
   const myId = gameStore((state) => state.myId)
+  const players = gameStore((state) => state.playersData)
+  const currentPlayer = players[player]
 
   const rollDiceMutation = useMutation({
     mutationKey: ['rollDice'],
@@ -66,8 +68,8 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
 
   return (
     <View
-      className={`flex-row ${reversed ? 'flex-row-reverse' : 'flex'} ${
-        banned ? 'opacity-40' : ''
+      className={`flex-row ${reversed ? 'flex-row-reverse' : 'flex'} ${banned ? 'opacity-40' : ''} ${
+        !currentPlayer ? 'opacity-0' : ''
       } w-1/2 items-center p-5`}
       style={{gap: 10}}>
       <View style={{gap: 5}} className={`w-10/12 ${bottom ? 'flex-col-reverse' : ''}`}>
@@ -78,7 +80,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
             <CheckmarkCircle02SolidIcon width={20} height={20} color={Colors.greenDefault} />
           )}
           <View>
-            <Medium className='rounded-full bg-white px-3 pb-1 pt-0.5 text-blue-700'>{name}</Medium>
+            <Medium className='rounded-full bg-white px-3 pb-1 pt-0.5 text-blue-700'>{currentPlayer?.fname}</Medium>
           </View>
         </View>
         <View className={'w-full'}>

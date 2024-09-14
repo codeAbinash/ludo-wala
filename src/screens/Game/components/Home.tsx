@@ -12,12 +12,14 @@ function HomeBox({style, no, ...props}: HomeProps) {
   const opacity = useSharedValue(1)
   const currentPlayerChance = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
-
+  const playersData = gameStore((state) => state.playersData)
+  const currentPlayer = playersData[no]
   const travelCount = useMemo(() => {
+    if (!currentPlayer) return 0
     const playerTokens = currentPositions.filter((p) => p.player === no)
     const totalWinned = 4 - playerTokens.length
     return playerTokens.reduce((acc, token) => acc + token.travelCount, 0) + totalWinned * (100 + 57)
-  }, [currentPositions, no])
+  }, [currentPlayer, currentPositions, no])
 
   useEffect(() => {
     opacity.value = currentPlayerChance === no ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1

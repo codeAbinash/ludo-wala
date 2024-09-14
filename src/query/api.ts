@@ -252,6 +252,7 @@ export type JoinTournamentRoom = {
   roomId: string
   status: boolean
   currentTurn: Num
+  players: PlayerTournamentRoom[]
 }
 
 export type InitialState = {
@@ -260,6 +261,12 @@ export type InitialState = {
   tokenId: string
   travelCount: number
   userId: number
+}
+export type PlayerTournamentRoom = {
+  userId: string | number
+  playerId: Num
+  fname: string
+  lname: string
 }
 
 export function join_tournament_room() {

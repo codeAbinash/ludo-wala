@@ -69,6 +69,7 @@ export default function Game() {
   const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
+  const setPlayersData = gameStore((state) => state.setPlayersData)
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
@@ -79,6 +80,7 @@ export default function Game() {
       setChancePlayer(data.currentTurn) // Set the current turn
       data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
       console.log(JSON.stringify(data, null, 2))
+      setPlayersData(data.players)
     },
   })
   useEffect(() => {
