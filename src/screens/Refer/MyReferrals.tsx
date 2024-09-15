@@ -18,15 +18,15 @@ export default function MyReferrals({navigation}: NavProp) {
     queryKey: ['MyReferrals'],
     queryFn: my_referral_f,
     getNextPageParam: (lastPage, _pages) => {
-      if (!lastPage.data?.next_page_url) return undefined
-      return lastPage.data.current_page + 1
+      if (lastPage.data.next_page_url) return lastPage.data.current_page + 1
+      return undefined
     },
     initialPageParam: 1,
   })
 
   const sortedData = useMemo(() => {
     if (!data) return []
-    return data.pages.flatMap((page) => page.data.data)
+    return data.pages.flatMap((page) => page.data.data).sort((a, b) => +b.total_winning - +a.total_winning)
   }, [data])
 
   useEffect(() => {
@@ -45,21 +45,25 @@ export default function MyReferrals({navigation}: NavProp) {
     <View className='flex-1'>
       <Radial>
         <BackHeader title='My Referrals' navigation={navigation} />
-        <View className='px-5'>
-          <Row
-            left={<SemiBold className='text-base text-white/50'>Name</SemiBold>}
-            mid={
-              <View className='flex-row items-center justify-center'>
-                <SemiBold className='text-base text-white/50'>Earning</SemiBold>
-                <TouchableOpacity
-                  className='p-1'
-                  onPress={() => Alert.alert('Deposit', 'This is the amount of money that the referred users earned.')}>
-                  <InformationCircleIcon height={15} width={15} className='text-white/70' />
-                </TouchableOpacity>
-              </View>
-            }
-            right={<SemiBold className='pr-2 text-right text-white/50'>Rank</SemiBold>}
-          />
+        <View className=''>
+          <View className='px-5'>
+            <Row
+              left={<SemiBold className='text-base text-white/50'>Name</SemiBold>}
+              mid={
+                <View className='flex-row items-center justify-center'>
+                  <SemiBold className='text-base text-white/50'>Earning</SemiBold>
+                  <TouchableOpacity
+                    className='p-1'
+                    onPress={() =>
+                      Alert.alert('Deposit', 'This is the amount of money that the referred users earned.')
+                    }>
+                    <InformationCircleIcon height={15} width={15} className='text-white/70' />
+                  </TouchableOpacity>
+                </View>
+              }
+              right={<SemiBold className='pr-2 text-right text-white/50'>Rank</SemiBold>}
+            />
+          </View>
 
           {isLoading ? (
             <View className='h-screen items-center justify-center pb-20 opacity-70'>
@@ -69,18 +73,20 @@ export default function MyReferrals({navigation}: NavProp) {
             <FlatList
               data={sortedData}
               renderItem={({item, index}) => (
-                <RowCard
-                  pp={item.profilePic}
-                  rank={index + 1}
-                  deposit={nFormatter(+item.total_winning)}
-                  name={item.fname}
-                />
+                <View className='px-5'>
+                  <RowCard
+                    pp={item.profilePic}
+                    rank={index + 1}
+                    deposit={nFormatter(+item.total_winning)}
+                    name={item.fname}
+                  />
+                </View>
               )}
               onEndReached={loadNext}
-              keyExtractor={(item) => item.fname}
+              keyExtractor={(item, index) => item.fname + index}
             />
           )}
-          {sortedData.length === 0 && (
+          {sortedData?.length === 0 && (
             <View className='h-96 items-center justify-center opacity-70'>
               <Medium className='text-lg text-white'>No Referrals</Medium>
             </View>

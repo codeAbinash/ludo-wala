@@ -233,8 +233,8 @@ export type Link = {
   active: boolean
 }
 
-export async function my_referral_f() {
-  return await postApi<MyReferrals>('refer/myReferrals', null)
+export async function my_referral_f({pageParam}: {pageParam: number}) {
+  return await postApi<MyReferrals>(`refer/myReferrals?page=${pageParam}`, null)
 }
 
 export async function roll_dice_tournament({playerId}: {playerId: number}) {

@@ -39,7 +39,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const isDiceRolling = gameStore((state) => state.isDiceRolling)
   const myId = gameStore((state) => state.myId)
   const players = gameStore((state) => state.playersData)
-  const currentPlayer = players[player]
+  const currentPlayer = players[player || 0]
 
   const rollDiceMutation = useMutation({
     mutationKey: ['rollDice'],
@@ -124,7 +124,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
                 </View>
               )} */}
               <Image
-                source={{uri: `https://avatar.iran.liara.run/username?username=${name}`}}
+                source={{uri: `https://avatar.iran.liara.run/username?username=${currentPlayer?.fname}`}}
                 style={{width: 48, height: 48}}
                 className='rounded-full'
               />

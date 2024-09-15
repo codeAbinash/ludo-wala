@@ -35,7 +35,7 @@ export function RowCard({pp, rank, deposit, name}: {pp: string; rank: number; de
           </View>
         }
         mid={<SemiBold className='text-center text-base text-white/50'>₹ {deposit}</SemiBold>}
-        right={<SemiBold className='pr-2 text-right text-base text-white/50'># {rank}</SemiBold>}
+        right={<SemiBold className='pr-2 text-right text-base text-white/50'># {rank + 1}</SemiBold>}
       />
     </View>
   )
