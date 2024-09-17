@@ -1,3 +1,4 @@
+import type {PlayerTournamentRoom} from '@query/api'
 import {create} from 'zustand'
 import {
   player0InitialState,
@@ -6,7 +7,6 @@ import {
   player4InitialState,
   type PlayerState,
 } from './initialState'
-import type {PlayerTournamentRoom} from '@query/api'
 
 export type Num = 0 | 1 | 2 | 3 | -1
 

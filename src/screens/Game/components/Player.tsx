@@ -39,7 +39,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const isDiceRolling = gameStore((state) => state.isDiceRolling)
   const myId = gameStore((state) => state.myId)
   const players = gameStore((state) => state.playersData)
-  const currentPlayer = players[player || 0]
+  const currentPlayer = players ? players[player] : null
 
   const rollDiceMutation = useMutation({
     mutationKey: ['rollDice'],

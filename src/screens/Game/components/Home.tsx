@@ -13,7 +13,7 @@ function HomeBox({style, no, ...props}: HomeProps) {
   const currentPlayerChance = gameStore((state) => state.chancePlayer)
   const currentPositions = gameStore((state) => state.currentPositions)
   const playersData = gameStore((state) => state.playersData)
-  const currentPlayer = playersData[no || 0]
+  const currentPlayer = playersData ? playersData[no] : null
   const steps = useMemo(() => {
     if (!currentPlayer) return 0
     const playerTokens = currentPositions.filter((p) => p.player === no)
