@@ -15,13 +15,22 @@ import {secureLs} from '@utils/storage'
 import {delay} from '@utils/utils'
 import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo, useState} from 'react'
-import {Alert, Image, View} from 'react-native'
+import {Alert, Image, Vibration, View} from 'react-native'
 import {io} from 'socket.io-client'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
 import {HorizontalBoxes, VerticalBoxes} from './components/Path'
 import Player from './components/Player'
-import {Plot1Data, Plot2Data, Plot3Data, Plot4Data, turningPoints, victoryStart} from './plotData'
+import {
+  Plot1Data,
+  Plot2Data,
+  Plot3Data,
+  Plot4Data,
+  StarSpots,
+  startingPoints,
+  turningPoints,
+  victoryStart,
+} from './plotData'
 import gameStore, {type Num} from './zustand/gameStore'
 import type {PlayerState} from './zustand/initialState'
 
@@ -232,6 +241,9 @@ async function handelTokenMove(data: TokenMoved) {
 
   if (data.playerId === gameStore.getState().myId && data.travelCount !== 0) {
     setChancePlayer(data.nextTurn)
+    if (data.nextTurn === gameStore.getState().myId) {
+      Vibration.vibrate(100)
+    }
     return
   }
 
@@ -267,14 +279,20 @@ async function handelTokenMove(data: TokenMoved) {
     await delay(__DEV__ ? 0 : 150)
   }
 
+  const isInStar = startingPoints.includes(token.pos) || StarSpots.includes(token.pos)
+
+  if (isInStar) {
+    playSound('safe_spot')
+  }
+
   // Check for victory
   if (token.travelCount === 56) {
     playSound('home_win')
     // Remove the token from the board
-    currentPositions.splice(
-      currentPositions.findIndex((t) => t.id === token.id),
-      1,
-    )
+    // currentPositions.splice(
+    //   currentPositions.findIndex((t) => t.id === token.id),
+    //   1,
+    // )
     setCurrentPositions([...currentPositions])
     // setChancePlayer(data.nextTurn)
   }
@@ -283,6 +301,9 @@ async function handelTokenMove(data: TokenMoved) {
   // if (travelDiff === 6) return setChancePlayer(player)
   // else setChancePlayer(data.nextTurn)
   setChancePlayer(data.nextTurn)
+  if (data.nextTurn === gameStore.getState().myId) {
+    Vibration.vibrate(100)
+  }
 }
 
 async function handelDiceRoll(data: DiceRolled) {
