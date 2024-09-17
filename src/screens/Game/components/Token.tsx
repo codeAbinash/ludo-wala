@@ -115,35 +115,35 @@ const Token = React.memo<TokenProps>(({token}) => {
 
     // Check if the token is on another token and not in star or starting point
     // Get all tokens that are on the same position
-    const tokensOnThisPosition = currentPositions.filter(
-      (t) => t.pos === token.pos && t.id !== token.id && token.player !== t.player,
-    )
+    // const tokensOnThisPosition = currentPositions.filter(
+    //   (t) => t.pos === token.pos && t.id !== token.id && token.player !== t.player,
+    // )
 
-    const isInStar = StarSpots.includes(token.pos)
-    const isInStarting = startingPoints.includes(token.pos)
+    // const isInStar = StarSpots.includes(token.pos)
+    // const isInStarting = startingPoints.includes(token.pos)
 
-    if (isInStar || isInStarting) playSound('safe_spot')
+    // if (isInStar || isInStarting) playSound('safe_spot')
 
-    const isAllowedToKill = !(isInStar || isInStarting || tokensOnThisPosition.length > 1)
+    // const isAllowedToKill = !(isInStar || isInStarting || tokensOnThisPosition.length > 1)
 
-    // If there is any token on this position then kill that token
-    if (isAllowedToKill) {
-      for (const t of tokensOnThisPosition) {
-        const travelCount = t.travelCount
-        console.log(travelCount)
-        playSound('collide')
-        for (let i = 0; i < travelCount; i++) {
-          t.pos -= 1
-          t.travelCount -= 1
-          if (t.pos === 0) t.pos = 52
-          setCurrentPositions([...currentPositions])
-          await delay(0)
-        }
-        console.log('Token killed')
-      }
-      // Set the chance to the player who killed the token
-      // setChancePlayer(player)
-    }
+    // // If there is any token on this position then kill that token
+    // if (isAllowedToKill) {
+    //   for (const t of tokensOnThisPosition) {
+    //     const travelCount = t.travelCount
+    //     console.log(travelCount)
+    //     playSound('collide')
+    //     for (let i = 0; i < travelCount; i++) {
+    //       t.pos -= 1
+    //       t.travelCount -= 1
+    //       if (t.pos === 0) t.pos = 52
+    //       setCurrentPositions([...currentPositions])
+    //       await delay(0)
+    //     }
+    //     console.log('Token killed')
+    //   }
+    //   // Set the chance to the player who killed the token
+    //   // setChancePlayer(player)
+    // }
 
     // Update the points
 
