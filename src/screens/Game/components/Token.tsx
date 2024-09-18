@@ -1,18 +1,24 @@
 import {playSound} from '@/helpers/SoundUtility'
 import Images from '@assets/images/images'
+import {move_token_tournament} from '@query/api'
+import {useMutation} from '@tanstack/react-query'
 import {W} from '@utils/dimensions'
-import {delay, getNextTurn} from '@utils/utils'
-import React, {useEffect, useMemo, useRef} from 'react'
+import React, {useCallback} from 'react'
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native'
-import Anim, {useAnimatedStyle, Easing, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
+import {
+  default as Anim,
+  default as Animated,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated'
 import {Circle, Svg} from 'react-native-svg'
-import {StarSpots, startingPoints, turningPoints, victoryStart} from '../plotData'
-import type {Num} from '../zustand/gameStore'
+import {turningPoints, victoryStart} from '../plotData'
 import gameStore from '../zustand/gameStore'
 import type {PlayerState} from '../zustand/initialState'
-import Animated from 'react-native-reanimated'
-import {useMutation} from '@tanstack/react-query'
-import {move_token_tournament} from '@query/api'
+import positionsStore from '../zustand/positionsStore'
 
 type TokenProps = {
   token: PlayerState
@@ -20,19 +26,21 @@ type TokenProps = {
 
 const TokenIcons = [Images.G0, Images.G1, Images.G2, Images.G3]
 
-function canTheTokenMove(token: PlayerState, diceNo: Num) {
-  return token.travelCount + diceNo <= 57
-}
+// function canTheTokenMove(token: PlayerState, diceNo: Num) {
+//   return token.travelCount + diceNo <= 57
+// }
 
 const Token = React.memo<TokenProps>(({token}) => {
   const {id, player} = token
   // const rotation = useRef(new Animated.Value(0)).current
+  const {currentPositions, setCurrentPositions} = positionsStore((state) => ({
+    currentPositions: state.currentPositions,
+    setCurrentPositions: state.updateCurrentPositions,
+  }))
   const chancePlayer = gameStore((state) => state.chancePlayer)
-  const currentPositions = gameStore((state) => state.currentPositions)
   const diceNo = gameStore((state) => state.diceNumber)
   const tokenSelection = gameStore((state) => state.tokenSelection)
   const setTokenSelection = gameStore((state) => state.enableTokenSelection)
-  const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   // const setChancePlayer = gameStore((state) => state.setChancePlayer)
   // const points = gameStore((state) => state.points)
   const isForwardable = token.travelCount + diceNo < 57 && player === chancePlayer && tokenSelection === player
@@ -83,7 +91,7 @@ const Token = React.memo<TokenProps>(({token}) => {
   //   [rotation],
   // )
 
-  async function handelPress() {
+  const handelPress = useCallback(async () => {
     setTokenSelection(-1) // Disable token selection
 
     if (!isForwardable) return
@@ -98,18 +106,19 @@ const Token = React.memo<TokenProps>(({token}) => {
       if (token.pos === turningPoint) token.pos = victoryStart[player]!
       if (token.pos === 53) token.pos = 1
       setCurrentPositions([...currentPositions])
-      await delay(__DEV__ ? 0 : 150)
+      // setCurrentPositions(currentPositions.map((t) => (t.id === token.id ? token : t)))
+      // await delay(__DEV__ ? 0 : 50)
     }
 
     // Check for victory
     if (token.travelCount === 56) {
       playSound('home_win')
       // Remove the token from the board
-      currentPositions.splice(
-        currentPositions.findIndex((t) => t.id === token.id),
-        1,
-      )
-      setCurrentPositions([...currentPositions])
+      // currentPositions.splice(
+      //   currentPositions.findIndex((t) => t.id === token.id),
+      //   1,
+      // )
+      // setCurrentPositions([...currentPositions])
       // setChancePlayer(player)
     }
 
@@ -153,7 +162,7 @@ const Token = React.memo<TokenProps>(({token}) => {
     // } else {
     //   setChancePlayer(chancePlayer)
     // }
-  }
+  }, [currentPositions, diceNo, isForwardable, mutate, player, setCurrentPositions, setTokenSelection, token])
 
   const TokenIcon = TokenIcons[player]
 
@@ -181,16 +190,16 @@ const Token = React.memo<TokenProps>(({token}) => {
           </View>
         )}
         {/* <TokenIcon
-        // width={W * 0.07}
-        // height={W * 0.07}
-        style={{
-          position: 'absolute',
-          zIndex: 100,
-          transform: [{translateY: -W * 0.02}],
-          height: W * 0.06,
-          width: W * 0.06,
-        }}
-      /> */}
+          // width={W * 0.07}
+          // height={W * 0.07}
+          style={{
+            position: 'absolute',
+            zIndex: 100,
+            transform: [{translateY: -W * 0.02}],
+            height: W * 0.06,
+            width: W * 0.06,
+          }}
+        /> */}
         <Image
           source={TokenIcon}
           style={[

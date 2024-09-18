@@ -1,13 +1,13 @@
 import Images from '@assets/images/images'
 import Arrow from '@icons/mid-box-arrow.svg'
-import {Blue, Green, Red, Yellow} from '@utils/colors'
-import {W} from '@utils/dimensions'
+import { Blue, Green, Red, Yellow } from '@utils/colors'
+import { W } from '@utils/dimensions'
 import React from 'react'
-import {Image, View} from 'react-native'
+import { Image, View } from 'react-native'
 
 export const w = W - 10
 
-export function MidBox() {
+export const MidBox = React.memo(() => {
   return (
     <View
       style={{
@@ -67,4 +67,4 @@ export function MidBox() {
       </View>
     </View>
   )
-}
+})

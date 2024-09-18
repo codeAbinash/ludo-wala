@@ -33,6 +33,7 @@ import {
 } from './plotData'
 import gameStore, {type Num} from './zustand/gameStore'
 import type {PlayerState} from './zustand/initialState'
+import positionsStore from './zustand/positionsStore'
 
 export type Message = {
   diceRolled?: DiceRolled
@@ -51,11 +52,12 @@ export type TokenMoved = {
   nextTurn: Num
 }
 
-const setDiceRolling = gameStore.getState().setIsDiceRolling
-const setDiceTouchDisabled = gameStore.getState().setIsTouchDisabled
-const setDiceNo = gameStore.getState().setDiceNumber
-const setChancePlayer = gameStore.getState().setChancePlayer
-const setTokenSelection = gameStore.getState().enableTokenSelection
+const gameState = gameStore.getState()
+const setDiceRolling = gameState.setIsDiceRolling
+const setDiceTouchDisabled = gameState.setIsTouchDisabled
+const setDiceNo = gameState.setDiceNumber
+const setChancePlayer = gameState.setChancePlayer
+const setTokenSelection = gameState.enableTokenSelection
 
 function getInitialPositions(data: InitialState[]): PlayerState[] {
   const positions: PlayerState[] = []
@@ -78,7 +80,7 @@ export default function Game() {
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
   const setPlayersData = gameStore((state) => state.setPlayersData)
-  const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
+  const setCurrentPositions = positionsStore((state) => state.updateCurrentPositions)
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
@@ -161,7 +163,7 @@ export default function Game() {
   )
 }
 
-function FirstPrice() {
+const FirstPrice = React.memo(() => {
   return (
     <View className='w-full flex-row justify-between px-3'>
       <View style={{flex: 0.5}}></View>
@@ -181,33 +183,29 @@ function FirstPrice() {
       </View>
     </View>
   )
-}
+})
 
-function TopPart() {
-  const p1 = gameStore((state) => state.player0)
-  const p2 = gameStore((state) => state.player1)
+const TopPart = React.memo(() => {
   return (
     <View className='w-full justify-between'>
       <View className='flex-row justify-between'>
-        <Player name='Abinash' life={2} player={0} data={p1} />
-        <Player name='Sudipto' life={3} reversed player={1} data={p2} />
+        <Player life={2} player={0} />
+        <Player life={3} reversed player={1} />
       </View>
     </View>
   )
-}
+})
 
-function BottomPart() {
-  const p3 = gameStore((state) => state.player2)
-  const p4 = gameStore((state) => state.player3)
+const BottomPart = React.memo(() => {
   return (
     <View className=''>
       <View className='flex-row justify-between'>
-        <Player life={2} name='Sujal' bottom player={3} data={p4} />
-        <Player name='Raju' life={2} reversed bottom player={2} data={p3} />
+        <Player life={2} bottom player={3} />
+        <Player life={2} reversed bottom player={2} />
       </View>
     </View>
   )
-}
+})
 
 function Board() {
   // const handlePress = () => {
@@ -236,23 +234,23 @@ function Board() {
 }
 
 async function handelTokenMove(data: TokenMoved) {
+  const myId = gameStore.getState().myId
+
   setTokenSelection(-1) // Disable token selection
   setDiceTouchDisabled(true)
 
-  if (data.playerId === gameStore.getState().myId && data.travelCount !== 0) {
+  if (data.playerId === myId && data.travelCount !== 0) {
     setChancePlayer(data.nextTurn)
-    if (data.nextTurn === gameStore.getState().myId) {
-      Vibration.vibrate(100)
-    }
+    if (data.nextTurn === myId) Vibration.vibrate(100)
     return
   }
 
-  const currentPositions = gameStore.getState().currentPositions
-  const setCurrentPositions = gameStore.getState().updateCurrentPositions
+  const currentPositions = positionsStore.getState().currentPositions
+  const setCurrentPositions = positionsStore.getState().updateCurrentPositions
   const player = data.playerId as Num
   const tokenId = data.tokenId
   const newTravelCount = data.travelCount
-  const token = currentPositions.find((t) => t.id === tokenId)
+  const token = currentPositions.find((t: PlayerState) => t.id === tokenId)
   if (!token) return
   const travelCount = token.travelCount
   const travelDiff = newTravelCount - travelCount
@@ -280,7 +278,6 @@ async function handelTokenMove(data: TokenMoved) {
   }
 
   const isInStar = startingPoints.includes(token.pos) || StarSpots.includes(token.pos)
-
   if (isInStar) {
     playSound('safe_spot')
   }
@@ -301,9 +298,7 @@ async function handelTokenMove(data: TokenMoved) {
   // if (travelDiff === 6) return setChancePlayer(player)
   // else setChancePlayer(data.nextTurn)
   setChancePlayer(data.nextTurn)
-  if (data.nextTurn === gameStore.getState().myId) {
-    Vibration.vibrate(100)
-  }
+  if (data.nextTurn === myId) Vibration.vibrate(100)
 }
 
 async function handelDiceRoll(data: DiceRolled) {

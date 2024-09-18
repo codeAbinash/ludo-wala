@@ -1,21 +1,18 @@
 import {ArrowIcon, StarIcon} from '@assets/icons/icons'
 import React, {useEffect, useMemo, useRef} from 'react'
-import {type StyleProp, type ViewProps, StyleSheet, TouchableOpacity, View} from 'react-native'
+import {type StyleProp, type ViewProps, View} from 'react-native'
 import {ArrowSpot, SafeSpots, StarSpots, startingPoints} from '../plotData'
 import gameStore from '../zustand/gameStore'
+import type {PlayerState} from '../zustand/initialState'
+import positionsStore from '../zustand/positionsStore'
 import {w} from './MidBox'
 import Token from './Token'
-import {Medium} from '@/fonts'
 
 type CellProps = {
   i: number
   cell: number
   color: string
 } & ViewProps
-
-const styles = StyleSheet.create({
-  starStyle: {},
-})
 
 const starProps = {
   width: w * 0.05,
@@ -26,31 +23,27 @@ const starProps = {
 }
 
 function Cell({cell, i, color, ...props}: CellProps) {
-  const id = i
-  const isSafe = useMemo(() => SafeSpots.includes(cell), [cell])
-  const isStar = useMemo(() => StarSpots.includes(cell), [cell])
-  const isStarting = useMemo(() => startingPoints.includes(cell), [cell])
-  const isArrow = useMemo(() => ArrowSpot.includes(cell), [cell])
+  const isSafe = SafeSpots.includes(cell)
+  const isStar = StarSpots.includes(cell)
+  const isStarting = startingPoints.includes(cell)
+  const isArrow = ArrowSpot.includes(cell)
+  const {chancePlayer, tokenSelection} = gameStore((state) => ({
+    chancePlayer: state.chancePlayer,
+    tokenSelection: state.tokenSelection,
+  }))
 
-  const chancePlayer = gameStore((state) => state.chancePlayer)
+  const currentPositions = positionsStore((state) => state.currentPositions)
 
-  const currentPositions = gameStore((state) => state.currentPositions)
-
+  const arrowStyle = useMemo(() => getRotatedArrowStyle(cell), [cell])
   const picesAtThisCell = useMemo(() => currentPositions.filter((p) => p.pos === cell), [currentPositions, cell])
   const zIndex = useRef(100)
-  const tokenSelection = gameStore((state) => state.tokenSelection)
 
   useEffect(() => {
     zIndex.current = 100
   }, [chancePlayer, picesAtThisCell])
 
   return (
-    <View
-      key={cell}
-      className='flex-1 items-center justify-center'
-      style={{padding: 1.5}}
-      // onPress={handelPress}
-      {...props}>
+    <View key={cell} className='flex-1 items-center justify-center' style={{padding: 1.5}} {...props}>
       <View
         className='relative h-full w-full flex-1 items-center justify-center'
         style={{borderRadius: 5, backgroundColor: isStar ? '#ffffff55' : isSafe ? color : 'white'}}>
@@ -61,50 +54,27 @@ function Cell({cell, i, color, ...props}: CellProps) {
         )}
         {isStarting && (
           <View className='absolute'>
-            <View className='relative flex-1 items-center justify-center'>
-              <StarIcon {...starProps} />
-            </View>
+            {/* <View className='relative flex-1 items-center justify-center'> */}
+            <StarIcon {...starProps} />
+            {/* </View> */}
           </View>
         )}
         {isArrow && (
-          <View className='absolute flex-1 items-center justify-center'>
-            <ArrowIcon width={w * 0.04} height={w * 0.04} color={color} style={getRotatedArrowStyle(cell)} />
+          // <View className='absolute flex-1 items-center justify-center'>
+          <View className='absolute'>
+            <ArrowIcon width={w * 0.04} height={w * 0.04} color={color} style={arrowStyle} />
           </View>
         )}
-        {picesAtThisCell.map((p, index) => {
-          const n = picesAtThisCell.length
-
-          let translateX = 0
-          let translateY = 0
-
-          if (n > 1) {
-            const angle = (index / n) * 2 * Math.PI
-            const radius = w * 0.02
-            translateX = radius * Math.cos(angle)
-            translateY = radius * Math.sin(angle)
-          }
-
-          zIndex.current -= 1
-
-          return (
-            <View
-              className='absolute items-center justify-center'
-              key={p.id}
-              style={{
-                transform: [
-                  {
-                    scale: n > 1 ? 0.8 : 1,
-                  },
-                  {translateX},
-                  {translateY},
-                ],
-                zIndex: p.player === tokenSelection ? 10000 : zIndex.current,
-              }}>
-              <Token token={p} />
-            </View>
-          )
-        })}
-
+        {picesAtThisCell.map((p, index) => (
+          <TokenContainer
+            key={p.id}
+            p={p}
+            picesAtThisCell={picesAtThisCell}
+            zIndex={zIndex}
+            tokenSelection={tokenSelection}
+            index={index}
+          />
+        ))}
         {/* <Medium
           className='text-center text-xs'
           style={[
@@ -119,6 +89,42 @@ function Cell({cell, i, color, ...props}: CellProps) {
     </View>
   )
 }
+
+type TokenContainerProps = {
+  picesAtThisCell: PlayerState[]
+  zIndex: React.MutableRefObject<number>
+  tokenSelection: number
+  index: number
+  p: PlayerState
+}
+
+const TokenContainer = React.memo(({picesAtThisCell, zIndex, tokenSelection, index, p}: TokenContainerProps) => {
+  const n = picesAtThisCell.length
+
+  let translateX = 0
+  let translateY = 0
+
+  if (n > 1) {
+    const angle = (index / n) * 2 * Math.PI
+    const radius = w * 0.02
+    translateX = radius * Math.cos(angle)
+    translateY = radius * Math.sin(angle)
+  }
+
+  zIndex.current -= 1
+
+  return (
+    <View
+      className='absolute items-center justify-center'
+      key={p.id}
+      style={{
+        transform: [{scale: n > 1 ? 0.8 : 1}, {translateX}, {translateY}],
+        zIndex: p.player === tokenSelection ? 10000 : zIndex.current,
+      }}>
+      <Token token={p} />
+    </View>
+  )
+})
 
 function getRotatedArrowStyle(i: number) {
   if (i === 38) return {transform: [{rotate: '90deg'}]}
