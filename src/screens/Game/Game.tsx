@@ -311,13 +311,12 @@ async function handelDiceRoll(data: DiceRolled) {
   setDiceRolling(true)
   setDiceTouchDisabled(true)
   playSound('dice_roll')
-  // await delay(0)
+  await delay(150)
   setDiceRolling(false)
   setDiceNo(newDiceNo)
 
-  if (data.playerId === gameStore.getState().myId) {
-    setTokenSelection(gameStore.getState().myId)
-  }
+  const myId = gameStore.getState().myId
+  if (data.playerId === myId) setTokenSelection(myId)
 
   // const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1
   // // const isAnyTokenLocked = currentPositions.findIndex((t) => t.pos === 0)
