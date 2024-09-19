@@ -98,7 +98,7 @@ const Token = React.memo<TokenProps>(({token}) => {
       if (token.pos === turningPoint) token.pos = victoryStart[player]!
       if (token.pos === 53) token.pos = 1
       setCurrentPositions([...currentPositions])
-      await delay(__DEV__ ? 0 : 150)
+      await delay(__DEV__ ? 0 : 50)
     }
 
     // Check for victory

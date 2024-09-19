@@ -308,15 +308,18 @@ async function handelTokenMove(data: TokenMoved) {
 
 async function handelDiceRoll(data: DiceRolled) {
   const newDiceNo = data.diceValue
-  setDiceRolling(true)
-  setDiceTouchDisabled(true)
-  playSound('dice_roll')
-  await delay(150)
-  setDiceRolling(false)
-  setDiceNo(newDiceNo)
 
   const myId = gameStore.getState().myId
   if (data.playerId === myId) setTokenSelection(myId)
+
+  if (data.playerId !== myId) {
+    setDiceRolling(true)
+    setDiceTouchDisabled(true)
+    playSound('dice_roll')
+    await delay(150)
+    setDiceRolling(false)
+    setDiceNo(newDiceNo)
+  }
 
   // const isAnyTokenAlive = currentPositions.findIndex((t) => t.pos !== 57 && t.player === player) !== -1
   // // const isAnyTokenLocked = currentPositions.findIndex((t) => t.pos === 0)
