@@ -12,10 +12,12 @@ import React, {useEffect, useMemo} from 'react'
 import {Image, TouchableOpacity, View} from 'react-native'
 import {useSharedValue, withTiming} from 'react-native-reanimated'
 import gameStore, {type Num} from '../zustand/gameStore'
+import type {PlayerState} from '../zustand/initialState'
 import Dice, {DiceRolling} from './Dice'
 
 type PlayerProps = {
   banned?: boolean
+  name: string
   reversed?: boolean
   bottom?: boolean
   life: number
@@ -23,6 +25,7 @@ type PlayerProps = {
   rolling?: boolean
   isRolled?: boolean
   player: Num
+  data: PlayerState[]
 }
 
 const r = 22
@@ -30,7 +33,7 @@ const strokeW = 3
 const bgColor = Colors.greenDefault
 const percentAge = 0.5
 
-const Player = ({banned, life, active, reversed, bottom, player}: PlayerProps) => {
+export default function Player({banned, name, life, active, reversed, bottom, player}: PlayerProps) {
   const currentPlayerChange = gameStore((state) => state.chancePlayer)
   const diceNo = gameStore((state) => state.diceNumber)
   const isDiceTouchDisabled = gameStore((state) => state.isTouchDisabled)
@@ -148,14 +151,14 @@ const Player = ({banned, life, active, reversed, bottom, player}: PlayerProps) =
           </View>
         </View>
         <View style={{gap: 5}}>
-          <Dots n={redLife} />
+          <Dots n={redLife} player={player} />
         </View>
       </View>
     </View>
   )
 }
 
-const Dots = React.memo(({n}: {n: number}) => {
+function Dots({n, player}: {n: number; player: Num}) {
   const dots = useMemo(() => Array.from({length: n}, (_, i) => i), [n])
   const redDots = useMemo(() => Array.from({length: 3 - n}, (_, i) => i), [n])
   return (
@@ -170,6 +173,4 @@ const Dots = React.memo(({n}: {n: number}) => {
       ))}
     </View>
   )
-})
-
-export default React.memo(Player)
+}

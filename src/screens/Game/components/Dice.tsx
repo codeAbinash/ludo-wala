@@ -1,5 +1,5 @@
 import LottieView from 'lottie-react-native'
-import React, { useEffect, useRef } from 'react'
+import React, {useRef, useEffect} from 'react'
 
 const d1 = require('@animations/d1.lottie')
 const d2 = require('@animations/d2.lottie')
@@ -9,7 +9,7 @@ const d5 = require('@animations/d5.lottie')
 const d6 = require('@animations/d6.lottie')
 const dices = [d1, d2, d3, d4, d5, d6]
 
-const Dice = React.memo<{diceNo: number}>(({diceNo}) => {
+export default function Dice({diceNo}: {diceNo: number}) {
   const animationRef = useRef<LottieView>(null)
   useEffect(() => animationRef.current?.play(30, 30), [])
 
@@ -24,11 +24,9 @@ const Dice = React.memo<{diceNo: number}>(({diceNo}) => {
       ref={animationRef}
     />
   )
-})
+}
 
-export default Dice
-
-export const DiceRolling = React.memo(() => {
+export function DiceRolling() {
   const animationRef = useRef<LottieView>(null)
   useEffect(() => animationRef.current?.play(5, 15), [])
   return (
@@ -42,4 +40,4 @@ export const DiceRolling = React.memo(() => {
       ref={animationRef}
     />
   )
-})
+}

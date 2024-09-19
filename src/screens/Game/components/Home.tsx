@@ -6,28 +6,21 @@ import {type ViewProps, View} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue, withRepeat, withTiming} from 'react-native-reanimated'
 import gameStore, {type Num} from '../zustand/gameStore'
 import {w} from './MidBox'
-import positionsStore from '../zustand/positionsStore'
 
 type HomeProps = {no: Num} & ViewProps
 function HomeBox({style, no, ...props}: HomeProps) {
   const opacity = useSharedValue(1)
-  const currentPositions = positionsStore((state) => state.currentPositions)
-
-  const {currentPlayerChance, playersData} = gameStore((state) => ({
-    currentPlayerChance: state.chancePlayer,
-    playersData: state.playersData,
-  }))
-
+  const currentPlayerChance = gameStore((state) => state.chancePlayer)
+  const currentPositions = gameStore((state) => state.currentPositions)
+  const playersData = gameStore((state) => state.playersData)
   const currentPlayer = playersData ? playersData[no] : null
-
   const steps = useMemo(() => {
     if (!currentPlayer) return 0
     const playerTokens = currentPositions.filter((p) => p.player === no)
     const winned = playerTokens.filter((p) => p.travelCount === 56)
     const totalWinned = 4 - playerTokens.length + winned.length
     return playerTokens.reduce((acc, token) => acc + token.travelCount, 0) + totalWinned * (100 + 57)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPositions, no])
+  }, [currentPlayer, currentPositions, no])
 
   useEffect(() => {
     opacity.value = currentPlayerChance === no ? withRepeat(withTiming(0.5, {duration: 500}), -1, true) : 1
