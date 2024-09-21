@@ -37,6 +37,7 @@ import type {PlayerState} from './zustand/initialState'
 export type Message = {
   diceRolled?: DiceRolled
   tokenMoved?: TokenMoved
+  nextTurn?: Num
 }
 
 export type DiceRolled = {
@@ -120,6 +121,7 @@ export default function Game() {
     s.on('message', async (message: Message) => {
       if (message.diceRolled) handelDiceRoll(message.diceRolled)
       if (message.tokenMoved) handelTokenMove(message.tokenMoved)
+      if (message.nextTurn) setChancePlayer(message.nextTurn)
       console.log(message)
     })
     s.on('error', (e) => {
