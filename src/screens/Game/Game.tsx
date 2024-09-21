@@ -121,7 +121,7 @@ export default function Game() {
     s.on('message', async (message: Message) => {
       if (message.diceRolled) handelDiceRoll(message.diceRolled)
       if (message.tokenMoved) handelTokenMove(message.tokenMoved)
-      if (message.nextTurn) setChancePlayer(message.nextTurn)
+      if (message.nextTurn || message.nextTurn === 0) setChancePlayer(message.nextTurn)
       console.log(message)
     })
     s.on('error', (e) => {

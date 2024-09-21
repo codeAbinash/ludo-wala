@@ -3,10 +3,9 @@ import {playSound} from '@/helpers/SoundUtility'
 import Animations from '@assets/animations/animations'
 import {CheckmarkCircle02SolidIcon, UnavailableSolidIcon} from '@assets/icons/icons'
 import {roll_dice_tournament} from '@query/api'
-import {Skia} from '@shopify/react-native-skia'
+import {Canvas, Path, Skia} from '@shopify/react-native-skia'
 import {useMutation} from '@tanstack/react-query'
 import Colors, {Red} from '@utils/colors'
-import {W} from '@utils/dimensions'
 import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo} from 'react'
 import {Image, TouchableOpacity, View} from 'react-native'
@@ -57,13 +56,18 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   })
 
   const path = Skia.Path.Make()
-  path.addCircle(W / 2, W / 2, r)
+  path.addCircle(50 / 2, 50 / 2, r)
   const percent = useSharedValue(0)
   const redLife = 3 - life
   useEffect(() => {
     percent.value = withTiming(percentAge, {duration: 2000})
     // percent.value = withTiming(100, {duration: 2000})
   }, [percent])
+
+  useEffect(() => {
+    percent.value = 0
+    percent.value = withTiming(1, {duration: 30000})
+  }, [currentPlayerChange, percent])
 
   function press() {
     setDiceRolling(true)
@@ -117,9 +121,14 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
                 {currentPlayerChange === player && isDiceRolling ? <DiceRolling /> : null}
               </TouchableOpacity>
               <View className='relative h-12 w-12 items-center justify-center rounded-full'>
-                {/* {active && (
-                  <View style={{position: 'absolute', zIndex: 50}}>
-                    <Canvas style={{height: W, width: W, transform: [{rotate: '90deg'}]}}>
+                {currentPlayerChange === player && (
+                  <View style={{position: 'absolute', zIndex: 500}}>
+                    <Canvas
+                      style={{
+                        height: 50,
+                        width: 50,
+                        transform: [{rotate: '90deg'}],
+                      }}>
                       <Path
                         path={path}
                         strokeWidth={strokeW}
@@ -133,7 +142,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
                       <Path
                         path={path}
                         strokeWidth={strokeW}
-                        color={'white'}
+                        color={Colors.red['500']}
                         style={'stroke'}
                         strokeJoin={'round'}
                         strokeCap={'round'}
@@ -142,7 +151,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
                       />
                     </Canvas>
                   </View>
-                )} */}
+                )}
                 <Image
                   source={{uri: `https://avatar.iran.liara.run/username?username=${currentPlayer?.fname}`}}
                   style={{width: 48, height: 48}}
