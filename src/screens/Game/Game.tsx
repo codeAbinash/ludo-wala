@@ -6,7 +6,7 @@ import Images from '@assets/images/images'
 import {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
-import {join_tournament_room, type InitialState} from '@query/api'
+import {join_tournament_room, type InitialState, type PlayerTournamentRoom} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
 import {GRADS} from '@utils/colors'
 import {webSocketLink} from '@utils/constants'
@@ -73,6 +73,16 @@ function getInitialPositions(data: InitialState[]): PlayerState[] {
   return positions
 }
 
+function modifyPlayersData(data: PlayerTournamentRoom[]) {
+  const players: PlayerTournamentRoom[] = []
+  for (let i = 0; i < data.length; i++) {
+    const player = data[i]
+    if (!player) continue
+    players[player.playerId] = player
+  }
+  return players
+}
+
 export default function Game() {
   const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
   const setSocket = socketStore((state) => state.setSocket)
@@ -89,7 +99,8 @@ export default function Game() {
       setChancePlayer(data.currentTurn) // Set the current turn
       data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
       console.log(JSON.stringify(data, null, 2))
-      setPlayersData(data.players)
+      setPlayersData(modifyPlayersData(data.players))
+      console.log('Players Data set.', data.players)
     },
   })
   useEffect(() => {
@@ -276,7 +287,7 @@ async function handelTokenMove(data: TokenMoved) {
     if (token.pos === turningPoints[player]) token.pos = victoryStart[player]!
     if (token.pos === 53) token.pos = 1
     setCurrentPositions([...currentPositions])
-    await delay(__DEV__ ? 0 : 150)
+    await delay(__DEV__ ? 0 : 100)
   }
 
   const isInStar = startingPoints.includes(token.pos) || StarSpots.includes(token.pos)

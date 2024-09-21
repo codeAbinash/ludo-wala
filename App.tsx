@@ -39,6 +39,7 @@ import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import Blank from '@screens/Extra/Blank'
 import Test from '@screens/Test'
+import Win from '@screens/Game/Win'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -132,6 +133,7 @@ export type RootStackParamList = {
   Leaderboard: undefined
   MyReferrals: undefined
   Test: undefined
+  Win: undefined
 }
 function Navigation() {
   return (
@@ -163,6 +165,7 @@ function Navigation() {
       <Stack.Screen name='JoinedTournament' component={JoinedTournament} />
       <Stack.Screen name='Leaderboard' component={Leaderboard} />
       <Stack.Screen name='MyReferrals' component={MyReferrals} />
+      <Stack.Screen name='Win' component={Win} />
     </Stack.Navigator>
   )
 }

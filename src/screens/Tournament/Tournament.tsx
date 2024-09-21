@@ -131,7 +131,7 @@ function Option({text, Icon, value}: OptionProps) {
         <Medium className='uppercase text-black/70' style={{fontSize: 10}} numberOfLines={1}>
           {text}
         </Medium>
-        <Bold className='text-xl text-black' numberOfLines={1} style={{flexShrink: 1}}>
+        <Bold className='text-xl text-black' numberOfLines={1} style={{flexShrink: 1, fontSize: 18}}>
           {value}
         </Bold>
       </View>

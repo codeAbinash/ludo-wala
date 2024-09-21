@@ -20,6 +20,14 @@ export default function Gradient({children, ...props}: CustomLinearGradientProps
   )
 }
 
+export function GradientYellow({children, ...props}: CustomLinearGradientProps) {
+  return (
+    <Gradient colors={[Colors.b1, Colors.b2]} {...props}>
+      {children}
+    </Gradient>
+  )
+}
+
 type RadialProps = ViewProps & {
   Col?: string[]
 }

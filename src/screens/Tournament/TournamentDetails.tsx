@@ -10,7 +10,7 @@ import {useNavigation, type RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
 import type {StackNav} from '@utils/types'
 import {stylishDate} from '@utils/utils'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Alert, Dimensions, Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {ScrollView} from 'react-native-gesture-handler'
 import Carousel from 'react-native-reanimated-carousel'
@@ -24,6 +24,18 @@ type ParamList = {
 
 export type TournamentDetailsParamList = TournamentData
 
+const keyDetails = [
+  '1stRoundBonus',
+  '2ndRoundWinning',
+  '3rdRoundWinning',
+  '4thRoundWinning',
+  '5thRoundWinning',
+  '6thRoundWinning',
+  '7thRoundWinning',
+  '8thRoundWinning',
+  '9thRoundWinning',
+]
+
 export default function TournamentDetails({
   navigation,
   route,
@@ -32,6 +44,11 @@ export default function TournamentDetails({
   route: RouteProp<ParamList, 'TournamentDetails'>
 }) {
   const [more, setMore] = useState(false)
+  const totalJoin = route.params.maxPlayers
+
+  const logBase4 = Math.log(totalJoin) / Math.log(4)
+
+  console.log(logBase4)
 
   const data = route.params
   const tournamentData = [
@@ -52,18 +69,34 @@ export default function TournamentDetails({
     {left: 'Rank #4', right: data['4thPrize']},
   ]
 
-  const roundData = [
-    {left: 'Round 1', mid: '10,48,576', right: '₹' + data['1stRoundBonus'].toString() + ' *'},
-    {left: 'Round 2', mid: '2,62,144', right: '₹' + data['2ndRoundWinning'].toString()},
-    {left: 'Round 3', mid: '65,536', right: '₹' + data['3rdRoundWinning'].toString()},
-    {left: 'Round 4', mid: '16,384', right: '₹' + data['4thRoundWinning'].toString()},
-    {left: 'Round 5', mid: '4,096', right: '₹' + data['5thRoundWinning'].toString()},
-    {left: 'Round 6', mid: '1,024', right: '₹' + data['6thRoundWinning'].toString()},
-    {left: 'Round 7', mid: '256', right: '₹' + data['7thRoundWinning'].toString()},
-    {left: 'Round 8', mid: '64', right: '₹' + data['8thRoundWinning'].toString()},
-    {left: 'Round 9', mid: '16', right: '₹' + data['9thRoundWinning'].toString()},
-    {left: 'Rounds', mid: 'Players', right: 'Prize'},
-  ].reverse()
+  const roundData = useMemo(() => {
+    // [
+    //   {left: 'Round 1', mid: '10,48,576', right: '₹' + data['1stRoundBonus'].toString() + ' *'},
+    //   {left: 'Round 2', mid: '2,62,144', right: '₹' + data['2ndRoundWinning'].toString()},
+    //   {left: 'Round 3', mid: '65,536', right: '₹' + data['3rdRoundWinning'].toString()},
+    //   {left: 'Round 4', mid: '16,384', right: '₹' + data['4thRoundWinning'].toString()},
+    //   {left: 'Round 5', mid: '4,096', right: '₹' + data['5thRoundWinning'].toString()},
+    //   {left: 'Round 6', mid: '1,024', right: '₹' + data['6thRoundWinning'].toString()},
+    //   {left: 'Round 7', mid: '256', right: '₹' + data['7thRoundWinning'].toString()},
+    //   {left: 'Round 8', mid: '64', right: '₹' + data['8thRoundWinning'].toString()},
+    //   {left: 'Round 9', mid: '16', right: '₹' + data['9thRoundWinning'].toString()},
+    //   {left: 'Rounds', mid: 'Players', right: 'Prize'},
+    // ].reverse()
+    // //   .slice(0, log4 + 1),
+
+    const arr: {left: string; right: string; mid?: string}[] = ([] = [])
+
+    arr.push({left: 'Rounds', mid: 'Players', right: 'Prize'})
+
+    for (let i = 0; i < logBase4; i++) {
+      arr.push({
+        left: `Round ${i + 1}`,
+        mid: (totalJoin / Math.pow(4, i)).toLocaleString(),
+        right: `₹${data[keyDetails[i] as keyof TournamentData] || 0}`,
+      })
+    }
+    return arr
+  }, [data, logBase4, totalJoin])
 
   return (
     <Radial>

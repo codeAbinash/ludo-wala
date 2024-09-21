@@ -20,6 +20,7 @@ const Images = {
   G1: require('./src/tokens/1.png'),
   G2: require('./src/tokens/2.png'),
   G3: require('./src/tokens/3.png'),
+  win: require('./src/win.png'),
 }
 
 export default Images

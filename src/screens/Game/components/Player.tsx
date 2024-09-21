@@ -42,6 +42,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   const myId = gameStore((state) => state.myId)
   const players = gameStore((state) => state.playersData)
   const currentPlayer = players ? players[player] : null
+  const setDiceNo = gameStore((state) => state.setDiceNumber)
 
   const rollDiceMutation = useMutation({
     mutationKey: ['rollDice'],
@@ -50,6 +51,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
       playSound('dice_roll')
       console.log('Dice Roll Request Success')
       console.log(data)
+      setDiceNo(data.diceValue)
       setDiceRolling(false)
     },
   })

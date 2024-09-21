@@ -237,8 +237,15 @@ export async function my_referral_f({pageParam}: {pageParam: number}) {
   return await postApi<MyReferrals>(`refer/myReferrals?page=${pageParam}`, null)
 }
 
+export interface DiceRoll {
+  diceValue: number
+  message: string
+  playerId: number
+  status: boolean
+}
+
 export async function roll_dice_tournament({playerId}: {playerId: number}) {
-  return await postApi<ServerResponse>('boardConnector/rollDice', {playerId, roomType: 'tournament'})
+  return await postApi<DiceRoll>('boardConnector/rollDice', {playerId, roomType: 'tournament'})
 }
 
 export function move_token_tournament(tokenId: string) {
@@ -267,7 +274,7 @@ export type PlayerTournamentRoom = {
   playerId: Num
   fname: string
   lname: string
-}
+} | undefined
 
 export function join_tournament_room() {
   return postApi<JoinTournamentRoom>('boardConnector/joinRoom', {roomType: 'tournament'})
