@@ -95,10 +95,7 @@ export default function Profile({navigation}: NavProp) {
                 {text: 'Cancel', style: 'cancel'},
                 {
                   text: 'Logout',
-                  onPress: () => {
-                    secureLs.clearAll()
-                    navigation.reset({index: 0, routes: [{name: 'Splash'}]})
-                  },
+                  onPress: () => navigation.navigate('Logout'),
                 },
               ])
             }}

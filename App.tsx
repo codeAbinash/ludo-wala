@@ -40,6 +40,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import Blank from '@screens/Extra/Blank'
 import Test from '@screens/Test'
 import Win, {type WinParamList} from '@screens/Game/Win'
+import Logout from '@screens/Logout'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -134,6 +135,7 @@ export type RootStackParamList = {
   MyReferrals: undefined
   Test: undefined
   Win: WinParamList
+  Logout: undefined
 }
 function Navigation() {
   return (
@@ -166,6 +168,7 @@ function Navigation() {
       <Stack.Screen name='Leaderboard' component={Leaderboard} />
       <Stack.Screen name='MyReferrals' component={MyReferrals} />
       <Stack.Screen name='Win' component={Win} />
+      <Stack.Screen name='Logout' component={Logout} />
     </Stack.Navigator>
   )
 }

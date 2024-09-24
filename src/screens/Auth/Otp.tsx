@@ -1,6 +1,6 @@
 import {Medium} from '@/fonts'
 import Images from '@assets/images/images'
-import {FullGradientButton, GradientButton, LoadingButton} from '@components/Button'
+import {FullGradientButton, LoadingButton} from '@components/Button'
 import Gradient, {Radial} from '@components/Gradient'
 import Input from '@components/Input'
 import {PaddingTop} from '@components/SafePadding'
@@ -8,10 +8,12 @@ import {setAuthToken, verifyOtp_f} from '@query/api'
 import type {RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
-import {ls, secureLs} from '@utils/storage'
+import {secureLs} from '@utils/storage'
 import type {StackNav} from '@utils/types'
+import {oneSignalInit} from '@utils/utils'
 import React from 'react'
 import {Alert, Image, View} from 'react-native'
+import {OneSignal} from 'react-native-onesignal'
 
 type ParamList = {
   OTP: OTPParamList
@@ -24,11 +26,19 @@ export default function OTP({navigation, route}: {navigation: StackNav; route: R
 
   const {mutate, isPending} = useMutation({
     mutationFn: () => verifyOtp_f({otp, mobileNumber: route.params.phone}),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log(data)
       if (!data.status) return Alert.alert('Error', data.message || 'Error occurred')
       secureLs.set('token', data.token)
       setAuthToken()
+
+      // Set up OneSignal
+      oneSignalInit()
+      await OneSignal.Notifications.requestPermission(true)
+      const phone = route.params.phone
+      OneSignal.login(phone)
+      console.log('Onesignal with phone:', phone)
+
       if (data.profileRequired) navigation.replace('EnterName')
       else navigation.replace('Home')
     },

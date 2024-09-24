@@ -1,9 +1,10 @@
-import {image} from '@/image'
-import type {User} from '@query/api'
-import {getShareText} from './constants'
+import { image } from '@/image'
+import type { User } from '@query/api'
+import type { Num } from '@screens/Game/zustand/gameStore'
+import { Linking } from 'react-native'
+import { OneSignal } from 'react-native-onesignal'
 import Share from 'react-native-share'
-import {Linking} from 'react-native'
-import type {Num} from '@screens/Game/zustand/gameStore'
+import { getShareText, ONESIGNAL_APP_ID } from './constants'
 
 export function getTotal(s1: string, s2: string, s3: string) {
   return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
@@ -88,4 +89,8 @@ export function getNextTurn(turn: number): Num {
 
 export function getPP(fname: string, lname: string) {
   return `https://avatar.iran.liara.run/username?username=${fname} ${lname}`
+}
+
+export function oneSignalInit() {
+  OneSignal.initialize(ONESIGNAL_APP_ID)
 }
