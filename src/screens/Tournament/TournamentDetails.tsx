@@ -149,7 +149,10 @@ function BottomPart({data}: {data: TournamentData}) {
     return () => clearInterval(interval)
   }, [data.registrationEndTime])
 
-  // if (data.eliminated) return <Eliminated /> // TODO: uncomment this line
+  if (data.status === 'completed') return <DisabledButton text1='Tournament Ended' text2='The tournament has ended' />
+
+  if (data.eliminated)
+    return <DisabledButton text1='You have been eliminated' text2='You have been eliminated from the tournament' />
 
   if (data.userJoined) return <AlreadyJoined data={data} />
 
@@ -177,18 +180,18 @@ function BottomPart({data}: {data: TournamentData}) {
   )
 }
 
-function Eliminated() {
+function DisabledButton({text1, text2}: {text1?: string; text2?: string}) {
   return (
     <View>
       <View className='bg-g1 p-5 pb-0 pt-3'>
         <FullGradientButton className='rounded-full bg-g1 opacity-70' activeOpacity={1} style={{padding: 15}} disabled>
           <View className='flex-row items-center justify-center'>
             <Award01SolidIcon width={16} height={16} className='text-black' />
-            <SemiBold className='ml-3 text-base text-black'>You have been eliminated</SemiBold>
+            <SemiBold className='ml-3 text-base text-black'>{text1}</SemiBold>
           </View>
         </FullGradientButton>
         <View className='mb-2 mt-1 flex-row items-center justify-center'>
-          <Medium className='text-sm text-white'>You have been eliminated from the tournament</Medium>
+          <Medium className='text-sm text-white'>{text2}</Medium>
         </View>
         <PaddingBottom />
       </View>

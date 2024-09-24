@@ -15,7 +15,7 @@ export default function Dice({diceNo}: {diceNo: number}) {
 
   return (
     <LottieView
-      source={dices[diceNo]}
+      source={dices[diceNo] || d1}
       autoPlay
       loop={false}
       style={{height: 90, width: 90}}
@@ -31,7 +31,7 @@ export function DiceRolling() {
   useEffect(() => animationRef.current?.play(5, 15), [])
   return (
     <LottieView
-      source={dices[4]}
+      source={dices[4] || d1}
       autoPlay
       loop
       style={{height: 90, width: 90}}

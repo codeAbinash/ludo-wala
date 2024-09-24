@@ -27,7 +27,10 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
   const {winnerData} = route.params
   const clearToDefault = gameStore((state) => state.clearToDefault)
 
-  const eliminatedPlayers = useMemo(() => winnerData?.eliminatedPlayers?.slice(0, 3), [winnerData.eliminatedPlayers])
+  const eliminatedPlayers = useMemo(
+    () => winnerData?.eliminatedPlayers?.slice(0, 3).sort((a, b) => Number(b.totalSteps) - Number(a.totalSteps)),
+    [winnerData.eliminatedPlayers],
+  )
   return (
     <Wrap>
       <View className='flex-1 items-center justify-center p-6' style={{gap: 20}}>
