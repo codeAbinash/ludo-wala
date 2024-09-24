@@ -220,13 +220,45 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
               <Board />
               <BottomPart />
             </View>
-            <View className='pb-3'>
-              {/* <Medium className='text-center text-white/70'>{getColor(player)}'s turn</Medium> */}
-            </View>
+            <Timer endTime={endTime} />
           </View>
           <PaddingBottom />
         </Wrap>
       </View>
+    </View>
+  )
+}
+
+function Timer({endTime}: {endTime: Date | null}) {
+  const end = endTime || new Date()
+  const [left, setLeft] = useState('')
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const diff = end.getTime() - now
+      if (diff < 0) {
+        setLeft('Time Over')
+        return
+      }
+      const minutes = addZero(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
+      const seconds = addZero(Math.floor((diff % (1000 * 60)) / 1000))
+      setLeft(`${minutes}:${seconds}`)
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return (
+    <View>
+      <Gradient className='flex-row rounded-xl border border-border p-2 px-3.5' style={{gap: 8}}>
+        <Clock01Icon className='text-b1' height={18} width={18} />
+        <SemiBold className='-mt-1 text-lg text-b1'>{left}</SemiBold>
+      </Gradient>
+      <PaddingBottom />
     </View>
   )
 }
@@ -256,27 +288,6 @@ function addZero(num: number) {
 }
 
 function FirstPrice({endTime}: {endTime: Date | null}) {
-  const end = endTime || new Date()
-  const [left, setLeft] = useState('')
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const diff = end.getTime() - now
-      if (diff < 0) {
-        setLeft('Time Over')
-        return
-      }
-      const minutes = addZero(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
-      const seconds = addZero(Math.floor((diff % (1000 * 60)) / 1000))
-      setLeft(`${minutes}:${seconds}`)
-    }, 1000)
-
-    return () => {
-      clearInterval(timer)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   return (
     <>
       <View className='w-full flex-row justify-between px-3'>
@@ -296,10 +307,6 @@ function FirstPrice({endTime}: {endTime: Date | null}) {
           <Medium>Menu</Medium>
         </View>
       </View>
-      <Gradient className='flex-row rounded-xl border border-border p-2 px-3.5' style={{gap: 8}}>
-        <Clock01Icon className='text-b1' height={18} width={18} />
-        <SemiBold className='-mt-1 text-lg text-b1'>{left}</SemiBold>
-      </Gradient>
     </>
   )
 }
