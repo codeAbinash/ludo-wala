@@ -16,7 +16,7 @@ import EnterName from '@screens/Auth/EnterName'
 import EnterPhone from '@screens/Auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/Auth/Otp'
 import EditProfile from '@screens/Profile/EditProfile'
-import Game from '@screens/Game/Game'
+import Game, {type GameParamList} from '@screens/Game/Game'
 import Home from '@screens/Home'
 import Wallet from '@screens/Home/Wallet'
 import HomeScreen from '@screens/Home/HomeScreen'
@@ -39,7 +39,7 @@ import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import Blank from '@screens/Extra/Blank'
 import Test from '@screens/Test'
-import Win from '@screens/Game/Win'
+import Win, {type WinParamList} from '@screens/Game/Win'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -129,11 +129,11 @@ export type RootStackParamList = {
   TournamentDetails: TournamentDetailsParamList
   JoinedTournament: undefined
   Blank: undefined
-  Game: undefined
+  Game: GameParamList
   Leaderboard: undefined
   MyReferrals: undefined
   Test: undefined
-  Win: undefined
+  Win: WinParamList
 }
 function Navigation() {
   return (

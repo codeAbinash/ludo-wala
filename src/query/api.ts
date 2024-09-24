@@ -172,6 +172,7 @@ export interface TournamentData {
   totalRound: number
   updated_at: null
   userJoined: boolean
+  eliminated: boolean
 }
 
 export async function getTournamentList_f() {
@@ -269,15 +270,17 @@ export type InitialState = {
   travelCount: number
   userId: number
 }
-export type PlayerTournamentRoom = {
-  userId: string | number
-  playerId: Num
-  fname: string
-  lname: string
-} | undefined
+export type PlayerTournamentRoom =
+  | {
+      userId: string | number
+      playerId: Num
+      fname: string
+      lname: string
+    }
+  | undefined
 
-export function join_tournament_room() {
-  return postApi<JoinTournamentRoom>('boardConnector/joinRoom', {roomType: 'tournament'})
+export function join_tournament_room(id: number, type: 'tournament') {
+  return postApi<JoinTournamentRoom>('boardConnector/joinRoom', {roomType: type, tournamentId: id})
 }
 
 export function refetch_tournament_room() {

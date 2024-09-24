@@ -7,11 +7,13 @@ import {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
 import {join_tournament_room, type InitialState, type PlayerTournamentRoom} from '@query/api'
+import type {RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
 import {GRADS} from '@utils/colors'
 import {webSocketLink} from '@utils/constants'
 import {H} from '@utils/dimensions'
 import {secureLs} from '@utils/storage'
+import type {StackNav} from '@utils/types'
 import {delay} from '@utils/utils'
 import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo, useState} from 'react'
@@ -34,18 +36,21 @@ import {
 } from './plotData'
 import gameStore, {type Num} from './zustand/gameStore'
 import {playersInitialData, type PlayerState} from './zustand/initialState'
-import type {NavProp, StackNav} from '@utils/types'
 
 export type Message = {
   diceRolled?: DiceRolled
   tokenMoved?: TokenMoved
   nextTurn?: Num
   roomJoined?: PlayerTournamentRoom
-  winnerBoard?: {
-    fname: string
-    totalSteps: string
-    userId: number
-  }
+  winnerBoard?: WinnerBoardElement
+}
+
+export type WinnerBoardElement = {
+  userId: number
+  playerId: number
+  fname: string
+  totalSteps: string
+  eliminatedPlayers?: WinnerBoardElement[]
 }
 
 export type DiceRolled = {
@@ -92,17 +97,30 @@ function modifyPlayersData(data: PlayerTournamentRoom[]) {
   return players
 }
 
-export default function Game({navigation}: NavProp) {
+type ParamList = {
+  Game: GameParamList
+}
+
+export type GameParamList = {
+  id: number
+  type: 'tournament'
+}
+
+//
+
+export default function Game({navigation, route}: {navigation: StackNav; route: RouteProp<ParamList, 'Game'>}) {
   const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
   const setPlayersData = gameStore((state) => state.setPlayersData)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
   const [endTime, setEndTime] = useState<Date | null>(null)
+  const id = route.params.id
+  const type = route.params.type
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
-    mutationFn: join_tournament_room,
+    mutationFn: () => join_tournament_room(id, type),
     onSuccess: (data) => {
       if (!data.status) return Alert.alert('Error', data.message)
       gameStore.getState().setMyId(data.playerId as Num) // Directly set the player id
@@ -133,7 +151,7 @@ export default function Game({navigation}: NavProp) {
       if (message.nextTurn || message.nextTurn === 0) nextTurnEvent(message.nextTurn)
       if (message.roomJoined) joinTournamentRoom(message.roomJoined)
       if (message.winnerBoard) winnerBoardEvent(message.winnerBoard, navigation)
-      console.log(message)
+      console.log(JSON.stringify(message, null, 2))
     })
     s.on('error', (e) => {
       Alert.alert('Error', e)
@@ -211,11 +229,11 @@ export default function Game({navigation}: NavProp) {
   )
 }
 
-function winnerBoardEvent(data: any, navigation: StackNav) {
-  // navigation.navigate('Win', data)
-  // Two step back
-  navigation.goBack()
-  navigation.goBack()
+function winnerBoardEvent(data: WinnerBoardElement, navigation: StackNav) {
+  navigation.reset({
+    index: 0,
+    routes: [{name: 'Win', params: {winnerData: data}}],
+  })
 }
 
 function joinTournamentRoom(data: PlayerTournamentRoom) {
@@ -335,7 +353,7 @@ function nextTurnEvent(player: Num) {
   const myId = gameStore.getState().myId
   const chance = gameStore.getState().chancePlayer
   // const
-  console.log('CHAAA', myId, chance)
+  // console.log('CHAAA', myId, chance)
   if (chance === myId) {
     Vibration.vibrate([0, 100, 200, 100])
     ToastAndroid.show('You Missed the Turn', ToastAndroid.SHORT)

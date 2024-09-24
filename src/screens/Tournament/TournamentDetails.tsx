@@ -149,6 +149,8 @@ function BottomPart({data}: {data: TournamentData}) {
     return () => clearInterval(interval)
   }, [data.registrationEndTime])
 
+  if (data.eliminated) return <Eliminated />
+
   if (data.userJoined) return <AlreadyJoined data={data} />
 
   return (
@@ -175,18 +177,38 @@ function BottomPart({data}: {data: TournamentData}) {
   )
 }
 
+function Eliminated() {
+  return (
+    <View>
+      <View className='bg-g1 p-5 pb-0 pt-3'>
+        <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}} disabled={true}>
+          <View className='flex-row items-center justify-center'>
+            <Award01SolidIcon width={16} height={16} className='text-black' />
+            <SemiBold className='ml-3 text-base text-black'>Eliminated</SemiBold>
+          </View>
+        </FullGradientButton>
+        <View className='mb-2 mt-1 flex-row items-center justify-center'>
+          <Medium className='text-sm text-white'>You have been eliminated from the tournament</Medium>
+        </View>
+        <PaddingBottom />
+      </View>
+    </View>
+  )
+}
+
 // const st = new Date().getTime() + 10000
 function AlreadyJoined({data}: {data: TournamentData}) {
   const [tournamentStartTime, setTournamentStartTime] = useState(0)
   const [isPlayable, setIsPlayable] = useState(false)
   const navigation = useNavigation<StackNav>()
-  const st = data.startTime
+  const st = data.currentRound > 1 ? data.nextRoundTime : data.startTime
+  // const st = data.startTime
+  // console.log(data.currentRound, 'current round')
   useEffect(() => {
     const startTime = new Date(st)
     function calculateTime() {
       let diff = startTime.getTime() - new Date().getTime()
       diff = diff < 0 ? 0 : diff
-      console.log(diff)
       setTournamentStartTime(diff)
       if (diff <= 0) setIsPlayable(true)
       else setIsPlayable(false)
@@ -201,7 +223,14 @@ function AlreadyJoined({data}: {data: TournamentData}) {
     <View>
       <View className='bg-g1 p-5 pb-0 pt-3'>
         {isPlayable ? (
-          <FullGradientButton className='rounded-full' onPress={() => navigation.navigate('Game')}>
+          <FullGradientButton
+            className='rounded-full'
+            onPress={() =>
+              navigation.navigate('Game', {
+                id: data.id,
+                type: 'tournament',
+              })
+            }>
             <View className='flex-row items-center justify-center'>
               <Award01SolidIcon width={16} height={16} className='text-black' />
               <SemiBold className='ml-3 text-base text-black'>Play Now</SemiBold>

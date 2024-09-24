@@ -59,7 +59,34 @@ export default function Profile({navigation}: NavProp) {
           <Option Icon={<BubbleChatSolidIcon {...ic} />} text='24/7 Support' onPress={() => open(contactLink)} />
           <Option Icon={<SentSolidIcon {...ic} />} text='Share with others' onPress={() => refer(user)} />
           {/* <Option Icon={<SentSolidIcon {...ic} />} text='Game' onPress={() => navigation.navigate('Game')} /> */}
-          {/* <Option Icon={<SentSolidIcon {...ic} />} text='Win' onPress={() => navigation.navigate('Win')} /> */}
+          {/* <Option
+            Icon={<SentSolidIcon {...ic} />}
+            text='Win'
+            onPress={() =>
+              navigation.navigate('Win', {
+                winnerData: {
+                  userId: 478,
+                  playerId: 0,
+                  fname: 'Abinash',
+                  totalSteps: '11',
+                  eliminatedPlayers: [
+                    {
+                      userId: 480,
+                      fname: 'Sudipto',
+                      playerId: 1,
+                      totalSteps: '2',
+                    },
+                    {
+                      userId: 478,
+                      fname: 'Sudipto',
+                      playerId: 0,
+                      totalSteps: '11',
+                    },
+                  ],
+                },
+              })
+            }
+          /> */}
           <Option
             Icon={<Door01SolidIcon {...ic} />}
             text='Logout'
