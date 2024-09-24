@@ -47,6 +47,7 @@ type GameStore = {
   updateFireWorks: (fireWorks: boolean) => void
   unfreezeDice: () => void
   // updatePlayerPiece: (player: Num, pieceId: string, position: number, travelCount: number) => void
+  clearToDefault: () => void
 }
 const gameStore = create<GameStore>((set) => ({
   player0: player0InitialState,
@@ -86,6 +87,24 @@ const gameStore = create<GameStore>((set) => ({
   unfreezeDice,
   updateFireWorks,
   // updatePlayerPiece,
+  clearToDefault: () => {
+    set({player0: player0InitialState})
+    set({player1: player2InitialState})
+    set({player2: player3InitialState})
+    set({player3: player4InitialState})
+    set({isDiceRolled: false})
+    set({isTouchDisabled: false})
+    set({winner: null})
+    set({diceNumber: 1})
+    set({chancePlayer: 3})
+    set({tokenSelection: -1})
+    set({cellSelection: -1})
+    set({currentPositions: []})
+    set({fireWorks: false})
+    set({points: [0, 0, 0, 0]})
+    set({myId: -1})
+    set({playersData: []})
+  },
 }))
 
 function setChancePlayer(chancePlayer: Num) {

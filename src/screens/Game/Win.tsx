@@ -25,6 +25,7 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
   const currentPlayerId = players[currentPlayer]?.userId
   const userId = route.params.winnerData.userId
   const {winnerData} = route.params
+  const clearToDefault = gameStore((state) => state.clearToDefault)
 
   const eliminatedPlayers = useMemo(() => winnerData?.eliminatedPlayers?.slice(0, 3), [winnerData.eliminatedPlayers])
   return (
@@ -46,7 +47,10 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
         <View className='mt-10 w-full px-4'>
           <FullGradientButton
             title='Go To Home'
-            onPress={() => navigation.reset({index: 0, routes: [{name: 'Home'}]})}
+            onPress={() => {
+              navigation.reset({index: 0, routes: [{name: 'Home'}]})
+              clearToDefault()
+            }}
           />
         </View>
       </View>
