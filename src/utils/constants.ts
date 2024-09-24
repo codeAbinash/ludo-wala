@@ -25,5 +25,6 @@ export const ppUrl = 'https://avatar.iran.liara.run/username?username=Abinash Ka
 
 export const webSocketLink = 'ws://socket.ludowalagames.com:3000'
 
+export const downloadAppLink = 'https://ludowala.co/download'
 
 export const ONESIGNAL_APP_ID = '161619eb-b716-499c-97b5-792da33b73d7'

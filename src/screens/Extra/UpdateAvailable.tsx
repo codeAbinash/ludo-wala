@@ -3,6 +3,7 @@ import Images from '@assets/images/images'
 import {FullGradientButton} from '@components/Button'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
+import {downloadAppLink} from '@utils/constants'
 import type {NavProp} from '@utils/types'
 import React from 'react'
 import {Image, Linking, View} from 'react-native'
@@ -24,12 +25,7 @@ export default function UpdateAvailable({navigation}: NavProp) {
           A new version of the app is available. Please update to continue using the app.
         </Medium>
         <View className='mt-10 w-full'>
-          <FullGradientButton
-            onPress={() => {
-              Linking.openURL('https://ludowala.co/download/')
-            }}
-            title='Update Now'
-          />
+          <FullGradientButton onPress={() => Linking.openURL(downloadAppLink)} title='Update Now' />
         </View>
         <PaddingBottom />
       </View>
