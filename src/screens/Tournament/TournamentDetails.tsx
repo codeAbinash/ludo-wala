@@ -149,7 +149,7 @@ function BottomPart({data}: {data: TournamentData}) {
     return () => clearInterval(interval)
   }, [data.registrationEndTime])
 
-  if (data.status === 'completed') return <DisabledButton text1='Tournament Ended' text2='The tournament has ended' />
+  if (data.status === 'complete') return <DisabledButton text1='Tournament Ended' text2='The tournament has ended' />
 
   if (data.eliminated)
     return <DisabledButton text1='You have been eliminated' text2='You have been eliminated from the tournament' />

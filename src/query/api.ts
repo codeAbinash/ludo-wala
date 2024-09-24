@@ -167,7 +167,7 @@ export interface TournamentData {
   registrationStartTime: Date
   roundInterval: number
   startTime: Date
-  status: string
+  status: 'complete' | 'live' | 'upcoming'
   title: string
   totalRound: number
   updated_at: null

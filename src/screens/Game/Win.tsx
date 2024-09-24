@@ -26,6 +26,7 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
   const userId = route.params.winnerData.userId
   const {winnerData} = route.params
   const clearToDefault = gameStore((state) => state.clearToDefault)
+  const didWin = currentPlayerId === userId
 
   const eliminatedPlayers = useMemo(
     () => winnerData?.eliminatedPlayers?.slice(0, 3).sort((a, b) => Number(b.totalSteps) - Number(a.totalSteps)),
@@ -37,7 +38,7 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
         <View>
           <Image className='mx-auto' source={Images.win} style={{height: 200, width: 200}} />
           <SemiBold className='text-center text-2xl text-b1'>
-            {currentPlayerId === userId ? 'You have win this game' : 'Better Luck Next Time!'}
+            {didWin ? 'You have win this game' : 'Better Luck Next Time!'}
           </SemiBold>
         </View>
         <View className='w-full' style={{gap: 10}}>
@@ -55,6 +56,9 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
               clearToDefault()
             }}
           />
+          <Medium className='mt-4 text-center text-b1'>
+            Note : Please Go Back To Tournament Details Page To Check The Final Result And Prize Distribution.
+          </Medium>
         </View>
       </View>
     </Wrap>
