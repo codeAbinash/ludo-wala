@@ -29,7 +29,7 @@ export default function Tournament({navigation}: NavProp) {
   }, [data])
 
   return (
-    <View>
+    <Radial>
       <BackHeader title='Tournament Mode' navigation={navigation} />
       <View className='px-5 pb-10' style={{gap: 20}}>
         {!data?.data && (
@@ -89,7 +89,7 @@ export default function Tournament({navigation}: NavProp) {
           />
         ))} */}
       </View>
-    </View>
+    </Radial>
   )
 }
 
