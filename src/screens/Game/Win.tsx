@@ -8,6 +8,18 @@ import {getPP} from '@utils/utils'
 import React from 'react'
 import {Image, View} from 'react-native'
 
+type ParamList = {
+  Win: WinParamList
+}
+
+export type WinParamList = {
+  winnerData: {
+    fname: string
+    totalSteps: string
+    userId: number
+  }
+}
+
 export default function Win({navigation}: NavProp) {
   return (
     <Wrap>

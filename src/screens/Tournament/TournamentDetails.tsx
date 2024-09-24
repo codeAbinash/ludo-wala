@@ -132,13 +132,17 @@ export default function TournamentDetails({
 function BottomPart({data}: {data: TournamentData}) {
   const [time, setTime] = useState(0)
   const [visible, setVisible] = useState(false)
+  const [isTimePassed, setIsTimePassed] = useState(false)
 
   useEffect(() => {
     const endTime = new Date(data.registrationEndTime)
     function calculateTime() {
       const diff = endTime.getTime() - new Date().getTime()
       setTime(diff)
-      if (diff < 0) clearInterval(interval)
+      if (diff < 0) {
+        clearInterval(interval)
+        setIsTimePassed(true)
+      }
     }
     calculateTime()
     const interval = setInterval(calculateTime, 1000)
@@ -151,7 +155,11 @@ function BottomPart({data}: {data: TournamentData}) {
     <View>
       <ModalAlert data={data} visible={visible} setVisible={setVisible} />
       <View className='bg-g1 p-5 pb-0 pt-3'>
-        <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}} onPress={() => setVisible(true)}>
+        <FullGradientButton
+          className='rounded-full bg-g1'
+          style={{padding: 15}}
+          onPress={() => setVisible(true)}
+          disabled={isTimePassed}>
           <View className='flex-row items-center justify-center'>
             <Award01SolidIcon width={16} height={16} className='text-black' />
             <SemiBold className='ml-3 text-base text-black'>Join Tournament</SemiBold>
@@ -167,31 +175,50 @@ function BottomPart({data}: {data: TournamentData}) {
   )
 }
 
+// const st = new Date().getTime() + 10000
 function AlreadyJoined({data}: {data: TournamentData}) {
   const [tournamentStartTime, setTournamentStartTime] = useState(0)
-
+  const [isPlayable, setIsPlayable] = useState(false)
+  const navigation = useNavigation<StackNav>()
+  const st = data.startTime
   useEffect(() => {
-    const startTime = new Date(data.startTime)
+    const startTime = new Date(st)
     function calculateTime() {
       let diff = startTime.getTime() - new Date().getTime()
       diff = diff < 0 ? 0 : diff
+      console.log(diff)
       setTournamentStartTime(diff)
+      if (diff <= 0) setIsPlayable(true)
+      else setIsPlayable(false)
       if (diff < 0) clearInterval(interval)
     }
     calculateTime()
     const interval = setInterval(calculateTime, 1000)
     return () => clearInterval(interval)
-  }, [data.startTime])
+  }, [data.startTime, st])
 
   return (
     <View>
       <View className='bg-g1 p-5 pb-0 pt-3'>
-        <FullGradientButton className='rounded-full bg-g1 opacity-70' activeOpacity={1} style={{padding: 15}} disabled>
-          <View className='flex-row items-center justify-center'>
-            <Award01SolidIcon width={16} height={16} className='text-black' />
-            <SemiBold className='ml-3 text-base text-black'>Starts in {availableTime(tournamentStartTime)}</SemiBold>
-          </View>
-        </FullGradientButton>
+        {isPlayable ? (
+          <FullGradientButton className='rounded-full' onPress={() => navigation.navigate('Game')}>
+            <View className='flex-row items-center justify-center'>
+              <Award01SolidIcon width={16} height={16} className='text-black' />
+              <SemiBold className='ml-3 text-base text-black'>Play Now</SemiBold>
+            </View>
+          </FullGradientButton>
+        ) : (
+          <FullGradientButton
+            className='rounded-full bg-g1 opacity-70'
+            activeOpacity={1}
+            style={{padding: 15}}
+            disabled>
+            <View className='flex-row items-center justify-center'>
+              <Award01SolidIcon width={16} height={16} className='text-black' />
+              <SemiBold className='ml-3 text-base text-black'>Starts in {availableTime(tournamentStartTime)}</SemiBold>
+            </View>
+          </FullGradientButton>
+        )}
         <View className='mb-2 mt-1 flex-row items-center justify-center'>
           <Medium className='text-sm text-white'>You have already joined the tournament</Medium>
         </View>

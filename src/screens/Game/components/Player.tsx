@@ -33,7 +33,7 @@ const bgColor = Colors.greenDefault
 const percentAge = 0.5
 
 export default function Player({banned, name, life, active, reversed, bottom, player}: PlayerProps) {
-  const currentPlayerChange = gameStore((state) => state.chancePlayer)
+  const currentPlayerChance = gameStore((state) => state.chancePlayer)
   const diceNo = gameStore((state) => state.diceNumber)
   const isDiceTouchDisabled = gameStore((state) => state.isTouchDisabled)
   const setDiceRolling = gameStore((state) => state.setIsDiceRolling)
@@ -59,15 +59,14 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
   path.addCircle(50 / 2, 50 / 2, r)
   const percent = useSharedValue(0)
   const redLife = 3 - life
-  useEffect(() => {
-    percent.value = withTiming(percentAge, {duration: 2000})
-    // percent.value = withTiming(100, {duration: 2000})
-  }, [percent])
 
   useEffect(() => {
-    percent.value = 0
-    percent.value = withTiming(1, {duration: 30000})
-  }, [currentPlayerChange, percent])
+    if (!isDiceRolling) {
+      percent.value = 0
+      percent.value = withTiming(1, {duration: 30000})
+    }
+  }, [currentPlayerChance, percent, isDiceRolling])
+  // }, [isDiceRolling, percent, currentPlayerChance])
 
   function press() {
     setDiceRolling(true)
@@ -79,7 +78,7 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
       {
         <View
           className={`w-full px-3 ${reversed ? 'items-end' : 'items-start'} ${
-            currentPlayerChange === player && !isDiceTouchDisabled ? 'opacity-100' : 'opacity-0'
+            currentPlayerChance === player && !isDiceTouchDisabled ? 'opacity-100' : 'opacity-0'
           } `}>
           <LottieView
             source={Animations.downArrow}
@@ -116,12 +115,12 @@ export default function Player({banned, name, life, active, reversed, bottom, pl
                 className='h-12 w-12 items-center justify-center rounded-xl'
                 onPress={press}
                 activeOpacity={0.7}
-                disabled={isDiceRolling || isDiceTouchDisabled || currentPlayerChange !== player || myId !== player}>
-                {!isDiceRolling && currentPlayerChange === player && <Dice diceNo={diceNo - 1} />}
-                {currentPlayerChange === player && isDiceRolling ? <DiceRolling /> : null}
+                disabled={isDiceRolling || isDiceTouchDisabled || currentPlayerChance !== player || myId !== player}>
+                {!isDiceRolling && currentPlayerChance === player && <Dice diceNo={diceNo - 1} />}
+                {currentPlayerChance === player && isDiceRolling ? <DiceRolling /> : null}
               </TouchableOpacity>
               <View className='relative h-12 w-12 items-center justify-center rounded-full'>
-                {currentPlayerChange === player && (
+                {currentPlayerChance === player && (
                   <View style={{position: 'absolute', zIndex: 500}}>
                     <Canvas
                       style={{
@@ -173,7 +172,7 @@ function Dots({n, player}: {n: number; player: Num}) {
   const dots = useMemo(() => Array.from({length: n}, (_, i) => i), [n])
   const redDots = useMemo(() => Array.from({length: 3 - n}, (_, i) => i), [n])
   return (
-    <View style={{gap: 5}}>
+    <View style={{gap: 5}} className='opacity-0'>
       {dots.map((_, i) => (
         <View key={i} style={{height: 10, width: 10, backgroundColor: Red[0], borderRadius: 5}} />
         // <FavouriteSolidIcon key={i} width={13} height={13} className='text-gray-500' />

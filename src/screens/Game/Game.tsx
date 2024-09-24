@@ -15,7 +15,8 @@ import {secureLs} from '@utils/storage'
 import {delay} from '@utils/utils'
 import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo, useState} from 'react'
-import {Alert, Image, Vibration, View} from 'react-native'
+import {Alert, Image, ToastAndroid, Vibration, View} from 'react-native'
+import Sound from 'react-native-sound'
 import {io} from 'socket.io-client'
 import HomeBox from './components/Home'
 import {MidBox, w} from './components/MidBox'
@@ -32,12 +33,19 @@ import {
   victoryStart,
 } from './plotData'
 import gameStore, {type Num} from './zustand/gameStore'
-import type {PlayerState} from './zustand/initialState'
+import {playersInitialData, type PlayerState} from './zustand/initialState'
+import type {NavProp, StackNav} from '@utils/types'
 
 export type Message = {
   diceRolled?: DiceRolled
   tokenMoved?: TokenMoved
   nextTurn?: Num
+  roomJoined?: PlayerTournamentRoom
+  winnerBoard?: {
+    fname: string
+    totalSteps: string
+    userId: number
+  }
 }
 
 export type DiceRolled = {
@@ -84,12 +92,13 @@ function modifyPlayersData(data: PlayerTournamentRoom[]) {
   return players
 }
 
-export default function Game() {
+export default function Game({navigation}: NavProp) {
   const token = useMemo(() => 'Bearer ' + secureLs.getString('token'), [])
   const setSocket = socketStore((state) => state.setSocket)
   const [isConnected, setIsConnected] = useState(false)
   const setPlayersData = gameStore((state) => state.setPlayersData)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
+  const [endTime, setEndTime] = useState<Date | null>(null)
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
@@ -121,7 +130,9 @@ export default function Game() {
     s.on('message', async (message: Message) => {
       if (message.diceRolled) handelDiceRoll(message.diceRolled)
       if (message.tokenMoved) handelTokenMove(message.tokenMoved)
-      if (message.nextTurn || message.nextTurn === 0) setChancePlayer(message.nextTurn)
+      if (message.nextTurn || message.nextTurn === 0) nextTurnEvent(message.nextTurn)
+      if (message.roomJoined) joinTournamentRoom(message.roomJoined)
+      if (message.winnerBoard) winnerBoardEvent(message.winnerBoard, navigation)
       console.log(message)
     })
     s.on('error', (e) => {
@@ -144,6 +155,32 @@ export default function Game() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    // Sound Utilities here
+    let sound: Sound
+    try {
+      sound = new Sound('home', Sound.MAIN_BUNDLE, (error) => {
+        if (error) {
+          console.log('Failed to load the sound', error)
+          return
+        }
+        sound.setNumberOfLoops(-1)
+        sound.setVolume(0.8)
+
+        // !__DEV__ &&
+        sound.play((success) => {
+          sound.release()
+        })
+      })
+    } catch (error) {}
+
+    return () => {
+      sound.stop()
+      sound.release()
+    }
+  }, [])
+
   return (
     <View className='flex-1'>
       <View className={`${isConnected && !isPending ? 'flex-0' : 'flex-1'}`}>
@@ -157,7 +194,7 @@ export default function Game() {
         <Wrap Col={['#215962', '#0b1e22']}>
           <PaddingTop />
           <View className='flex-1 items-center justify-between'>
-            <FirstPrice />
+            <FirstPrice endTime={new Date().getTime() + 120000} />
             <View>
               <TopPart />
               <Board />
@@ -174,25 +211,71 @@ export default function Game() {
   )
 }
 
-function FirstPrice() {
+function winnerBoardEvent(data: any, navigation: StackNav) {
+  // navigation.navigate('Win', data)
+  // Two step back
+  navigation.goBack()
+  navigation.goBack()
+}
+
+function joinTournamentRoom(data: PlayerTournamentRoom) {
+  const playersData = gameStore.getState().playersData
+  const setPlayersData = gameStore.getState().setPlayersData
+  const currentPositions = gameStore.getState().currentPositions
+  const setCurrentPositions = gameStore.getState().updateCurrentPositions
+  if (data?.playerId) {
+    playersData[data.playerId] = data
+    setPlayersData([...playersData])
+    const initialPositions = playersInitialData[data.playerId] || []
+    setCurrentPositions([...currentPositions, ...initialPositions])
+  }
+}
+
+function FirstPrice({endTime}: {endTime: number}) {
+  const end = new Date(endTime)
+  const [left, setLeft] = useState('')
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const diff = end.getTime() - now
+      if (diff < 0) {
+        setLeft('Time Over')
+        return
+      }
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+      setLeft(`${minutes}:${seconds} left`)
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
-    <View className='w-full flex-row justify-between px-3'>
-      <View style={{flex: 0.5}}></View>
-      <View className='mt-2 flex-1 flex-row'>
-        <View
-          className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5'
-          style={{columnGap: 10}}>
-          <Image source={Images.trophy} style={{width: 40, height: 40}} />
-          <View>
-            <SemiBold className='text-blue-600'>1st Prize</SemiBold>
-            <SemiBold className='text-base text-blue-600'>₹1 Crore</SemiBold>
+    <>
+      <View className='w-full flex-row justify-between px-3'>
+        <View style={{flex: 0.5}}></View>
+        <View className='mt-2 flex-1 flex-row'>
+          <View
+            className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5'
+            style={{columnGap: 10}}>
+            <Image source={Images.trophy} style={{width: 40, height: 40}} />
+            <View>
+              <SemiBold className='text-blue-600'>1st Prize</SemiBold>
+              <SemiBold className='text-base text-blue-600'>₹150</SemiBold>
+            </View>
           </View>
         </View>
+        <View style={{flex: 0.5}} className='flex-row justify-end'>
+          <Medium>Menu</Medium>
+        </View>
       </View>
-      <View style={{flex: 0.5}} className='flex-row justify-end'>
-        <Medium>Menu</Medium>
-      </View>
-    </View>
+      {/* <View>
+        <Medium className='text-xl text-white'>{left}</Medium>
+      </View> */}
+    </>
   )
 }
 
@@ -246,6 +329,19 @@ function Board() {
       </View>
     </>
   )
+}
+
+function nextTurnEvent(player: Num) {
+  const myId = gameStore.getState().myId
+  const chance = gameStore.getState().chancePlayer
+  // const
+  console.log('CHAAA', myId, chance)
+  if (chance === myId) {
+    Vibration.vibrate([0, 100, 200, 100])
+    ToastAndroid.show('You Missed the Turn', ToastAndroid.SHORT)
+  }
+  setChancePlayer(player)
+  // setTokenSelection(-1)
 }
 
 async function handelTokenMove(data: TokenMoved) {

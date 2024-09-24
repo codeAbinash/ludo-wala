@@ -113,3 +113,5 @@ export const player4InitialState: PlayerState[] = [
     player: 3,
   },
 ]
+
+export const playersInitialData = [player0InitialState, player2InitialState, player3InitialState, player4InitialState]
