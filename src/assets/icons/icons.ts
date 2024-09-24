@@ -45,3 +45,4 @@ export {default as UserIcon} from '@icons/user-stroke-rounded.svg'
 export {default as Wallet01Icon} from '@icons/wallet-01-stroke-rounded.svg'
 
 export {default as FavouriteSolidIcon} from '@icons/favourite-solid-rounded.svg'
+export { default as Clock01Icon } from '@icons/clock-01-stroke-rounded.svg'

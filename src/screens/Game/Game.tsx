@@ -2,8 +2,9 @@ import {Medium, SemiBold} from '@/fonts'
 import {playSound} from '@/helpers/SoundUtility'
 import {socketStore} from '@/zustand/socketStore'
 import Animations from '@assets/animations/animations'
+import {Clock01Icon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
-import {Radial} from '@components/Gradient'
+import Gradient, {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
 import Wrap from '@components/Screen'
 import {join_tournament_room, type InitialState, type PlayerTournamentRoom} from '@query/api'
@@ -129,6 +130,7 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
       console.log(JSON.stringify(data, null, 2))
       setPlayersData(modifyPlayersData(data.players))
       console.log('Players Data set.', data.players)
+      setEndTime(new Date(data.endTime || Date.now() - 10000))
     },
   })
   useEffect(() => {
@@ -212,7 +214,7 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
         <Wrap Col={['#215962', '#0b1e22']}>
           <PaddingTop />
           <View className='flex-1 items-center justify-between'>
-            <FirstPrice endTime={new Date().getTime() + 120000} />
+            <FirstPrice endTime={endTime} />
             <View>
               <TopPart />
               <Board />
@@ -249,8 +251,12 @@ function joinTournamentRoom(data: PlayerTournamentRoom) {
   }
 }
 
-function FirstPrice({endTime}: {endTime: number}) {
-  const end = new Date(endTime)
+function addZero(num: number) {
+  return num < 10 ? '0' + num : num
+}
+
+function FirstPrice({endTime}: {endTime: Date | null}) {
+  const end = endTime || new Date()
   const [left, setLeft] = useState('')
 
   useEffect(() => {
@@ -261,9 +267,9 @@ function FirstPrice({endTime}: {endTime: number}) {
         setLeft('Time Over')
         return
       }
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-      setLeft(`${minutes}:${seconds} left`)
+      const minutes = addZero(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
+      const seconds = addZero(Math.floor((diff % (1000 * 60)) / 1000))
+      setLeft(`${minutes}:${seconds}`)
     }, 1000)
 
     return () => {
@@ -290,9 +296,10 @@ function FirstPrice({endTime}: {endTime: number}) {
           <Medium>Menu</Medium>
         </View>
       </View>
-      {/* <View>
-        <Medium className='text-xl text-white'>{left}</Medium>
-      </View> */}
+      <Gradient className='flex-row rounded-xl border border-border p-2 px-3.5' style={{gap: 8}}>
+        <Clock01Icon className='text-b1' height={18} width={18} />
+        <SemiBold className='-mt-1 text-lg text-b1'>{left}</SemiBold>
+      </Gradient>
     </>
   )
 }

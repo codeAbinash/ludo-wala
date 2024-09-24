@@ -149,7 +149,7 @@ function BottomPart({data}: {data: TournamentData}) {
     return () => clearInterval(interval)
   }, [data.registrationEndTime])
 
-  if (data.eliminated) return <Eliminated />
+  // if (data.eliminated) return <Eliminated /> // TODO: uncomment this line
 
   if (data.userJoined) return <AlreadyJoined data={data} />
 
@@ -181,10 +181,10 @@ function Eliminated() {
   return (
     <View>
       <View className='bg-g1 p-5 pb-0 pt-3'>
-        <FullGradientButton className='rounded-full bg-g1' style={{padding: 15}} disabled={true}>
+        <FullGradientButton className='rounded-full bg-g1 opacity-70' activeOpacity={1} style={{padding: 15}} disabled>
           <View className='flex-row items-center justify-center'>
             <Award01SolidIcon width={16} height={16} className='text-black' />
-            <SemiBold className='ml-3 text-base text-black'>Eliminated</SemiBold>
+            <SemiBold className='ml-3 text-base text-black'>You have been eliminated</SemiBold>
           </View>
         </FullGradientButton>
         <View className='mb-2 mt-1 flex-row items-center justify-center'>
