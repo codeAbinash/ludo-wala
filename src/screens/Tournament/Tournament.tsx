@@ -5,7 +5,7 @@ import Images from '@assets/images/images'
 import BackHeader from '@components/BackHeader'
 import {FullGradientButton} from '@components/Button'
 import Gradient, {Radial} from '@components/Gradient'
-import Wrap from '@components/Screen'
+import {PaddingBottom} from '@components/SafePadding'
 import {getTournamentList_f, type TournamentData} from '@query/api'
 import {useNavigation} from '@react-navigation/native'
 import {useQuery} from '@tanstack/react-query'
@@ -15,6 +15,7 @@ import {print} from '@utils/utils'
 import LottieView from 'lottie-react-native'
 import React, {useEffect} from 'react'
 import {Image, TouchableOpacity, View} from 'react-native'
+import {FlatList} from 'react-native-gesture-handler'
 import type {SvgProps} from 'react-native-svg'
 
 export default function Tournament({navigation}: NavProp) {
@@ -28,16 +29,9 @@ export default function Tournament({navigation}: NavProp) {
   }, [data])
 
   return (
-    <Wrap>
+    <View>
       <BackHeader title='Tournament Mode' navigation={navigation} />
       <View className='px-5 pb-10' style={{gap: 20}}>
-        <Gradient className='flex-row justify-between rounded-3xl border border-border p-5'>
-          <View>
-            <Bold className='text-3xl text-b1'>Ludo{'\n'}Tournament</Bold>
-            <Regular className='mt-1 text-lg text-b1'>Play with real players</Regular>
-          </View>
-          <Image source={Images.trophy} className='h-24 w-24' />
-        </Gradient>
         {!data?.data && (
           <View className='h-80 w-full items-center justify-center'>
             <LottieView
@@ -50,6 +44,38 @@ export default function Tournament({navigation}: NavProp) {
             />
           </View>
         )}
+        <FlatList
+          ListHeaderComponent={
+            <Gradient className='flex-row justify-between rounded-3xl border border-border p-5'>
+              <View>
+                <Bold className='text-3xl text-b1'>Ludo{'\n'}Tournament</Bold>
+                <Regular className='mt-1 text-lg text-b1'>Play with real players</Regular>
+              </View>
+              <Image source={Images.trophy} className='h-24 w-24' />
+            </Gradient>
+          }
+          data={data?.data || []}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{gap: 15, paddingBottom: 200}}
+          renderItem={({item}) => (
+            <Card
+              firstPrice={item['1stPrize'] || ''}
+              entryPrize={item.entryFee || 0}
+              buttonText={item.userJoined ? 'Joined' : 'Join'}
+              maxPlayers={item.maxPlayers}
+              joinedUsers={item.participants_count}
+              data={item}
+              onPress={() => navigation.navigate('TournamentDetails', item)}
+            />
+          )}
+          ListFooterComponent={
+            <View>
+              <PaddingBottom />
+            </View>
+          }></FlatList>
+        {/*
         {data?.data.map((item, index: number) => (
           <Card
             firstPrice={item['1stPrize'] || ''}
@@ -61,9 +87,9 @@ export default function Tournament({navigation}: NavProp) {
             data={item}
             onPress={() => navigation.navigate('TournamentDetails', item)}
           />
-        ))}
+        ))} */}
       </View>
-    </Wrap>
+    </View>
   )
 }
 
