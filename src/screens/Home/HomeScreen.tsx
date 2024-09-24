@@ -15,6 +15,7 @@ import Wrap from '@components/Screen'
 import SmallProfile from '@components/SmallProfile'
 import {get_user_f} from '@query/api'
 import {useNavigation} from '@react-navigation/native'
+import gameStore from '@screens/Game/zustand/gameStore'
 import {useMutation} from '@tanstack/react-query'
 import Colors from '@utils/colors'
 import {W} from '@utils/dimensions'
@@ -137,8 +138,14 @@ function GameMode({
 export default function HomeScreen({navigation}: NavProp) {
   const setUser = userStore((state) => state.setUser)
   const [currentOption, setCurrentOption] = React.useState<GameType>('Tournament')
-
+  const clearToDefault = gameStore((state) => state.clearToDefault)
   const curr = useSharedValue(0)
+  const isFocused = useNavigation().isFocused()
+
+  useEffect(() => {
+    if (!isFocused) return
+    clearToDefault()
+  }, [clearToDefault, isFocused])
 
   useDerivedValue(() => {
     curr.value = withTiming(getCurrentUserIndex(currentOption))
