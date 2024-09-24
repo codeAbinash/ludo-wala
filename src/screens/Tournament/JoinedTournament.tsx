@@ -35,7 +35,6 @@ export default function JoinedTournament({navigation}: NavProp) {
         loop={false}
         style={{width: W * 1.5, height: W * 1}}
       />
-      c
       <GradientButton title='Go to Home' onPress={() => navigation.pop(3)} className='mt-10 rounded-full px-10 py-3' />
     </View>
   )

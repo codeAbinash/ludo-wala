@@ -31,7 +31,14 @@ export default function Tournament({navigation}: NavProp) {
   return (
     <Radial>
       <BackHeader title='Tournament Mode' navigation={navigation} />
-      <View className='px-5 pb-10' style={{gap: 20}}>
+      <View className='flex-1 px-5' style={{gap: 20}}>
+        <Gradient className='flex-row justify-between rounded-3xl border border-border p-5'>
+          <View>
+            <Bold className='text-3xl text-b1'>Ludo{'\n'}Tournament</Bold>
+            <Regular className='mt-1 text-lg text-b1'>Play with real players</Regular>
+          </View>
+          <Image source={Images.trophy} className='h-24 w-24' />
+        </Gradient>
         {!data?.data && (
           <View className='h-80 w-full items-center justify-center'>
             <LottieView
@@ -44,37 +51,30 @@ export default function Tournament({navigation}: NavProp) {
             />
           </View>
         )}
-        <FlatList
-          ListHeaderComponent={
-            <Gradient className='flex-row justify-between rounded-3xl border border-border p-5'>
+        <View className='flex-1'>
+          <FlatList
+            data={data?.data || []}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{gap: 15}}
+            renderItem={({item}) => (
+              <Card
+                firstPrize={item['1stPrize'] || ''}
+                entryPrize={item.entryFee || 0}
+                buttonText={item.userJoined ? 'Joined' : 'Join'}
+                maxPlayers={item.maxPlayers}
+                joinedUsers={item.participants_count}
+                data={item}
+                onPress={() => navigation.navigate('TournamentDetails', item)}
+              />
+            )}
+            ListFooterComponent={
               <View>
-                <Bold className='text-3xl text-b1'>Ludo{'\n'}Tournament</Bold>
-                <Regular className='mt-1 text-lg text-b1'>Play with real players</Regular>
+                <PaddingBottom />
               </View>
-              <Image source={Images.trophy} className='h-24 w-24' />
-            </Gradient>
-          }
-          data={data?.data || []}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{gap: 15, paddingBottom: 200}}
-          renderItem={({item}) => (
-            <Card
-              firstPrice={item['1stPrize'] || ''}
-              entryPrize={item.entryFee || 0}
-              buttonText={item.userJoined ? 'Joined' : 'Join'}
-              maxPlayers={item.maxPlayers}
-              joinedUsers={item.participants_count}
-              data={item}
-              onPress={() => navigation.navigate('TournamentDetails', item)}
-            />
-          )}
-          ListFooterComponent={
-            <View>
-              <PaddingBottom />
-            </View>
-          }></FlatList>
+            }></FlatList>
+        </View>
         {/*
         {data?.data.map((item, index: number) => (
           <Card
@@ -94,7 +94,7 @@ export default function Tournament({navigation}: NavProp) {
 }
 
 interface CardProps {
-  firstPrice: string
+  firstPrize: string
   entryPrize: number
   buttonText: string
   maxPlayers: number
@@ -103,7 +103,7 @@ interface CardProps {
   onPress: () => void
 }
 
-function Card({firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data}: CardProps) {
+function Card({firstPrize: firstPrice, entryPrize, buttonText, maxPlayers, joinedUsers, data}: CardProps) {
   const navigation = useNavigation<StackNav>()
   const width = (joinedUsers / maxPlayers) * 100
   return (
