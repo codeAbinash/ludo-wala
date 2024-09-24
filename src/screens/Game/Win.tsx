@@ -38,7 +38,7 @@ export default function Win({navigation, route}: {navigation: StackNav; route: R
         </View>
         <View className='w-full' style={{gap: 10}}>
           <Titlebar />
-          <Row isGradient score={winnerData.totalSteps} prize={'0'} name='Abinash Karmakar' />
+          <Row isGradient score={winnerData.totalSteps} prize={'0'} name={winnerData.fname} />
           {eliminatedPlayers?.map((player, index) => {
             return <Row key={index} score={player?.totalSteps} prize={'0'} name={player?.fname} />
           })}
