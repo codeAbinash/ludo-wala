@@ -261,7 +261,7 @@ export type JoinTournamentRoom = {
   status: boolean
   currentTurn: Num
   players: PlayerTournamentRoom[]
-  endTime: Date
+  endTime: string
 }
 
 export type InitialState = {

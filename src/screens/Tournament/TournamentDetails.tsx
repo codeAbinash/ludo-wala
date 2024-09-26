@@ -232,6 +232,7 @@ function AlreadyJoined({data}: {data: TournamentData}) {
               navigation.navigate('Game', {
                 id: data.id,
                 type: 'tournament',
+                firstPrice: data['1stPrize'],
               })
             }>
             <View className='flex-row items-center justify-center'>

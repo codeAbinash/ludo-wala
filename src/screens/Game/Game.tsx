@@ -1,8 +1,8 @@
-import {Medium, SemiBold} from '@/fonts'
+import {Bold, Medium, SemiBold} from '@/fonts'
 import {playSound} from '@/helpers/SoundUtility'
 import {socketStore} from '@/zustand/socketStore'
 import Animations from '@assets/animations/animations'
-import {Clock01Icon} from '@assets/icons/icons'
+import {Clock01Icon, InformationCircleIcon} from '@assets/icons/icons'
 import Images from '@assets/images/images'
 import Gradient, {Radial} from '@components/Gradient'
 import {PaddingBottom, PaddingTop} from '@components/SafePadding'
@@ -10,7 +10,7 @@ import Wrap from '@components/Screen'
 import {join_tournament_room, type InitialState, type PlayerTournamentRoom} from '@query/api'
 import type {RouteProp} from '@react-navigation/native'
 import {useMutation} from '@tanstack/react-query'
-import {GRADS} from '@utils/colors'
+import Colors, {GRADS} from '@utils/colors'
 import {webSocketLink} from '@utils/constants'
 import {H} from '@utils/dimensions'
 import {secureLs} from '@utils/storage'
@@ -18,7 +18,7 @@ import type {StackNav} from '@utils/types'
 import {delay} from '@utils/utils'
 import LottieView from 'lottie-react-native'
 import React, {useEffect, useMemo, useState} from 'react'
-import {Alert, Image, ToastAndroid, Vibration, View} from 'react-native'
+import {Alert, Image, ToastAndroid, TouchableOpacity, Vibration, View} from 'react-native'
 import Sound from 'react-native-sound'
 import {io} from 'socket.io-client'
 import HomeBox from './components/Home'
@@ -44,6 +44,7 @@ export type Message = {
   nextTurn?: Num
   roomJoined?: PlayerTournamentRoom
   winnerBoard?: WinnerBoardElement
+  gameCrash?: boolean
 }
 
 export type WinnerBoardElement = {
@@ -105,6 +106,7 @@ type ParamList = {
 export type GameParamList = {
   id: number
   type: 'tournament'
+  firstPrice: string
 }
 
 //
@@ -115,22 +117,25 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
   const [isConnected, setIsConnected] = useState(false)
   const setPlayersData = gameStore((state) => state.setPlayersData)
   const setCurrentPositions = gameStore((state) => state.updateCurrentPositions)
-  const [endTime, setEndTime] = useState<Date | null>(null)
+  const [endTime, setEndTime] = useState<string | null>(null)
   const id = route.params.id
   const type = route.params.type
+  const firstPrice = route.params.firstPrice
 
   const {isPending, isError, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
     mutationFn: () => join_tournament_room(id, type),
     onSuccess: (data) => {
-      if (!data.status) return Alert.alert('Error', data.message)
+      if (!data.status)
+        return Alert.alert('Join Room Failed', data.message, [{text: 'OK', onPress: () => navigation.goBack()}])
+
       gameStore.getState().setMyId(data.playerId as Num) // Directly set the player id
       setChancePlayer(data.currentTurn) // Set the current turn
       data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
       console.log(JSON.stringify(data, null, 2))
       setPlayersData(modifyPlayersData(data.players))
       console.log('Players Data set.', data.players)
-      setEndTime(new Date(data.endTime || Date.now() - 10000))
+      setEndTime(data.endTime)
     },
   })
   useEffect(() => {
@@ -153,6 +158,7 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
       if (message.nextTurn || message.nextTurn === 0) nextTurnEvent(message.nextTurn)
       if (message.roomJoined) joinTournamentRoom(message.roomJoined)
       if (message.winnerBoard) winnerBoardEvent(message.winnerBoard, navigation)
+      if (message.gameCrash) gameCrashEvent(navigation)
       console.log(JSON.stringify(message, null, 2))
     })
     s.on('error', (e) => {
@@ -186,7 +192,7 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
           return
         }
         sound.setNumberOfLoops(-1)
-        sound.setVolume(0.8)
+        sound.setVolume(0.6)
 
         // !__DEV__ &&
         sound.play((success) => {
@@ -214,51 +220,17 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
         <Wrap Col={['#215962', '#0b1e22']}>
           <PaddingTop />
           <View className='flex-1 items-center justify-between'>
-            <FirstPrice endTime={endTime} />
+            <Header firstPrice={firstPrice} endTime={endTime} />
             <View>
               <TopPart />
               <Board />
               <BottomPart />
             </View>
-            <Timer endTime={endTime} />
+            <View />
           </View>
           <PaddingBottom />
         </Wrap>
       </View>
-    </View>
-  )
-}
-
-function Timer({endTime}: {endTime: Date | null}) {
-  const end = endTime || new Date()
-  const [left, setLeft] = useState('')
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const diff = end.getTime() - now
-      if (diff < 0) {
-        setLeft('Time Over')
-        return
-      }
-      const minutes = addZero(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
-      const seconds = addZero(Math.floor((diff % (1000 * 60)) / 1000))
-      setLeft(`${minutes}:${seconds}`)
-    }, 1000)
-
-    return () => {
-      clearInterval(timer)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  return (
-    <View>
-      <Gradient className='flex-row rounded-xl border border-border p-2 px-3.5' style={{gap: 8}}>
-        <Clock01Icon className='text-b1' height={18} width={18} />
-        <SemiBold className='-mt-1 text-lg text-b1'>{left}</SemiBold>
-      </Gradient>
-      <PaddingBottom />
     </View>
   )
 }
@@ -283,31 +255,88 @@ function joinTournamentRoom(data: PlayerTournamentRoom) {
   }
 }
 
+function gameCrashEvent(navigation: StackNav) {
+  navigation.goBack()
+}
+
 function addZero(num: number) {
   return num < 10 ? '0' + num : num
 }
 
-function FirstPrice({endTime}: {endTime: Date | null}) {
+function Header({firstPrice, endTime}: {firstPrice: string; endTime: string | null}) {
   return (
-    <>
-      <View className='w-full flex-row justify-between px-3'>
-        <View style={{flex: 0.5}}></View>
-        <View className='mt-2 flex-1 flex-row'>
-          <View
-            className='mx-auto flex-row items-center justify-between rounded-xl bg-white px-3 py-1 pl-1.5'
-            style={{columnGap: 10}}>
-            <Image source={Images.trophy} style={{width: 40, height: 40}} />
-            <View>
-              <SemiBold className='text-blue-600'>1st Prize</SemiBold>
-              <SemiBold className='text-base text-blue-600'>₹150</SemiBold>
-            </View>
-          </View>
+    <View className='w-full flex-row items-center justify-between px-5 py-3' style={{gap: 20}}>
+      <Timer endTime={endTime} />
+      <FirstPrize firstPrice={firstPrice} />
+      <IButton />
+    </View>
+  )
+}
+
+function FirstPrize({firstPrice}: {firstPrice: string}) {
+  return (
+    <View>
+      <Gradient
+        colors={[Colors.b1, Colors.b2]}
+        className='flex-row rounded-full border-border px-3 py-2 pr-4'
+        style={{columnGap: 10}}>
+        <Image source={Images.trophy} style={{width: 30, height: 30}} />
+        <View>
+          <SemiBold className='text-black'>1st Prize</SemiBold>
+          <Bold className='-mt-1 text-base text-black'>{firstPrice}</Bold>
         </View>
-        <View style={{flex: 0.5}} className='flex-row justify-end'>
-          <Medium>Menu</Medium>
-        </View>
-      </View>
-    </>
+      </Gradient>
+    </View>
+  )
+}
+
+function IButton() {
+  return (
+    <TouchableOpacity
+      className='w-1/5 flex-row items-center'
+      activeOpacity={0.7}
+      onPressOut={() => Alert.alert('Your Report Is Recorded')}>
+      <Gradient
+        className='w-full flex-row items-center justify-center rounded-full border border-border p-1.5 px-2'
+        style={{gap: 8}}>
+        <InformationCircleIcon className='text-b1' height={20} width={20} />
+      </Gradient>
+      <PaddingBottom />
+    </TouchableOpacity>
+  )
+}
+
+function Timer({endTime}: {endTime: string | null}) {
+  const end = new Date(endTime || new Date())
+  const [left, setLeft] = useState('')
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const diff = end.getTime() - now
+      if (diff < 0) {
+        setLeft('Over')
+        return
+      }
+      const minutes = addZero(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
+      const seconds = addZero(Math.floor((diff % (1000 * 60)) / 1000))
+      setLeft(`${minutes}:${seconds}`)
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return (
+    <View className='w-1/4 flex-row items-center justify-center'>
+      <Gradient className='w-full flex-row rounded-full border border-border p-1.5 px-2' style={{gap: 8}}>
+        <Clock01Icon className='text-b1' height={20} width={20} />
+        <SemiBold className='text-sm text-b1'>{left}</SemiBold>
+      </Gradient>
+      <PaddingBottom />
+    </View>
   )
 }
 

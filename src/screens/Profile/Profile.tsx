@@ -67,6 +67,7 @@ export default function Profile({navigation}: NavProp) {
                   navigation.navigate('Game', {
                     id: 123,
                     type: 'tournament',
+                    firstPrice: '1000',
                   })
                 }
               />

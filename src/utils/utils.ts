@@ -1,10 +1,10 @@
-import { image } from '@/image'
-import type { User } from '@query/api'
-import type { Num } from '@screens/Game/zustand/gameStore'
-import { Linking } from 'react-native'
-import { OneSignal } from 'react-native-onesignal'
+import {image} from '@/image'
+import type {User} from '@query/api'
+import type {Num} from '@screens/Game/zustand/gameStore'
+import {Linking} from 'react-native'
+import {OneSignal} from 'react-native-onesignal'
 import Share from 'react-native-share'
-import { getShareText, ONESIGNAL_APP_ID } from './constants'
+import {getShareText, ONESIGNAL_APP_ID} from './constants'
 
 export function getTotal(s1: string, s2: string, s3: string) {
   return (parseFloat(s1) + parseFloat(s2) + parseFloat(s3)).toFixed(2)
