@@ -122,24 +122,30 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
   const type = route.params.type
   const firstPrice = route.params.firstPrice
 
-  const {isPending, isError, mutate} = useMutation({
+  const {isPending, data, mutate} = useMutation({
     mutationKey: ['joinTournamentRoom'],
     mutationFn: () => join_tournament_room(id, type),
-    onSuccess: (data) => {
-      if (!data.status)
-        return Alert.alert('Join Room Failed', data.message, [{text: 'OK', onPress: () => navigation.goBack()}])
+    onSuccess: (d) => {
+      if (!d.status)
+        return Alert.alert('Join Room Failed', d.message, [{text: 'OK', onPress: () => navigation.goBack()}])
 
-      gameStore.getState().setMyId(data.playerId as Num) // Directly set the player id
-      setChancePlayer(data.currentTurn) // Set the current turn
-      data.events && data.events.length && setCurrentPositions(getInitialPositions(data.events))
-      console.log(JSON.stringify(data, null, 2))
-      setPlayersData(modifyPlayersData(data.players))
-      console.log('Players Data set.', data.players)
-      setEndTime(data.endTime)
+      gameStore.getState().setMyId(d.playerId as Num) // Directly set the player id
+      setChancePlayer(d.currentTurn) // Set the current turn
+      d.events && d.events.length && setCurrentPositions(getInitialPositions(d.events))
+      console.log(JSON.stringify(d, null, 2))
+      setPlayersData(modifyPlayersData(d.players))
+      console.log('Players Data set.', d.players)
+      setEndTime(d.endTime)
     },
+    onError: (e) => {
+      console.log(e)
+      Alert.alert('Error', 'Failed to join the room', [{text: 'OK', onPress: () => navigation.goBack()}])
+    },
+    retry: false,
   })
   useEffect(() => {
-    mutate()
+    if (!data) return
+
     // const s = io('ws://192.168.21.12:3000', {
     const s = io(webSocketLink, {
       reconnectionDelayMax: 10000,
@@ -162,11 +168,11 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
       console.log(JSON.stringify(message, null, 2))
     })
     s.on('error', (e) => {
-      Alert.alert('Error', e)
+      Alert.alert('Error', e, [{text: 'OK', onPress: () => navigation.goBack()}])
       console.log(e)
     })
     s.on('connect_error', (e) => {
-      Alert.alert('Error', e.toString())
+      Alert.alert('Error', e.toString(), [{text: 'OK', onPress: () => navigation.goBack()}])
       console.log(JSON.stringify(e, null, 2))
     })
     s.on('disconnect', () => {
@@ -180,6 +186,11 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
       s.close()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  useEffect(() => {
+    mutate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -192,7 +203,7 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
           return
         }
         sound.setNumberOfLoops(-1)
-        sound.setVolume(0.6)
+        sound.setVolume(0.5)
 
         // !__DEV__ &&
         sound.play((success) => {
@@ -226,13 +237,17 @@ export default function Game({navigation, route}: {navigation: StackNav; route: 
               <Board />
               <BottomPart />
             </View>
-            <View />
+            <Footer />
           </View>
           <PaddingBottom />
         </Wrap>
       </View>
     </View>
   )
+}
+
+function Footer() {
+  return <View className='h-10 w-full'></View>
 }
 
 function winnerBoardEvent(data: WinnerBoardElement, navigation: StackNav) {
@@ -266,9 +281,8 @@ function addZero(num: number) {
 function Header({firstPrice, endTime}: {firstPrice: string; endTime: string | null}) {
   return (
     <View className='w-full flex-row items-center justify-between px-5 py-3' style={{gap: 20}}>
-      <Timer endTime={endTime} />
       <FirstPrize firstPrice={firstPrice} />
-      <IButton />
+      <Timer endTime={endTime} />
     </View>
   )
 }
@@ -278,7 +292,7 @@ function FirstPrize({firstPrice}: {firstPrice: string}) {
     <View>
       <Gradient
         colors={[Colors.b1, Colors.b2]}
-        className='flex-row rounded-full border-border px-3 py-2 pr-4'
+        className='flex-row rounded-full border-border px-5 py-2 pr-4'
         style={{columnGap: 10}}>
         <Image source={Images.trophy} style={{width: 30, height: 30}} />
         <View>
@@ -287,22 +301,6 @@ function FirstPrize({firstPrice}: {firstPrice: string}) {
         </View>
       </Gradient>
     </View>
-  )
-}
-
-function IButton() {
-  return (
-    <TouchableOpacity
-      className='w-1/5 flex-row items-center'
-      activeOpacity={0.7}
-      onPressOut={() => Alert.alert('Your Report Is Recorded')}>
-      <Gradient
-        className='w-full flex-row items-center justify-center rounded-full border border-border p-1.5 px-2'
-        style={{gap: 8}}>
-        <InformationCircleIcon className='text-b1' height={20} width={20} />
-      </Gradient>
-      <PaddingBottom />
-    </TouchableOpacity>
   )
 }
 
@@ -330,12 +328,14 @@ function Timer({endTime}: {endTime: string | null}) {
   }, [])
 
   return (
-    <View className='w-1/4 flex-row items-center justify-center'>
-      <Gradient className='w-full flex-row rounded-full border border-border p-1.5 px-2' style={{gap: 8}}>
-        <Clock01Icon className='text-b1' height={20} width={20} />
-        <SemiBold className='text-sm text-b1'>{left}</SemiBold>
+    <View className='flex-row items-center justify-center' style={{gap: 10}}>
+      <Gradient className='flex-row rounded-full border border-border p-2 px-3' style={{gap: 8}}>
+        <Clock01Icon className='text-b1' height={16} width={16} />
+        <SemiBold className='-mt-0.5 text-sm text-b1'>{left}</SemiBold>
       </Gradient>
-      <PaddingBottom />
+      <TouchableOpacity onPress={() => Alert.alert('Message', 'Your Report Is Recorded.')}>
+        <InformationCircleIcon className='text-b1' height={20} width={20} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -430,9 +430,12 @@ async function handelTokenMove(data: TokenMoved) {
   if (newTravelCount === 0) {
     console.log('Token killed')
     playSound('collide')
+
+    const moveOnEachIteration = travelCount > 12 ? 2 : 1
+
     for (let i = 0; i < travelCount; i++) {
       token.pos -= 1
-      token.travelCount -= 1
+      token.travelCount -= moveOnEachIteration
       if (token.pos === 0) token.pos = 52
       setCurrentPositions([...currentPositions])
       await delay(0)
