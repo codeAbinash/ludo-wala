@@ -305,7 +305,7 @@ function FirstPrize({firstPrice}: {firstPrice: string}) {
 }
 
 function Timer({endTime}: {endTime: string | null}) {
-  const end = new Date(endTime ? endTime + 'Z' : new Date())
+  const end = new Date(endTime ? endTime : new Date())
   const [left, setLeft] = useState('')
 
   useEffect(() => {

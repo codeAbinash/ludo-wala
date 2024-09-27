@@ -87,8 +87,8 @@ export function getNextTurn(turn: number): Num {
   return turn + 1 > 3 ? 0 : ((turn + 1) as Num)
 }
 
-export function getPP(fname: string, lname: string) {
-  return `https://avatar.iran.liara.run/username?username=${fname} ${lname}`
+export function getPP(fname: string, lname: string | null) {
+  return `https://avatar.iran.liara.run/username?username=${fname} ${lname || ''}`
 }
 
 export function oneSignalInit() {

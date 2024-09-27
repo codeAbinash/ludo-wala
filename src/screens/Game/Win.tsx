@@ -84,7 +84,7 @@ function Row({isGradient, score, name, prize}: {isGradient?: boolean; score: str
       <View className='flex-row items-center justify-center' style={{gap: 12}}>
         <Image
           source={{
-            uri: getPP('Abinash', 'Karmakar'),
+            uri: getPP(name, null),
           }}
           style={{height: 40, width: 40}}
         />

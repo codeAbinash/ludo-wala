@@ -106,10 +106,10 @@ const Token = React.memo<TokenProps>(({token}) => {
     if (token.travelCount === 56) {
       playSound('home_win')
       // Remove the token from the board
-      currentPositions.splice(
-        currentPositions.findIndex((t) => t.id === token.id),
-        1,
-      )
+      // currentPositions.splice(
+      //   currentPositions.findIndex((t) => t.id === token.id),
+      //   1,
+      // )
       setCurrentPositions([...currentPositions])
       // setChancePlayer(player)
     }
