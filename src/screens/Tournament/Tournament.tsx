@@ -113,7 +113,8 @@ function Card({firstPrize: firstPrice, entryPrize, buttonText, maxPlayers, joine
           <Option
             text='First Price'
             Icon={DbFillIcon}
-            value={firstPrice.split(' ')[0] + ' ' + firstPrice.split(' ')[1]}
+            value={firstPrice}
+            // value={firstPrice.split(' ')[0] + ' ' + firstPrice.split(' ')[1]}
           />
           <Option text='Entry Prize' Icon={TrophyFillIcon} value={'₹ ' + entryPrize} />
           <Option text='ASSURED WINNERS' Icon={LikeFillIcon} value={'100%'} />
@@ -153,8 +154,8 @@ function Option({text, Icon, value}: OptionProps) {
       <View className='rounded-full bg-gray-100 p-2'>
         <Icon height={20} width={20} />
       </View>
-      <View style={{gap: 2}}>
-        <Medium className='uppercase text-black/70' style={{fontSize: 10}} numberOfLines={1}>
+      <View style={{flex: 1, gap: 2}}>
+        <Medium className='uppercase text-black/70' style={{fontSize: 10, flexWrap: 'wrap'}}>
           {text}
         </Medium>
         <Bold className='text-xl text-black' numberOfLines={1} style={{flexShrink: 1, fontSize: 16}}>
