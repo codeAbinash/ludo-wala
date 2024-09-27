@@ -327,7 +327,7 @@ function Timer({endTime}: {endTime: string | null}) {
       clearInterval(timer)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [endTime])
 
   return (
     <View className='flex-row items-center justify-center' style={{gap: 10}}>
@@ -335,7 +335,7 @@ function Timer({endTime}: {endTime: string | null}) {
         <Clock01Icon className='text-b1' height={16} width={16} />
         <SemiBold className='-mt-0.5 text-sm text-b1'>{left}</SemiBold>
       </Gradient>
-      <TouchableOpacity onPress={() => Alert.alert('Message', 'Your Report Is Recorded.')}>
+      <TouchableOpacity onPress={() => ToastAndroid.show('Your Report Is Recorded.', ToastAndroid.SHORT)}>
         <InformationCircleIcon className='text-b1' height={20} width={20} />
       </TouchableOpacity>
     </View>
