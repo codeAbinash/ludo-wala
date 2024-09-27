@@ -350,7 +350,6 @@ function ModalAlert({
         transparent={true}
         visible={visible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
           setVisible(!visible)
         }}>
         <View className='flex-1 justify-end bg-black/50'>

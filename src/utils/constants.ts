@@ -1,4 +1,4 @@
-export const APP_VERSION = '1.5'
+export const APP_VERSION = '1.6'
 
 export function getShareText(referCode: string) {
   return `Duniya Ka Pehla Ludo Tournament App! 🌍

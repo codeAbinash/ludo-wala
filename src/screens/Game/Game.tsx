@@ -289,7 +289,7 @@ function Header({firstPrice, endTime}: {firstPrice: string; endTime: string | nu
 
 function FirstPrize({firstPrice}: {firstPrice: string}) {
   return (
-    <View>
+    <View style={{maxWidth: '60%'}}>
       <Gradient
         colors={[Colors.b1, Colors.b2]}
         className='flex-row rounded-full border-border px-5 py-2 pr-4'
@@ -297,7 +297,9 @@ function FirstPrize({firstPrice}: {firstPrice: string}) {
         <Image source={Images.trophy} style={{width: 30, height: 30}} />
         <View>
           <SemiBold className='text-black'>1st Prize</SemiBold>
-          <Bold className='-mt-1 text-base text-black'>{firstPrice}</Bold>
+          <Bold className='-mt-1 pr-5 text-base text-black' numberOfLines={1} style={{flexShrink: 1}}>
+            {firstPrice}
+          </Bold>
         </View>
       </Gradient>
     </View>
