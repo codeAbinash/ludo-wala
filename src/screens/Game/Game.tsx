@@ -433,11 +433,9 @@ async function handelTokenMove(data: TokenMoved) {
     console.log('Token killed')
     playSound('collide')
 
-    const moveOnEachIteration = travelCount > 12 ? 2 : 1
-
     for (let i = 0; i < travelCount; i++) {
       token.pos -= 1
-      token.travelCount -= moveOnEachIteration
+      token.travelCount -= 1
       if (token.pos === 0) token.pos = 52
       setCurrentPositions([...currentPositions])
       await delay(0)
