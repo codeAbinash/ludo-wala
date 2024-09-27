@@ -2,12 +2,12 @@ import {navigationStore} from '@/zustand/navigationStore'
 import {userStore} from '@/zustand/userStore'
 import Animations from '@assets/animations/animations'
 import Images from '@assets/images/images'
-import Gradient, {Radial} from '@components/Gradient'
+import {Radial} from '@components/Gradient'
 import {PaddingBottom} from '@components/SafePadding'
 import {get_settings_f, get_user_f} from '@query/api'
 import {useMutation} from '@tanstack/react-query'
 import {APP_VERSION} from '@utils/constants'
-import {ls, secureLs} from '@utils/storage'
+import {secureLs} from '@utils/storage'
 import type {NavProp} from '@utils/types'
 import LottieView from 'lottie-react-native'
 import React, {useEffect} from 'react'
@@ -30,13 +30,13 @@ export default function Splash({navigation}: NavProp) {
 
   useEffect(() => {
     const updateData = getSettingsMutation.data
-    if (data && updateData) {
+    const token = secureLs.getString('token')
+    if (updateData) {
       // Decide navigation here
-
-      // Check for Update
       const version = updateData.apkVersion
       const isForceUpdate = updateData.forceUpdate === '1'
 
+      // Check for Update
       if (APP_VERSION !== version && isForceUpdate) {
         navigation.reset({index: 0, routes: [{name: 'Update'}]})
         return
@@ -46,7 +46,10 @@ export default function Splash({navigation}: NavProp) {
         navigation.replace('EnterName')
         return
       }
-      navigation.replace('Home')
+
+      // Navigate to EnterPhone if token is not available
+      if (!token) navigation.replace('EnterPhone')
+      else navigation.replace('Home')
     }
   }, [data, getSettingsMutation.data, navigation])
 
@@ -57,13 +60,8 @@ export default function Splash({navigation}: NavProp) {
 
   useEffect(() => {
     const token = secureLs.getString('token')
-    console.log(token)
-    if (token) {
-      mutate()
-    } else {
-      navigation.replace('EnterPhone')
-    }
-  }, [mutate, navigation])
+    token && mutate()
+  }, [mutate])
 
   useEffect(() => {
     setNavigation(navigation)
