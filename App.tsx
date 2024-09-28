@@ -41,6 +41,7 @@ import Blank from '@screens/Extra/Blank'
 import Test from '@screens/Test'
 import Win, {type WinParamList} from '@screens/Game/Win'
 import Logout from '@screens/Logout'
+import WithdrawRequest from '@screens/Withdraw/WithdrawRequest'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -136,6 +137,7 @@ export type RootStackParamList = {
   Test: undefined
   Win: WinParamList
   Logout: undefined
+  WithdrawRequest: undefined
 }
 function Navigation() {
   return (
@@ -169,6 +171,7 @@ function Navigation() {
       <Stack.Screen name='MyReferrals' component={MyReferrals} />
       <Stack.Screen name='Win' component={Win} />
       <Stack.Screen name='Logout' component={Logout} />
+      <Stack.Screen name='WithdrawRequest' component={WithdrawRequest} />
     </Stack.Navigator>
   )
 }
