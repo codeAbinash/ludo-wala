@@ -29,7 +29,7 @@ export default function WithdrawRequest({navigation}: {navigation: StackNav}) {
           Your Request For Withdrawal Has Been Submitted. Transaction Will Be Process Within 24 Hours.
         </Medium>
       </Gradient>
-      <GradientButton title='Go Back' onPress={() => navigation.goBack()} className='mt-10 rounded-full px-10 py-3' />
+      <GradientButton title='Go Back' onPress={() => navigation.pop(3)} className='mt-10 rounded-full px-10 py-3' />
     </View>
   )
 }

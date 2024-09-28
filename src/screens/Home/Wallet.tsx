@@ -54,7 +54,7 @@ export default function Wallet({navigation}: NavProp) {
               <View>
                 <TouchableOpacity
                   className='flex-row rounded-full border border-b1 px-5 py-2.5'
-                  onPress={() => navigation.navigate('WithdrawRequest')}>
+                  onPress={() => navigation.navigate('Withdraw')}>
                   <ArrowDown02Icon className='text-b1' height={18} width={18} />
                   <SemiBold className='pl-1 text-b1'>Withdraw</SemiBold>
                 </TouchableOpacity>

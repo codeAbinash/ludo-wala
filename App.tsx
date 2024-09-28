@@ -11,25 +11,32 @@ import Wrap from '@components/Screen'
 import {useNetInfo} from '@react-native-community/netinfo'
 import {NavigationContainer} from '@react-navigation/native'
 import {CardStyleInterpolators, createStackNavigator, type StackNavigationOptions} from '@react-navigation/stack'
-import AddCash from '@screens/Tournament/AddCash'
 import EnterName from '@screens/Auth/EnterName'
 import EnterPhone from '@screens/Auth/EnterPhone'
 import OTP, {type OTPParamList} from '@screens/Auth/Otp'
-import EditProfile from '@screens/Profile/EditProfile'
-import Game, {type GameParamList} from '@screens/Game/Game'
-import Home from '@screens/Home'
-import Wallet from '@screens/Home/Wallet'
-import HomeScreen from '@screens/Home/HomeScreen'
-import JoinedTournament from '@screens/Tournament/JoinedTournament'
+import Blank from '@screens/Extra/Blank'
 import Maintenance, {type MaintenanceParamList} from '@screens/Extra/Maintenance'
 import PaymentSuccessful, {type PaymentSuccessfulParamList} from '@screens/Extra/PaymentSuccessful'
+import Splash from '@screens/Extra/Splash'
+import UpdateAvailable from '@screens/Extra/UpdateAvailable'
+import Game, {type GameParamList} from '@screens/Game/Game'
+import Win, {type WinParamList} from '@screens/Game/Win'
+import Home from '@screens/Home'
+import HomeScreen from '@screens/Home/HomeScreen'
+import Wallet from '@screens/Home/Wallet'
+import Logout from '@screens/Logout'
+import EditProfile from '@screens/Profile/EditProfile'
 import Leaderboard from '@screens/Refer/Leaderboard'
 import MyReferrals from '@screens/Refer/MyReferrals'
 import Refer from '@screens/Refer/Refer'
-import Splash from '@screens/Extra/Splash'
+import Test from '@screens/Test'
+import AddCash from '@screens/Tournament/AddCash'
+import JoinedTournament from '@screens/Tournament/JoinedTournament'
 import Tournament from '@screens/Tournament/Tournament'
 import TournamentDetails, {type TournamentDetailsParamList} from '@screens/Tournament/TournamentDetails'
-import UpdateAvailable from '@screens/Extra/UpdateAvailable'
+import AccountDetailsWithdraw from '@screens/Withdraw/AccountDetailsWithdraw'
+import Withdraw from '@screens/Withdraw/Withdraw'
+import WithdrawRequest from '@screens/Withdraw/WithdrawRequest'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {W} from '@utils/dimensions'
 import {DarkTheme, DefaultTheme} from '@utils/themes'
@@ -37,11 +44,6 @@ import LottieView from 'lottie-react-native'
 import React from 'react'
 import {Dimensions, StatusBar, useColorScheme, View} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
-import Blank from '@screens/Extra/Blank'
-import Test from '@screens/Test'
-import Win, {type WinParamList} from '@screens/Game/Win'
-import Logout from '@screens/Logout'
-import WithdrawRequest from '@screens/Withdraw/WithdrawRequest'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -138,6 +140,8 @@ export type RootStackParamList = {
   Win: WinParamList
   Logout: undefined
   WithdrawRequest: undefined
+  Withdraw: undefined
+  AccountDetailsWithdraw: undefined
 }
 function Navigation() {
   return (
@@ -172,6 +176,8 @@ function Navigation() {
       <Stack.Screen name='Win' component={Win} />
       <Stack.Screen name='Logout' component={Logout} />
       <Stack.Screen name='WithdrawRequest' component={WithdrawRequest} />
+      <Stack.Screen name='Withdraw' component={Withdraw} />
+      <Stack.Screen name='AccountDetailsWithdraw' component={AccountDetailsWithdraw} />
     </Stack.Navigator>
   )
 }
